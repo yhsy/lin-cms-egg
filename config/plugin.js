@@ -6,4 +6,8 @@ module.exports = {
   // static: {
   //   enable: true,
   // }
+  validatePlus: {
+    enable: true,
+    package: 'egg-validate-plus',
+  },
 };

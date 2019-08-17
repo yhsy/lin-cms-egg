@@ -16,5 +16,5 @@ module.exports = app => {
   router.get('/', controller.home.index);
 
   require('./test')(app);
-
+  require('./user')(app);
 };
