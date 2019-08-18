@@ -37,6 +37,10 @@ class UserController extends BaseController {
     if (!validateResult) return;
 
     // console.log(validateResult);
+    // const user = await ctx.service.user.find(userId);
+    const user = await this.app.mysql.get('lin_user', { id: 1 });
+    console.log(`user is ${JSON.stringify(user)}`);
+
     const data = {
       msg: '登录成功',
       username,
