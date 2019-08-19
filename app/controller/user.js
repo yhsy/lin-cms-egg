@@ -1,6 +1,7 @@
 'use strict';
 // 基础控制类
 const BaseController = require('./base');
+const Md5 = require('md5');
 
 class UserController extends BaseController {
   // 登录
@@ -38,8 +39,18 @@ class UserController extends BaseController {
 
     // console.log(validateResult);
     // const user = await ctx.service.user.find(userId);
-    const user = await this.app.mysql.get('lin_user', { id: 1 });
+    // 校验用户名
+    const user = await this.app.mysql.get('lin_user', { nickname: username });
     console.log(`user is ${JSON.stringify(user)}`);
+    if (!user) {
+      this.sendFail({}, '用户不存在', 10003);
+      return;
+    }
+    // 校验密码(简单Md5加密)
+    if (user.password !== Md5(password)) {
+      this.sendFail({}, '密码错误', 10003);
+      return;
+    }
 
     const data = {
       msg: '登录成功',
