@@ -1,3 +1,10 @@
+/*
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-08-19 08:56:55
+ * @LastEditTime: 2019-08-19 09:05:36
+ * @LastEditors: Please set LastEditors
+ */
 /* eslint valid-jsdoc: "off" */
 
 'use strict';
@@ -47,7 +54,8 @@ module.exports = appInfo => {
       // 用户名
       user: 'root',
       // 密码
-      password: 'a123456',
+      // password: 'a123456',
+      password: '1qaz!QAZ',
       // 数据库名
       database: 'lin-cms',
     },
