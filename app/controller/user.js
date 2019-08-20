@@ -1,3 +1,10 @@
+/*
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-08-20 08:36:44
+ * @LastEditTime: 2019-08-20 09:45:35
+ * @LastEditors: Please set LastEditors
+ */
 'use strict';
 // 基础控制类
 const BaseController = require('./base');
@@ -6,8 +13,8 @@ const Md5 = require('md5');
 class UserController extends BaseController {
   // 登录
   async login() {
-    // egg全局的上下文对象(request和response都在里面)
-    const { ctx } = this;
+    // ctx: egg全局的上下文对象(request和response都在里面)
+    const { ctx, app } = this;
     // 获取账号密码
     const { username, password } = ctx.request.body;
 
@@ -31,7 +38,7 @@ class UserController extends BaseController {
     };
 
     // 拿到验证结果
-    const validateResult = await this.ctx.validate(rule, {
+    const validateResult = await ctx.validate(rule, {
       username,
       password,
     });
@@ -40,7 +47,7 @@ class UserController extends BaseController {
     // console.log(validateResult);
     // const user = await ctx.service.user.find(userId);
     // 校验用户名
-    const user = await this.app.mysql.get('lin_user', { nickname: username });
+    const user = await app.mysql.get('lin_user', { nickname: username });
     console.log(`user is ${JSON.stringify(user)}`);
     if (!user) {
       this.sendFail({}, '用户不存在', 10003);
@@ -52,12 +59,17 @@ class UserController extends BaseController {
       return;
     }
 
+    // 生成token(用户创建时间,jwt秘钥,过期时间:2小时(3d表示3天))
+    const token = app.jwt.sign({ time: user.create_time }, app.config.jwt.secret, { expiresIn: '2h' });
+
+
     const data = {
-      msg: '登录成功',
-      username,
-      password,
+      // msg: '登录成功',
+      // username,
+      // password,
+      token,
     };
-    this.sendSuccess(data, 'ok');
+    this.sendSuccess(data, '登录成功');
     // if (!validateResult) {
     //   this.sendFail(data, '账号或密码错误', 10002);
     // } else {

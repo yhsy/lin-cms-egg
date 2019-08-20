@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-19 08:56:55
- * @LastEditTime: 2019-08-19 09:05:36
+ * @LastEditTime: 2019-08-20 08:59:18
  * @LastEditors: Please set LastEditors
  */
 /* eslint valid-jsdoc: "off" */
@@ -18,11 +18,17 @@ module.exports = appInfo => {
    * @type {Egg.EggAppConfig}
    **/
   const config = (exports = {});
-  // post请求安全(暂时关闭)
+  // egg安全配置
   config.security = {
+    // post请求安全(暂时关闭)
     csrf: {
       enable: false,
     },
+    // csrf: {
+    //   headerName: 'x-csrf-token', // 自定义请求头(客户端)
+    //   // queryName: '_csrf', // 通过 query 传递 CSRF token 的默认字段为 _csrf
+    //   // bodyName: '_csrf', // 通过 body 传递 CSRF token 的默认字段为 _csrf
+    // },
   };
 
   // 校验插件配置
@@ -36,7 +42,7 @@ module.exports = appInfo => {
           code: 1001,
           message: errors[0].message,
           data: {},
-          error: errors,
+          // error: errors,
           // message: '参数错误',
         };
       }
@@ -63,6 +69,12 @@ module.exports = appInfo => {
     app: true,
     // 是否加载到 agent 上，默认关闭
     agent: false,
+  };
+
+  // jwt插件配置
+  config.jwt = {
+    // 秘钥
+    secret: 'egg666',
   };
 
   // use for cookie sign key, should change to your own and keep security
