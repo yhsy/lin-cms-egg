@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-20 08:36:44
- * @LastEditTime: 2019-08-20 09:45:35
+ * @LastEditTime: 2019-08-21 09:13:44
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -48,7 +48,7 @@ class UserController extends BaseController {
     // const user = await ctx.service.user.find(userId);
     // 校验用户名
     const user = await app.mysql.get('lin_user', { nickname: username });
-    console.log(`user is ${JSON.stringify(user)}`);
+    // console.log(`user is ${JSON.stringify(user)}`);
     if (!user) {
       this.sendFail({}, '用户不存在', 10003);
       return;
@@ -60,36 +60,36 @@ class UserController extends BaseController {
     }
 
     // 生成token(用户创建时间,jwt秘钥,过期时间:2小时(3d表示3天))
-    const token = app.jwt.sign({ time: user.create_time }, app.config.jwt.secret, { expiresIn: '2h' });
+    const token = app.jwt.sign({ id: user.id, time: user.create_time }, app.config.jwt.secret, { expiresIn: '3d' });
 
-
+    // 返回数据
     const data = {
-      // msg: '登录成功',
-      // username,
-      // password,
       token,
     };
     this.sendSuccess(data, '登录成功');
-    // if (!validateResult) {
-    //   this.sendFail(data, '账号或密码错误', 10002);
-    // } else {
-    // this.sendSuccess(data, 'ok');
-    // }
 
-    // console.log(`username is ${username}, password is ${password}`);
-
-    // 登录失败返回
-    // this.sendFail(data, '账号或密码错误', 10002);
-    // 登录成功返回
-    // this.sendSuccess(data, 'ok');
   }
   async info() {
-    const data = {
-      name: '洪双',
-      age: '31',
-    };
+    const { app, ctx } = this;
+    // 获取token
+    const token = ctx.request.headers.authorization.split(' ')[1];
+    // token解密
+    const decoded = app.jwt.verify(token, app.config.jwt.secret);
 
-    this.sendSuccess(data, 'ok');
+    const { id } = decoded;
+    // 通过id获取个人信息(id,昵称,头像,)
+    const results = await app.mysql.select('lin_user', { // 搜索 lin_user 表
+      where: { id }, // WHERE 条件
+      columns: [ 'id', 'nickname', 'avatar' ], // 要查询的表字段(既返回的数据)
+    });
+
+    // 没有查询到id对应的用户
+    if (results.length === 0) {
+      this.sendFail({}, '用户不存在', 10003);
+      return;
+    }
+    // 返回数据
+    this.sendSuccess(results, 'ok');
   }
 }
 
