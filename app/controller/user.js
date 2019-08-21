@@ -2,13 +2,20 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-20 08:36:44
- * @LastEditTime: 2019-08-21 09:13:44
+ * @LastEditTime: 2019-08-21 18:37:52
  * @LastEditors: Please set LastEditors
  */
 'use strict';
 // 基础控制类
 const BaseController = require('./base');
+// Md5加密:方法1
 const Md5 = require('md5');
+
+// Md5加密:方法2(node内置加密模块)
+// nodejs内置的加密模块
+// const crypto = require('crypto');
+// const Md5 = crypto.createHash('md5');
+
 
 class UserController extends BaseController {
   // 登录
@@ -54,10 +61,20 @@ class UserController extends BaseController {
       return;
     }
     // 校验密码(简单Md5加密)
+    /* 方法1:MD5插件 */
     if (user.password !== Md5(password)) {
       this.sendFail({}, '密码错误', 10003);
       return;
     }
+
+    /* 方法2:node内置的加密模块 */
+    // Md5.update(password);
+    // const md5Password = Md5.digest('hex');
+    // if (user.password !== md5Password) {
+    //   this.sendFail({}, '密码错误', 10003);
+    //   return;
+    // }
+
 
     // 生成token(用户创建时间,jwt秘钥,过期时间:2小时(3d表示3天))
     const token = app.jwt.sign({ id: user.id, time: user.create_time }, app.config.jwt.secret, { expiresIn: '3d' });
@@ -65,18 +82,20 @@ class UserController extends BaseController {
     // 返回数据
     const data = {
       token,
+      id: user.id,
     };
     this.sendSuccess(data, '登录成功');
 
   }
   async info() {
     const { app, ctx } = this;
+    const { id } = ctx.request.headers;
     // 获取token
-    const token = ctx.request.headers.authorization.split(' ')[1];
+    // const token = ctx.request.headers.authorization.split(' ')[1];
     // token解密
-    const decoded = app.jwt.verify(token, app.config.jwt.secret);
+    // const decoded = app.jwt.verify(token, app.config.jwt.secret);
 
-    const { id } = decoded;
+    // const { id } = decoded;
     // 通过id获取个人信息(id,昵称,头像,)
     const results = await app.mysql.select('lin_user', { // 搜索 lin_user 表
       where: { id }, // WHERE 条件
@@ -89,7 +108,7 @@ class UserController extends BaseController {
       return;
     }
     // 返回数据
-    this.sendSuccess(results, 'ok');
+    this.sendSuccess(results[0], 'ok');
   }
 }
 
