@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-19 08:56:55
- * @LastEditTime: 2019-08-22 09:40:26
+ * @LastEditTime: 2019-08-22 17:24:55
  * @LastEditors: Please set LastEditors
  */
 /* eslint valid-jsdoc: "off" */
@@ -12,6 +12,9 @@
 /**
  * @param {Egg.EggAppInfo} appInfo app info
  */
+
+const path = require('path');
+
 module.exports = appInfo => {
   /**
    * built-in config
@@ -77,9 +80,27 @@ module.exports = appInfo => {
     secret: 'egg666',
   };
 
+  // 日志分为 NONE，DEBUG，INFO，WARN 和 ERROR 5 个级别
   // 日志输出为Json格式
-  exports.logger = {
+  config.logger = {
     outputJSON: true,
+  };
+
+  // 自定义日志设置
+  config.customLogger = {
+    formatLogger: {
+      // 生成的log文件配置
+      file: path.join(appInfo.root, 'logs/api.log'),
+      formatter(meta) {
+        // console.log('formatter');
+        return `[${meta.date}] ${meta.message}`;
+      },
+      // ctx请求日志(格式化)
+      contextFormatter(meta) {
+        // console.log('contextFormatter');
+        return `[${meta.date}][${meta.level}] [${meta.ctx.method} ${meta.ctx.url}] ${meta.message}`;
+      },
+    },
   };
 
   // use for cookie sign key, should change to your own and keep security

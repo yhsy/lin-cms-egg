@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-22 08:50:41
- * @LastEditTime: 2019-08-22 09:33:09
+ * @LastEditTime: 2019-08-22 17:29:06
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -14,7 +14,7 @@ module.exports = function(ctx) {
   const logger = new Logger();
   logger.set('file', new CustomTransport({
     level: 'INFO',
-    file: 'app.log',
+    file: 'logs/custom/app.log',
   }, ctx));
   return logger;
 };

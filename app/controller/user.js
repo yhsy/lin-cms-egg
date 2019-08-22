@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-20 08:36:44
- * @LastEditTime: 2019-08-22 09:33:14
+ * @LastEditTime: 2019-08-22 17:30:28
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -22,9 +22,23 @@ class UserController extends BaseController {
   async login() {
     // ctx: egg全局的上下文对象(request和response都在里面)
     const { ctx, app } = this;
-    this.ctx.swLog.info('请求开始');
-    // console.log()
-    ctx.logger.info('请求开始');
+    // helper实用工具函数(定义在:extend/helper.js)
+    // const { helper } = this.ctx;
+    const { formatLoggerMsg } = this.ctx.helper;
+    /* 日志配置-start */
+    // 自定义日志(扩展extend实现)
+    // this.ctx.swLog.info('请求开始');
+
+    // egg自带系统日志
+    // ctx.logger.info('请求开始');
+
+    // 配置的自定义日志
+    // ctx.getLogger('formatLogger').info('ctx', '测试请求');
+
+    // 日志提示message格式化
+    // ctx.getLogger('formatLogger').info(formatLoggerMsg('测试请求', '用户名'));
+    /* 日志配置-end */
+
 
     // 获取账号密码
     const { username, password } = ctx.request.body;
@@ -54,7 +68,8 @@ class UserController extends BaseController {
       password,
     });
     if (!validateResult) {
-      ctx.logger.error(new Error('请求失败,校验错误'));
+      // 错误日志
+      ctx.getLogger('formatLogger').info(formatLoggerMsg('参数格式错误', username));
       return;
     }
 
@@ -64,18 +79,19 @@ class UserController extends BaseController {
     const user = await app.mysql.get('lin_user', { nickname: username });
     // console.log(`user is ${JSON.stringify(user)}`);
     if (!user) {
-      ctx.logger.error(new Error('请求失败,用户不存在'));
+      // 错误日志
+      ctx.getLogger('formatLogger').info(formatLoggerMsg('用户不存在', username));
       this.sendFail({}, '用户不存在', 10003);
       return;
     }
     // 校验密码(简单Md5加密)
     /* 方法1:MD5插件 */
     if (user.password !== Md5(password)) {
-      ctx.logger.error(new Error('请求失败,密码错误'));
+      // 错误日志
+      ctx.getLogger('formatLogger').info(formatLoggerMsg('登录密码错误', username));
       this.sendFail({}, '密码错误', 10003);
       return;
     }
-
 
     /* 方法2:node内置的加密模块 */
     // Md5.update(password);
@@ -84,7 +100,6 @@ class UserController extends BaseController {
     //   this.sendFail({}, '密码错误', 10003);
     //   return;
     // }
-
 
     // 生成token(用户创建时间,jwt秘钥,过期时间:2小时(3d表示3天))
     const token = app.jwt.sign({ id: user.id, time: user.create_time }, app.config.jwt.secret, { expiresIn: '3d' });
@@ -95,8 +110,8 @@ class UserController extends BaseController {
       id: user.id,
     };
 
-    // 请求log
-    ctx.logger.success('请求成功');
+    ctx.getLogger('formatLogger').success(formatLoggerMsg('登录成功', username));
+
     this.sendSuccess(data, '登录成功');
 
   }
