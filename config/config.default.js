@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-19 08:56:55
- * @LastEditTime: 2019-08-20 08:59:18
+ * @LastEditTime: 2019-08-22 09:40:26
  * @LastEditors: Please set LastEditors
  */
 /* eslint valid-jsdoc: "off" */
@@ -75,6 +75,11 @@ module.exports = appInfo => {
   config.jwt = {
     // 秘钥
     secret: 'egg666',
+  };
+
+  // 日志输出为Json格式
+  exports.logger = {
+    outputJSON: true,
   };
 
   // use for cookie sign key, should change to your own and keep security

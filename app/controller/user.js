@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-20 08:36:44
- * @LastEditTime: 2019-08-21 18:37:52
+ * @LastEditTime: 2019-08-22 09:33:14
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -22,6 +22,10 @@ class UserController extends BaseController {
   async login() {
     // ctx: egg全局的上下文对象(request和response都在里面)
     const { ctx, app } = this;
+    this.ctx.swLog.info('请求开始');
+    // console.log()
+    ctx.logger.info('请求开始');
+
     // 获取账号密码
     const { username, password } = ctx.request.body;
 
@@ -49,7 +53,10 @@ class UserController extends BaseController {
       username,
       password,
     });
-    if (!validateResult) return;
+    if (!validateResult) {
+      ctx.logger.error(new Error('请求失败,校验错误'));
+      return;
+    }
 
     // console.log(validateResult);
     // const user = await ctx.service.user.find(userId);
@@ -57,15 +64,18 @@ class UserController extends BaseController {
     const user = await app.mysql.get('lin_user', { nickname: username });
     // console.log(`user is ${JSON.stringify(user)}`);
     if (!user) {
+      ctx.logger.error(new Error('请求失败,用户不存在'));
       this.sendFail({}, '用户不存在', 10003);
       return;
     }
     // 校验密码(简单Md5加密)
     /* 方法1:MD5插件 */
     if (user.password !== Md5(password)) {
+      ctx.logger.error(new Error('请求失败,密码错误'));
       this.sendFail({}, '密码错误', 10003);
       return;
     }
+
 
     /* 方法2:node内置的加密模块 */
     // Md5.update(password);
@@ -84,6 +94,9 @@ class UserController extends BaseController {
       token,
       id: user.id,
     };
+
+    // 请求log
+    ctx.logger.success('请求成功');
     this.sendSuccess(data, '登录成功');
 
   }
