@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-20 08:36:44
- * @LastEditTime: 2019-08-22 17:30:28
+ * @LastEditTime: 2019-08-22 18:48:49
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -18,10 +18,19 @@ const Md5 = require('md5');
 
 
 class UserController extends BaseController {
+  // 图片验证码
+  async verify() {
+    const { ctx } = this;
+    const captcha = await this.service.user.captcha(); // 服务里面的方法
+    ctx.response.type = 'image/svg+xml'; // 知道你个返回的类型
+    ctx.body = captcha.data; // 返回一张图片
+  }
   // 登录
   async login() {
     // ctx: egg全局的上下文对象(request和response都在里面)
     const { ctx, app } = this;
+    // this.ctx.session.code
+    // console.log(`图形验证码:${ctx.session.code}`);
     // helper实用工具函数(定义在:extend/helper.js)
     // const { helper } = this.ctx;
     const { formatLoggerMsg } = this.ctx.helper;
@@ -41,7 +50,8 @@ class UserController extends BaseController {
 
 
     // 获取账号密码
-    const { username, password } = ctx.request.body;
+    const { username, password, vcode } = ctx.request.body;
+    // console.log(`图形验证码:${ctx.session.code}`);
 
     // 账号密码校验规则
     const rule = {
@@ -57,7 +67,14 @@ class UserController extends BaseController {
           min: 6,
           max: 20,
           message: '密码长度为6-20位',
-          code: 1003,
+        },
+      ],
+      vcode: [
+        { required: true, message: '验证码不能为空' },
+        {
+          type: 'string',
+          len: 4,
+          message: '验证码长度为4位',
         },
       ],
     };
@@ -66,6 +83,7 @@ class UserController extends BaseController {
     const validateResult = await ctx.validate(rule, {
       username,
       password,
+      vcode,
     });
     if (!validateResult) {
       // 错误日志
@@ -101,6 +119,17 @@ class UserController extends BaseController {
     //   return;
     // }
 
+    // 判断图形验证码
+    const { code } = ctx.session;
+    console.log(code);
+    if (vcode !== code) {
+      console.log(vcode);
+      // 错误日志
+      ctx.getLogger('formatLogger').info(formatLoggerMsg('验证码错误', username));
+      this.sendFail({}, '验证码错误', 10003);
+      return;
+    }
+
     // 生成token(用户创建时间,jwt秘钥,过期时间:2小时(3d表示3天))
     const token = app.jwt.sign({ id: user.id, time: user.create_time }, app.config.jwt.secret, { expiresIn: '3d' });
 
@@ -110,7 +139,7 @@ class UserController extends BaseController {
       id: user.id,
     };
 
-    ctx.getLogger('formatLogger').success(formatLoggerMsg('登录成功', username));
+    ctx.getLogger('formatLogger').info(formatLoggerMsg('登录成功', username));
 
     this.sendSuccess(data, '登录成功');
 

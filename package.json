@@ -12,7 +12,8 @@
     "egg-logview": "^2.0.0",
     "egg-mysql": "^3.0.0",
     "egg-scripts": "^2.11.0",
-    "egg-validate-plus": "^1.1.6"
+    "egg-validate-plus": "^1.1.6",
+    "svg-captcha": "^1.4.0"
   },
   "devDependencies": {
     "autod": "^3.0.1",
