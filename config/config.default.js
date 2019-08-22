@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-19 08:56:55
- * @LastEditTime: 2019-08-22 17:42:33
+ * @LastEditTime: 2019-08-22 17:59:23
  * @LastEditors: Please set LastEditors
  */
 /* eslint valid-jsdoc: "off" */
@@ -105,6 +105,22 @@ module.exports = appInfo => {
 
   // 日志查看插件(地址栏查看:http://127.0.0.1:7001/__logs)
   config.logview = {};
+
+  // 日志切割配置
+  config.logrotator = {
+    // 每天切割(默认)
+    // 日志大小切割
+    filesRotateBySize: [
+      path.join(appInfo.root, 'logs', appInfo.name, 'egg-web.log'),
+    ],
+    // 切割最大值:默认单位 kb
+    // 2G切割(2 * 1024 * 1024 * 1024)
+    maxFileSize: 1024 * 1024 * 1024,
+    // 每小时
+    // filesRotateByHour: [
+    //   path.join(appInfo.root, 'logs', appInfo.name, 'common-error.log'),
+    // ],
+  };
 
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1565839029125_2159';
