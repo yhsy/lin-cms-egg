@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-19 08:56:58
- * @LastEditTime: 2019-08-20 08:57:55
+ * @LastEditTime: 2019-08-22 17:39:57
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -27,5 +27,10 @@ module.exports = {
   jwt: {
     enable: true,
     package: 'egg-jwt',
+  },
+  // 日志查看插件
+  logview: {
+    package: 'egg-logview',
+    // env: ['local', 'default', 'test', 'unittest']
   },
 };

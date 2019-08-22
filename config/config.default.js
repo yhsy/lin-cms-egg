@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-19 08:56:55
- * @LastEditTime: 2019-08-22 17:24:55
+ * @LastEditTime: 2019-08-22 17:42:33
  * @LastEditors: Please set LastEditors
  */
 /* eslint valid-jsdoc: "off" */
@@ -102,6 +102,9 @@ module.exports = appInfo => {
       },
     },
   };
+
+  // 日志查看插件(地址栏查看:http://127.0.0.1:7001/__logs)
+  config.logview = {};
 
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1565839029125_2159';
