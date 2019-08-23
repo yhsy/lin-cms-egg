@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-20 08:36:44
- * @LastEditTime: 2019-08-23 11:53:59
+ * @LastEditTime: 2019-08-23 16:15:17
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -176,7 +176,6 @@ class AdminController extends BaseController {
     const { service } = this;
     const results = await service.admin.list();
     // console.log(`results is ${JSON.stringify(results)}`);
-
     // 返回数据
     this.sendSuccess(results, 'ok');
   }
