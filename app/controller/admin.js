@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-20 08:36:44
- * @LastEditTime: 2019-08-22 18:48:49
+ * @LastEditTime: 2019-08-23 09:11:46
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -17,18 +17,18 @@ const Md5 = require('md5');
 // const Md5 = crypto.createHash('md5');
 
 
-class UserController extends BaseController {
+class AdminController extends BaseController {
   // 图片验证码
   async verify() {
     const { ctx } = this;
-    const captcha = await this.service.user.captcha(); // 服务里面的方法
-    ctx.response.type = 'image/svg+xml'; // 知道你个返回的类型
+    const captcha = await this.service.admin.captcha(); // 服务里面的方法
+    ctx.response.type = 'image/svg+xml'; // 返回的类型
     ctx.body = captcha.data; // 返回一张图片
   }
   // 登录
   async login() {
     // ctx: egg全局的上下文对象(request和response都在里面)
-    const { ctx, app } = this;
+    const { ctx, app, service } = this;
     // this.ctx.session.code
     // console.log(`图形验证码:${ctx.session.code}`);
     // helper实用工具函数(定义在:extend/helper.js)
@@ -92,10 +92,11 @@ class UserController extends BaseController {
     }
 
     // console.log(validateResult);
-    // const user = await ctx.service.user.find(userId);
-    // 校验用户名
-    const user = await app.mysql.get('lin_user', { nickname: username });
+    // 获取用户所有信息(通过username)
+    // const user = await app.mysql.get('lin_user', { nickname: username });
+    const user = await service.admin.allInfo({ nickname: username });
     // console.log(`user is ${JSON.stringify(user)}`);
+    // 校验用户名
     if (!user) {
       // 错误日志
       ctx.getLogger('formatLogger').info(formatLoggerMsg('用户不存在', username));
@@ -144,8 +145,9 @@ class UserController extends BaseController {
     this.sendSuccess(data, '登录成功');
 
   }
+  // 获取个人信息
   async info() {
-    const { app, ctx } = this;
+    const { app, ctx, service } = this;
     const { id } = ctx.request.headers;
     // 获取token
     // const token = ctx.request.headers.authorization.split(' ')[1];
@@ -154,10 +156,12 @@ class UserController extends BaseController {
 
     // const { id } = decoded;
     // 通过id获取个人信息(id,昵称,头像,)
-    const results = await app.mysql.select('lin_user', { // 搜索 lin_user 表
-      where: { id }, // WHERE 条件
-      columns: [ 'id', 'nickname', 'avatar' ], // 要查询的表字段(既返回的数据)
-    });
+    // const results = await app.mysql.select('lin_user', { // 搜索 lin_user 表
+    //   where: { id }, // WHERE 条件
+    //   columns: [ 'id', 'nickname', 'avatar' ], // 要查询的表字段(既返回的数据)
+    // });
+    // 根据用户id,获取用户信息
+    const results = await service.admin.info({ id });
 
     // 没有查询到id对应的用户
     if (results.length === 0) {
@@ -169,4 +173,4 @@ class UserController extends BaseController {
   }
 }
 
-module.exports = UserController;
+module.exports = AdminController;
