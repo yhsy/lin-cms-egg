@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-15 11:17:17
- * @LastEditTime: 2019-08-16 10:50:17
+ * @LastEditTime: 2019-08-23 09:17:17
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -16,5 +16,5 @@ module.exports = app => {
   router.get('/', controller.home.index);
 
   require('./test')(app);
-  require('./user')(app);
+  require('./admin')(app);
 };
