@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-20 08:36:44
- * @LastEditTime: 2019-08-23 09:11:46
+ * @LastEditTime: 2019-08-23 11:53:59
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -148,29 +148,43 @@ class AdminController extends BaseController {
   // 获取个人信息
   async info() {
     const { app, ctx, service } = this;
+    const { formatLoggerMsg } = this.ctx.helper;
+
     const { id } = ctx.request.headers;
     // 获取token
     // const token = ctx.request.headers.authorization.split(' ')[1];
     // token解密
     // const decoded = app.jwt.verify(token, app.config.jwt.secret);
-
+    // 从token中提取用户id
     // const { id } = decoded;
-    // 通过id获取个人信息(id,昵称,头像,)
-    // const results = await app.mysql.select('lin_user', { // 搜索 lin_user 表
-    //   where: { id }, // WHERE 条件
-    //   columns: [ 'id', 'nickname', 'avatar' ], // 要查询的表字段(既返回的数据)
-    // });
+
     // 根据用户id,获取用户信息
     const results = await service.admin.info({ id });
 
     // 没有查询到id对应的用户
     if (results.length === 0) {
+      ctx.getLogger('formatLogger').info(formatLoggerMsg('用户不存在'));
       this.sendFail({}, '用户不存在', 10003);
       return;
     }
     // 返回数据
     this.sendSuccess(results[0], 'ok');
   }
+
+  // 获取管理员列表(分页)
+  async list() {
+    const { service } = this;
+    const results = await service.admin.list();
+    // console.log(`results is ${JSON.stringify(results)}`);
+
+    // 返回数据
+    this.sendSuccess(results, 'ok');
+  }
+
+  // 添加管理员
+  // 编辑管理员
+  // 删除管理员
+
 }
 
 module.exports = AdminController;

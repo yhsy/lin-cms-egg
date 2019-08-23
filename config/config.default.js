@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-19 08:56:55
- * @LastEditTime: 2019-08-22 17:59:23
+ * @LastEditTime: 2019-08-23 10:49:21
  * @LastEditors: Please set LastEditors
  */
 /* eslint valid-jsdoc: "off" */
@@ -66,7 +66,7 @@ module.exports = appInfo => {
       // password: 'a123456',
       password: '1qaz!QAZ',
       // 数据库名
-      database: 'lin-cms',
+      database: 'lin-cms-egg',
     },
     // 是否加载到 app 上，默认开启
     app: true,
