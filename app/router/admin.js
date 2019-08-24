@@ -21,4 +21,6 @@ module.exports = app => {
   router.get('/api/admin/info', app.jwt, controller.admin.info);
   // 获取管理员列表
   router.get('/api/admin/list', app.jwt, controller.admin.list);
+  // 添加管理员
+  router.post('/api/admin/add', app.jwt, controller.admin.add);
 };

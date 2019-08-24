@@ -206,6 +206,42 @@ class AdminController extends BaseController {
   }
 
   // 添加管理员
+  async add() {
+    const { ctx, service } = this;
+    const { username, password, group_id } = this.ctx.request.body;
+    // 账号密码校验规则
+    const rule = {
+      username: [
+        { required: true, message: '用户名不能为空' },
+        { type: 'string', message: '用户名必须是字符串' },
+      ],
+      password: [
+        { required: true, message: '密码不能为空' },
+        { type: 'string', message: '提交类型必须是字符串' },
+        {
+          type: 'string',
+          min: 6,
+          max: 20,
+          message: '密码长度为6-20位',
+        },
+      ],
+      group_id: [{ required: true, message: '分组不能为空' }],
+    };
+
+    // 拿到验证结果
+    const validateResult = await ctx.validate(rule, {
+      username,
+      password,
+      group_id,
+    });
+    if (!validateResult) {
+      // 错误日志
+      ctx
+        .getLogger('formatLogger')
+        .info(formatLoggerMsg('参数格式错误', username));
+      return;
+    }
+  }
   // 编辑管理员
   // 删除管理员
 }
