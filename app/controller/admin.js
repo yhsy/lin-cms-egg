@@ -16,7 +16,6 @@ const Md5 = require('md5');
 // const crypto = require('crypto');
 // const Md5 = crypto.createHash('md5');
 
-
 class AdminController extends BaseController {
   // 图片验证码
   async verify() {
@@ -47,7 +46,6 @@ class AdminController extends BaseController {
     // 日志提示message格式化
     // ctx.getLogger('formatLogger').info(formatLoggerMsg('测试请求', '用户名'));
     /* 日志配置-end */
-
 
     // 获取账号密码
     const { username, password, vcode } = ctx.request.body;
@@ -87,7 +85,9 @@ class AdminController extends BaseController {
     });
     if (!validateResult) {
       // 错误日志
-      ctx.getLogger('formatLogger').info(formatLoggerMsg('参数格式错误', username));
+      ctx
+        .getLogger('formatLogger')
+        .info(formatLoggerMsg('参数格式错误', username));
       return;
     }
 
@@ -99,7 +99,9 @@ class AdminController extends BaseController {
     // 校验用户名
     if (!user) {
       // 错误日志
-      ctx.getLogger('formatLogger').info(formatLoggerMsg('用户不存在', username));
+      ctx
+        .getLogger('formatLogger')
+        .info(formatLoggerMsg('用户不存在', username));
       this.sendFail({}, '用户不存在', 10003);
       return;
     }
@@ -107,7 +109,9 @@ class AdminController extends BaseController {
     /* 方法1:MD5插件 */
     if (user.password !== Md5(password)) {
       // 错误日志
-      ctx.getLogger('formatLogger').info(formatLoggerMsg('登录密码错误', username));
+      ctx
+        .getLogger('formatLogger')
+        .info(formatLoggerMsg('登录密码错误', username));
       this.sendFail({}, '密码错误', 10003);
       return;
     }
@@ -124,15 +128,20 @@ class AdminController extends BaseController {
     const { code } = ctx.session;
     console.log(code);
     if (vcode !== code) {
-      console.log(vcode);
+      // console.log(vcode);
       // 错误日志
-      ctx.getLogger('formatLogger').info(formatLoggerMsg('验证码错误', username));
+      ctx.getLogger('formatLogger');
+      ctx.info(formatLoggerMsg('验证码错误', username));
       this.sendFail({}, '验证码错误', 10003);
       return;
     }
 
     // 生成token(用户创建时间,jwt秘钥,过期时间:2小时(3d表示3天))
-    const token = app.jwt.sign({ id: user.id, time: user.create_time }, app.config.jwt.secret, { expiresIn: '3d' });
+    const token = app.jwt.sign(
+      { id: user.id, time: user.create_time },
+      app.config.jwt.secret,
+      { expiresIn: '3d' }
+    );
 
     // 返回数据
     const data = {
@@ -143,7 +152,6 @@ class AdminController extends BaseController {
     ctx.getLogger('formatLogger').info(formatLoggerMsg('登录成功', username));
 
     this.sendSuccess(data, '登录成功');
-
   }
   // 获取个人信息
   async info() {
@@ -173,7 +181,24 @@ class AdminController extends BaseController {
 
   // 获取管理员列表(分页)
   async list() {
-    const { service } = this;
+    const { ctx, service } = this;
+    const { formatLoggerMsg } = this.ctx.helper;
+    const { page } = this.ctx.request.body;
+
+    // page校验
+    const rule = {
+      page: [{ required: true, message: 'page不能为空' }],
+    };
+
+    // 拿到验证结果
+    const validateResult = await ctx.validate(rule, {
+      page,
+    });
+    if (!validateResult) {
+      // 错误日志
+      ctx.getLogger('formatLogger').info(formatLoggerMsg('page不能为空', ''));
+      return;
+    }
     const results = await service.admin.list();
     // console.log(`results is ${JSON.stringify(results)}`);
     // 返回数据
@@ -183,7 +208,6 @@ class AdminController extends BaseController {
   // 添加管理员
   // 编辑管理员
   // 删除管理员
-
 }
 
 module.exports = AdminController;
