@@ -209,6 +209,7 @@ class AdminController extends BaseController {
   async add() {
     const { ctx, service } = this;
     const { username, password, group_id } = this.ctx.request.body;
+    const { formatLoggerMsg } = this.ctx.helper;
     // 账号密码校验规则
     const rule = {
       username: [
@@ -241,6 +242,18 @@ class AdminController extends BaseController {
         .info(formatLoggerMsg('参数格式错误', username));
       return;
     }
+
+    // 添加管理员到数据库(获取插入结果)
+    const results = await service.admin.add();
+    if (!results) {
+      // 错误日志
+      ctx
+        .getLogger('formatLogger')
+        .info(formatLoggerMsg('添加失败,请重试', username));
+      return;
+    }
+
+    this.sendSuccess({}, '添加成功');
   }
   // 编辑管理员
   // 删除管理员

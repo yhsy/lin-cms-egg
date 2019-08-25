@@ -12,6 +12,8 @@ const Service = require('egg').Service;
 const svgCaptcha = require('svg-captcha');
 // 日期插件
 const moment = require('moment');
+// Md5加密:方法1
+const Md5 = require('md5');
 
 class AdminService extends Service {
   // 生成验证码
@@ -41,7 +43,8 @@ class AdminService extends Service {
   }
   // 获取基础信息
   async info(obj) {
-    const results = await this.app.mysql.select('lin_admin', { // 搜索 lin_admin 表
+    const results = await this.app.mysql.select('lin_admin', {
+      // 搜索 lin_admin 表
       where: obj, // WHERE 条件
       columns: [ 'id', 'nickname', 'avatar' ], // 要查询的表字段(既返回的数据)
     });
@@ -69,7 +72,16 @@ class AdminService extends Service {
     const list = await this.app.mysql.select('lin_admin', {
       // 是管理员
       where: requestObj,
-      columns: [ 'id', 'nickname', 'avatar', 'admin', 'active', 'group_id', 'create_time', 'update_time' ], // 要查询的表字段
+      columns: [
+        'id',
+        'nickname',
+        'avatar',
+        'admin',
+        'active',
+        'group_id',
+        'create_time',
+        'update_time',
+      ], // 要查询的表字段
       // 排序方式(创建时间->id)
       orders: [[ 'create_time', 'desc' ], [ 'id', 'desc' ]],
       limit: 10, // 返回数据量(size)
@@ -156,9 +168,24 @@ class AdminService extends Service {
   }
 
   // 添加管理员
+  async add() {
+    const { username, password, group_id } = this.ctx.request.body;
+    // console.log(username, password, group_id);
+    // 插入
+    const results = await this.app.mysql.insert('lin_admin', {
+      nickname: username,
+      password: Md5(password),
+      group_id,
+      admin: 2,
+      active: 1,
+      avatar: 'http://7n.webgo.vip/avatar.png',
+    });
+    // 判断插入成功(判断是否插入成功 )
+    const insertSuccess = results.affectedRows === 1;
+    return insertSuccess;
+  }
   // 编辑管理员
   // 删除管理员
-
 }
 
 module.exports = AdminService;
