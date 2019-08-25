@@ -257,6 +257,47 @@ class AdminController extends BaseController {
   }
   // 编辑管理员
   // 删除管理员
+  async delete() {
+    const { ctx, service } = this;
+    const { formatLoggerMsg } = this.ctx.helper;
+    const { id } = this.ctx.request.body;
+
+    // id校验
+    const rule = {
+      id: [
+        { required: true, message: 'id不能为空' },
+        { type: 'number', message: 'id必须是数字' },
+      ],
+    };
+
+    // 拿到验证结果
+    const validateResult = await ctx.validate(rule, {
+      id,
+    });
+    if (!validateResult) {
+      // 错误日志
+      ctx.getLogger('formatLogger').info(formatLoggerMsg('参数格式错误', id));
+      return;
+    }
+
+    // 是否存在该ID
+    const idInfo = await service.admin.allInfo({ id });
+
+    if (!idInfo) {
+      // 错误日志
+      ctx.getLogger('formatLogger').info(formatLoggerMsg('ID不存在', id));
+      this.sendFail({}, 'ID不存在', 10003);
+      return;
+    }
+
+    const results = await service.admin.delete(id);
+    if (!results) {
+      // 错误日志
+      ctx.getLogger('formatLogger').info(formatLoggerMsg('删除失败,请重试', id));
+      return;
+    }
+    this.sendSuccess({}, '删除成功');
+  }
 }
 
 module.exports = AdminController;

@@ -23,4 +23,6 @@ module.exports = app => {
   router.get('/api/admin/list', app.jwt, controller.admin.list);
   // 添加管理员
   router.post('/api/admin/add', app.jwt, controller.admin.add);
+  // 删除管理员
+  router.post('/api/admin/delete', app.jwt, controller.admin.delete);
 };

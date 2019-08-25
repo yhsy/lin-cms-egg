@@ -186,6 +186,12 @@ class AdminService extends Service {
   }
   // 编辑管理员
   // 删除管理员
+  async delete(id) {
+    const results = await this.app.mysql.delete('lin_admin', {
+      id,
+    });
+    return results;
+  }
 }
 
 module.exports = AdminService;
