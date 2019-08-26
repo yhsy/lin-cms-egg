@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-26 14:43:37
- * @LastEditTime: 2019-08-26 18:42:48
+ * @LastEditTime: 2019-08-26 18:46:13
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -12,8 +12,11 @@ const path = require('path');
 // 七牛云上传
 const qn = require('../utils/qiniu');
 
-class UploadController extends BaseController {
+const fs = require('mz/fs');
+const pump = require('mz-modules/pump');
 
+
+class UploadController extends BaseController {
   // 上传图片到七牛云
   async uploadImg() {
     const { ctx } = this;
@@ -48,6 +51,45 @@ class UploadController extends BaseController {
     // 上传成功返回
     this.sendSuccess(results, 'ok');
 
+  }
+
+  //   上传文件到服务器
+  async uploadFile() {
+    const { ctx } = this;
+
+    const files = ctx.request.files;
+    ctx.logger.warn('files: %j', files);
+
+    try {
+      for (const file of files) {
+        // 文件名
+        const filename = file.filename.toLowerCase();
+        // 上传的目录
+        const targetPath = path.join(this.config.baseDir, 'app/public', filename);
+        const source = fs.createReadStream(file.filepath);
+        const target = fs.createWriteStream(targetPath);
+        await pump(source, target);
+        ctx.logger.warn('save %s to %s', file.filepath, targetPath);
+      }
+    } finally {
+      // delete those request tmp files
+      await ctx.cleanupRequestFiles();
+    }
+
+    const fields = [];
+    for (const k in ctx.request.body) {
+      fields.push({
+        key: k,
+        value: ctx.request.body[k],
+      });
+    }
+
+    // console.log(files, fields);
+
+    // await ctx.render('page/multiple_result.html', {
+    //   fields,
+    //   files,
+    // });
   }
 }
 

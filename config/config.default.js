@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-19 08:56:55
- * @LastEditTime: 2019-08-23 10:49:21
+ * @LastEditTime: 2019-08-26 18:37:49
  * @LastEditors: Please set LastEditors
  */
 /* eslint valid-jsdoc: "off" */
@@ -124,6 +124,14 @@ module.exports = appInfo => {
 
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1565839029125_2159';
+
+  // 上传文件配置
+  config.multipart = {
+    mode: 'file',
+    // mode: 'stream',
+    // fileSize: '50mb',
+    // fileExtensions: [ '.xls', '.txt' ], // 扩展几种上传的文件格式
+  };
 
   // add your middleware config here
   config.middleware = [];
