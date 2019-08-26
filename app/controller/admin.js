@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-20 08:36:44
- * @LastEditTime: 2019-08-26 11:45:23
+ * @LastEditTime: 2019-08-26 12:17:15
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -57,33 +57,11 @@ class AdminController extends BaseController {
     // console.log(`图形验证码:${ctx.session.code}`);
 
     // 账号密码校验规则
-    const rule = {
-      username: [
-        { required: true, message: '用户名不能为空' },
-        { type: 'string', message: '用户名必须是字符串' },
-      ],
-      password: [
-        { required: true, message: '密码不能为空' },
-        { type: 'string', message: '提交类型必须是字符串' },
-        {
-          type: 'string',
-          min: 6,
-          max: 20,
-          message: '密码长度为6-20位',
-        },
-      ],
-      vcode: [
-        { required: true, message: '验证码不能为空' },
-        {
-          type: 'string',
-          len: 4,
-          message: '验证码长度为4位',
-        },
-      ],
-    };
+    const rules = AdminRule.login;
+    // console.log(AdminRule.login);
 
     // 拿到验证结果
-    const validateResult = await ctx.validate(rule, {
+    const validateResult = await ctx.validate(rules, {
       username,
       password,
       vcode,
@@ -93,8 +71,6 @@ class AdminController extends BaseController {
       ctx
         .getLogger('formatLogger')
         .info(formatLoggerMsg('参数格式错误', username));
-      this.sendFail({}, '参数格式错误', 10003);
-
       return;
     }
 
@@ -164,7 +140,23 @@ class AdminController extends BaseController {
     const { app, ctx, service } = this;
     const { formatLoggerMsg } = this.ctx.helper;
 
+    // 这里获取的是字符串
     const { id } = ctx.request.headers;
+
+    // 校验id
+    const rules = AdminRule.info;
+
+    // 拿到验证结果
+    const validateResult = await ctx.validate(rules, {
+      id,
+    });
+    if (!validateResult) {
+      // 错误日志
+      ctx
+        .getLogger('formatLogger')
+        .info(formatLoggerMsg('管理员ID错误', ''));
+      return;
+    }
     // 获取token
     // const token = ctx.request.headers.authorization.split(' ')[1];
     // token解密
@@ -192,18 +184,18 @@ class AdminController extends BaseController {
     const { page } = this.ctx.request.body;
 
     // page校验
-    const rule = {
-      page: [{ required: true, message: 'page不能为空' }],
-    };
+    // const rule = {
+    //   page: [{ required: true, message: 'page不能为空' }],
+    // };
+    const rules = AdminRule.list;
 
     // 拿到验证结果
-    const validateResult = await ctx.validate(rule, {
+    const validateResult = await ctx.validate(rules, {
       page,
     });
     if (!validateResult) {
       // 错误日志
       ctx.getLogger('formatLogger').info(formatLoggerMsg('page不能为空', ''));
-      this.sendFail({}, 'page不能为空', 10003);
       return;
     }
     const results = await service.admin.list();
@@ -218,26 +210,27 @@ class AdminController extends BaseController {
     const { username, password, group_id } = this.ctx.request.body;
     const { formatLoggerMsg } = this.ctx.helper;
     // 账号密码校验规则
-    const rule = {
-      username: [
-        { required: true, message: '用户名不能为空' },
-        { type: 'string', message: '用户名必须是字符串' },
-      ],
-      password: [
-        { required: true, message: '密码不能为空' },
-        { type: 'string', message: '提交类型必须是字符串' },
-        {
-          type: 'string',
-          min: 6,
-          max: 20,
-          message: '密码长度为6-20位',
-        },
-      ],
-      group_id: [{ required: true, message: '分组不能为空' }],
-    };
+    // const rule = {
+    //   username: [
+    //     { required: true, message: '用户名不能为空' },
+    //     { type: 'string', message: '用户名必须是字符串' },
+    //   ],
+    //   password: [
+    //     { required: true, message: '密码不能为空' },
+    //     { type: 'string', message: '提交类型必须是字符串' },
+    //     {
+    //       type: 'string',
+    //       min: 6,
+    //       max: 20,
+    //       message: '密码长度为6-20位',
+    //     },
+    //   ],
+    //   group_id: [{ required: true, message: '分组不能为空' }],
+    // };
+    const rules = AdminRule.add;
 
     // 拿到验证结果
-    const validateResult = await ctx.validate(rule, {
+    const validateResult = await ctx.validate(rules, {
       username,
       password,
       group_id,
@@ -247,8 +240,6 @@ class AdminController extends BaseController {
       ctx
         .getLogger('formatLogger')
         .info(formatLoggerMsg('参数格式错误', username));
-      this.sendFail({}, '参数格式错误', 10003);
-
       return;
     }
 
@@ -272,22 +263,21 @@ class AdminController extends BaseController {
     const { id } = this.ctx.request.body;
 
     // id校验
-    const rule = {
-      id: [
-        { required: true, message: 'id不能为空' },
-        { type: 'number', message: 'id必须是数字' },
-      ],
-    };
+    // const rule = {
+    //   id: [
+    //     { required: true, message: 'id不能为空' },
+    //     { type: 'number', message: 'id必须是数字' },
+    //   ],
+    // };
+    const rules = AdminRule.id;
 
     // 拿到验证结果
-    const validateResult = await ctx.validate(rule, {
+    const validateResult = await ctx.validate(rules, {
       id,
     });
     if (!validateResult) {
       // 错误日志
       ctx.getLogger('formatLogger').info(formatLoggerMsg('参数格式错误', id));
-      this.sendFail({}, '参数格式错误', 10003);
-
       return;
     }
 
@@ -324,7 +314,7 @@ class AdminController extends BaseController {
     //   ],
     // };
     // 校验规则
-    const rules = AdminRule.edit;
+    const rules = AdminRule.id;
 
     // 拿到验证结果
     const validateResult = await ctx.validate(rules, {
@@ -335,7 +325,6 @@ class AdminController extends BaseController {
       ctx
         .getLogger('formatLogger')
         .info(formatLoggerMsg('id错误', ''));
-      this.sendFail({}, '参数:id错误', 10003);
       return;
     }
 
