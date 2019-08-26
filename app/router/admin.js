@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-19 08:46:54
- * @LastEditTime: 2019-08-23 11:32:32
+ * @LastEditTime: 2019-08-26 09:38:29
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -25,4 +25,6 @@ module.exports = app => {
   router.post('/api/admin/add', app.jwt, controller.admin.add);
   // 删除管理员
   router.post('/api/admin/delete', app.jwt, controller.admin.delete);
+  // 编辑管理员
+  router.post('/api/admin/edit', app.jwt, controller.admin.edit);
 };

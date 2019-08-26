@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-20 08:36:44
- * @LastEditTime: 2019-08-26 08:38:12
+ * @LastEditTime: 2019-08-26 10:08:41
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -88,6 +88,8 @@ class AdminController extends BaseController {
       ctx
         .getLogger('formatLogger')
         .info(formatLoggerMsg('参数格式错误', username));
+      this.sendFail({}, '参数格式错误', 10003);
+
       return;
     }
 
@@ -196,6 +198,7 @@ class AdminController extends BaseController {
     if (!validateResult) {
       // 错误日志
       ctx.getLogger('formatLogger').info(formatLoggerMsg('page不能为空', ''));
+      this.sendFail({}, 'page不能为空', 10003);
       return;
     }
     const results = await service.admin.list();
@@ -239,6 +242,8 @@ class AdminController extends BaseController {
       ctx
         .getLogger('formatLogger')
         .info(formatLoggerMsg('参数格式错误', username));
+      this.sendFail({}, '参数格式错误', 10003);
+
       return;
     }
 
@@ -249,12 +254,12 @@ class AdminController extends BaseController {
       ctx
         .getLogger('formatLogger')
         .info(formatLoggerMsg('添加失败,请重试', username));
+      this.sendFail({}, '添加失败,请重试', 10003);
       return;
     }
 
     this.sendSuccess({}, '添加成功');
   }
-  // 编辑管理员
   // 删除管理员
   async delete() {
     const { ctx, service } = this;
@@ -276,6 +281,8 @@ class AdminController extends BaseController {
     if (!validateResult) {
       // 错误日志
       ctx.getLogger('formatLogger').info(formatLoggerMsg('参数格式错误', id));
+      this.sendFail({}, '参数格式错误', 10003);
+
       return;
     }
 
@@ -293,9 +300,92 @@ class AdminController extends BaseController {
     if (!results) {
       // 错误日志
       ctx.getLogger('formatLogger').info(formatLoggerMsg('删除失败,请重试', id));
+      this.sendFail({}, '删除失败,请重试', 10003);
+
       return;
     }
     this.sendSuccess({}, '删除成功');
+  }
+  // 编辑管理员
+  async edit() {
+    const { ctx, service } = this;
+    const { id, username, password, create_time, update_time, delete_time } = ctx.request.body;
+    const { formatLoggerMsg } = this.ctx.helper;
+
+    // 账号密码校验规则
+    const rule = {
+      id: [
+        { required: true, message: 'ID不能为空' },
+        { type: 'number', message: 'id类型为数字' },
+      ],
+    };
+
+
+    // 拿到验证结果
+    const validateResult = await ctx.validate(rule, {
+      id,
+    });
+    if (!validateResult) {
+      // 错误日志
+      ctx
+        .getLogger('formatLogger')
+        .info(formatLoggerMsg('id错误', ''));
+      this.sendFail({}, '参数:id错误', 10003);
+      return;
+    }
+
+    // 不能修改用户名和密码
+    if (username || password || create_time || update_time || delete_time) {
+      // 错误日志
+      ctx
+        .getLogger('formatLogger')
+        .info(formatLoggerMsg('用户名和密码不能修改', ''));
+      this.sendFail({}, '用户名和密码不能修改', 10003);
+      return;
+    }
+
+    const { filterNullObj } = ctx.helper;
+    const requestObj = filterNullObj(ctx.request.body);
+    // console.log(`requestObj: ${JSON.stringify(requestObj)}`);
+    // 获取JSON长度
+    // console.log(Object.keys(requestObj).length);
+    // 对象的长度(既属性的数量):object没有length属性
+    const requestObjLen = Object.keys(requestObj).length;
+
+    // 修改的内容必须包含一个其他参数
+    if (requestObjLen < 2) {
+      ctx
+        .getLogger('formatLogger')
+        .info(formatLoggerMsg('不能修改,参数错误', ''));
+      this.sendFail({}, '不能修改,参数错误', 10003);
+      return;
+    }
+
+    // 判断id是否存在
+    // 是否存在该ID
+    const idInfo = await service.admin.allInfo({ id });
+
+    if (!idInfo) {
+      // 错误日志
+      ctx.getLogger('formatLogger').info(formatLoggerMsg('ID不存在', id));
+      this.sendFail({}, 'ID不存在', 10003);
+      return;
+    }
+
+
+    // 插入到数据库
+    const results = await service.admin.edit(requestObj);
+    if (!results) {
+      // 错误日志
+      ctx
+        .getLogger('formatLogger')
+        .info(formatLoggerMsg('修改失败,请重试', id));
+      this.sendFail({}, '修改失败,请重试', 10003);
+
+      return;
+    }
+
+    this.sendSuccess({}, '修改成功');
   }
 }
 
