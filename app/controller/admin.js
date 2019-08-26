@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-20 08:36:44
- * @LastEditTime: 2019-08-23 16:15:17
+ * @LastEditTime: 2019-08-26 08:38:12
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -130,8 +130,7 @@ class AdminController extends BaseController {
     if (vcode !== code) {
       // console.log(vcode);
       // 错误日志
-      ctx.getLogger('formatLogger');
-      ctx.info(formatLoggerMsg('验证码错误', username));
+      ctx.getLogger('formatLogger').info(formatLoggerMsg('验证码错误', username));
       this.sendFail({}, '验证码错误', 10003);
       return;
     }

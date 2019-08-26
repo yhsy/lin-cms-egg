@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-22 18:22:02
- * @LastEditTime: 2019-08-23 18:01:57
+ * @LastEditTime: 2019-08-26 08:55:19
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -58,11 +58,13 @@ class AdminService extends Service {
     // console.log(this.ctx.request.body);
     // 过滤没有值的参数
     const requestObj = filterNullObj(this.ctx.request.body);
+    // 返回结果
+    let results = {};
 
     // 如果有日期筛选(要用mysql原生的查询语句)
     if (requestObj.startTime && requestObj.endTime) {
-      const res = await this.getTimeList(requestObj);
-      return res;
+      results = await this.getTimeList(requestObj);
+      return results;
     }
     // 分页
     const { page } = requestObj;
@@ -87,11 +89,20 @@ class AdminService extends Service {
       limit: 10, // 返回数据量(size)
       offset: 10 * (page - 1), // 数据偏移量(page的位置,从哪里取)
     });
+    // console.log(`list is ${list}`);
+    // 判断该页是否有数据
+    if (list.length === 0) {
+      results = {
+        list,
+        total: 0,
+      };
+      return results;
+    }
     // 统计总条数
-    const total = await this.app.mysql.count('lin_admin');
+    const total = await this.app.mysql.count('lin_admin', requestObj);
 
     // 组装数据
-    const results = {
+    results = {
       list,
       total,
     };
