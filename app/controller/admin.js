@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-20 08:36:44
- * @LastEditTime: 2019-08-26 10:08:41
+ * @LastEditTime: 2019-08-26 11:45:23
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -10,6 +10,11 @@
 const BaseController = require('./base');
 // Md5加密:方法1
 const Md5 = require('md5');
+// 自定义校验规则
+const AdminRule = require('../rules/admin');
+
+// const AdminRule = require('../rules/admin');
+// console.log(`AdminRule is ${AdminRule.edit}`);
 
 // Md5加密:方法2(node内置加密模块)
 // nodejs内置的加密模块
@@ -311,18 +316,18 @@ class AdminController extends BaseController {
     const { ctx, service } = this;
     const { id, username, password, create_time, update_time, delete_time } = ctx.request.body;
     const { formatLoggerMsg } = this.ctx.helper;
-
-    // 账号密码校验规则
-    const rule = {
-      id: [
-        { required: true, message: 'ID不能为空' },
-        { type: 'number', message: 'id类型为数字' },
-      ],
-    };
-
+    // 校验规则
+    // const rule = {
+    //   id: [
+    //     { required: true, message: 'ID不能为空' },
+    //     { type: 'number', message: 'id类型为数字' },
+    //   ],
+    // };
+    // 校验规则
+    const rules = AdminRule.edit;
 
     // 拿到验证结果
-    const validateResult = await ctx.validate(rule, {
+    const validateResult = await ctx.validate(rules, {
       id,
     });
     if (!validateResult) {
