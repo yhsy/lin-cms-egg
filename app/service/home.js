@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-27 10:47:42
- * @LastEditTime: 2019-08-27 15:32:38
+ * @LastEditTime: 2019-08-27 16:35:04
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -33,6 +33,16 @@ class HomeService extends Service {
   async editBanner() {
     const requestObj = this.ctx.request.body;
     const result = await this.app.mysql.update('lin_banner', requestObj);
+    const updateSuccess = result.affectedRows === 1;
+    return updateSuccess;
+  }
+  // 删除banner
+  async delBanner(id) {
+    const row = {
+      id,
+      is_delete: 1,
+    };
+    const result = await this.app.mysql.update('lin_banner', row);
     const updateSuccess = result.affectedRows === 1;
     return updateSuccess;
   }

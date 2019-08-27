@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-27 11:32:16
- * @LastEditTime: 2019-08-27 15:29:02
+ * @LastEditTime: 2019-08-27 16:36:50
  * @LastEditors: Please set LastEditors
  */
 
@@ -17,5 +17,6 @@ module.exports = app => {
   router.post('/api/home/banner/add', app.jwt, controller.home.addBanner);
   // 编辑Banner
   router.post('/api/home/banner/edit', app.jwt, controller.home.editBanner);
-
+  // 删除Banner(软删除)
+  router.post('/api/home/banner/del', app.jwt, controller.home.delBanner);
 };

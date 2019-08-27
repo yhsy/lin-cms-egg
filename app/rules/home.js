@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-27 10:52:41
- * @LastEditTime: 2019-08-27 15:08:47
+ * @LastEditTime: 2019-08-27 16:14:03
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -19,6 +19,9 @@ const HomeRules = {
     sort,
     img_url,
     is_show,
+  },
+  delBanner: {
+    id,
   },
 };
 module.exports = HomeRules;
