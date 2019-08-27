@@ -1,10 +1,11 @@
 /*
  * @Description: In User Settings Edit
  * @Author: your name
- * @Date: 2019-08-15 11:17:17
- * @LastEditTime: 2019-08-27 11:49:18
+ * @Date: 2019-08-27 11:32:16
+ * @LastEditTime: 2019-08-27 11:34:27
  * @LastEditors: Please set LastEditors
  */
+
 'use strict';
 
 /**
@@ -12,11 +13,6 @@
  */
 module.exports = app => {
   const { router, controller } = app;
-
-  router.get('/', controller.home.index);
-
-  require('./test')(app);
-  require('./admin')(app);
-  require('./upload')(app);
-  require('./home')(app);
+  // 添加Banner
+  router.post('/api/home/banner/add', app.jwt, controller.home.addBanner);
 };

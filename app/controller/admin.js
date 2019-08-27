@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-20 08:36:44
- * @LastEditTime: 2019-08-26 12:17:15
+ * @LastEditTime: 2019-08-27 11:19:00
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -174,7 +174,7 @@ class AdminController extends BaseController {
       return;
     }
     // 返回数据
-    this.sendSuccess(results[0], 'ok');
+    this.sendSuccess(results[0], '获取成功');
   }
 
   // 获取管理员列表(分页)

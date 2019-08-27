@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-26 10:44:32
- * @LastEditTime: 2019-08-26 12:14:45
+ * @LastEditTime: 2019-08-27 11:07:01
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -33,6 +33,19 @@ const BaseRule = {
   ],
   // 管理员-分组id
   group_id: [{ required: true, message: '分组不能为空' }],
+  // 序号
+  sort: [
+    { required: true, message: '序号不能为空' },
+    { type: 'number', message: '序号类型为数字' },
+  ],
+  img_url: [
+    { required: true, message: '图片地址不能为空' },
+    { type: 'url', message: '图片地址为url标准地址' },
+  ],
+  is_show: [
+    { required: true, message: '是否显示:不能为空' },
+    { type: 'enum', enum: [ 0, 1 ], message: '是否显示:参数错误' },
+  ],
 };
 
 module.exports = BaseRule;
