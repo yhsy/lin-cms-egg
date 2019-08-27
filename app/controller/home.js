@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-15 11:17:17
- * @LastEditTime: 2019-08-27 12:03:22
+ * @LastEditTime: 2019-08-27 15:52:25
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -42,6 +42,32 @@ class HomeController extends BaseController {
       return;
     }
     this.sendSuccess({}, '添加成功');
+  }
+  // 编辑banner
+  async editBanner() {
+    const { ctx, service } = this;
+    const { formatLoggerMsg } = ctx.helper;
+    const { id, sort, img_url, is_show } = ctx.request.body;
+
+    const rules = HomeRules.editBanner;
+    const validateResult = await ctx.validate(rules, { id, sort, img_url, is_show });
+    if (!validateResult) return;
+
+    const bannerInfo = await service.home.infoBanner(id);
+    if (!bannerInfo) {
+      ctx.getLogger('formatLogger').info(formatLoggerMsg('ID不存在'));
+      this.sendFail({}, 'ID不存在', 10003);
+      return;
+    }
+
+    const results = await service.home.editBanner();
+    if (!results) {
+      ctx.getLogger('formatLogger').info(formatLoggerMsg('修改失败,请重试'));
+      this.sendFail({}, '添加失败,请重试', 10003);
+      return;
+    }
+
+    this.sendSuccess({}, '修改成功');
   }
 }
 
