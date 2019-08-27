@@ -746,6 +746,138 @@
               "relationNoShow": true
             }
           ]
+        },
+        {
+          "title": "LIN_BANNER",
+          "fields": [
+            {
+              "name": "id",
+              "type": "INT_10",
+              "remark": "自增ID",
+              "chnname": "自增ID",
+              "pk": true,
+              "notNull": true,
+              "autoIncrement": true
+            },
+            {
+              "name": "sort",
+              "type": "INT_10",
+              "remark": "排序序号",
+              "chnname": "排序序号",
+              "notNull": true
+            },
+            {
+              "name": "title",
+              "type": "VARCHAR_50",
+              "remark": "",
+              "chnname": "图片标题"
+            },
+            {
+              "name": "desc",
+              "type": "VARCHAR_100",
+              "remark": "",
+              "chnname": "图片描述"
+            },
+            {
+              "name": "img_url",
+              "type": "VARCHAR_100",
+              "remark": "",
+              "chnname": "图片地址",
+              "notNull": true
+            },
+            {
+              "name": "link",
+              "type": "VARCHAR_100",
+              "remark": "",
+              "chnname": "链接地址"
+            },
+            {
+              "name": "is_show",
+              "type": "TINYINT_3",
+              "remark": "",
+              "chnname": "是否显示",
+              "notNull": true,
+              "defaultValue": "1"
+            },
+            {
+              "name": "is_delete",
+              "type": "TINYINT_3",
+              "remark": "",
+              "chnname": "是否删除",
+              "notNull": true,
+              "defaultValue": "0"
+            },
+            {
+              "name": "created_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间",
+              "defaultValue": "CURRENT_TIMESTAMP"
+            },
+            {
+              "name": "update_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间",
+              "defaultValue": "CURRENT_TIMESTAMP",
+              "uiHint": ""
+            },
+            {
+              "name": "delete_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "删除时间",
+              "defaultValue": ""
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "banner表"
         }
       ],
       "graphCanvas": {
