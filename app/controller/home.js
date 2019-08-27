@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-15 11:17:17
- * @LastEditTime: 2019-08-27 16:45:49
+ * @LastEditTime: 2019-08-27 18:02:25
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -87,6 +87,24 @@ class HomeController extends BaseController {
 
     this.sendSuccess({}, '删除成功');
 
+  }
+  // 获取Banner列表
+  async listBanner() {
+    const { ctx, service } = this;
+    const { page } = ctx.request.body;
+
+    const rules = HomeRules.list;
+    const validateResult = await ctx.validate(rules, { page });
+    if (!validateResult) return;
+
+    const results = await service.home.listBanner(page);
+    // 没有数据
+    if (results.list.length === 0) {
+      this.sendSuccess(results, '暂无数据');
+      return;
+    }
+
+    this.sendSuccess(results, '列表获取成功');
   }
 }
 

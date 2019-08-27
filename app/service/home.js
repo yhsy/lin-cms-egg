@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-27 10:47:42
- * @LastEditTime: 2019-08-27 16:35:04
+ * @LastEditTime: 2019-08-27 18:26:48
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -10,12 +10,17 @@
 const Service = require('egg').Service;
 // 常用函数
 const Utils = require('../utils');
-const { filterNullObj } = Utils;
+const { formatTimeYMDH } = Utils;
+
 
 class HomeService extends Service {
   // 查询banner信息
   async infoBanner(id) {
     const result = await this.app.mysql.get('lin_banner', { id });
+    // 过滤软删除的id
+    if (result.is_delete) {
+      return false;
+    }
     return result;
   }
   // 添加banner
@@ -29,7 +34,7 @@ class HomeService extends Service {
     const insertSuccess = result.affectedRows === 1;
     return insertSuccess;
   }
-  //  编辑banner
+  // 编辑banner
   async editBanner() {
     const requestObj = this.ctx.request.body;
     const result = await this.app.mysql.update('lin_banner', requestObj);
@@ -45,6 +50,47 @@ class HomeService extends Service {
     const result = await this.app.mysql.update('lin_banner', row);
     const updateSuccess = result.affectedRows === 1;
     return updateSuccess;
+  }
+  // 获取banner列表
+  async listBanner(page) {
+    const { ctx, app } = this;
+    let results = {};
+    const requestObj = ctx.request.body;
+    const queryObj = {};
+
+    // 过滤软删除的banner
+    queryObj.is_delete = 0;
+    // 查询条件(过滤前端提交的无用字段,只留下能查询的字段)
+    if (requestObj.is_show) {
+      queryObj.is_show = requestObj.is_show;
+    }
+
+    // 数据列表
+    const list = await app.mysql.select('lin_banner', {
+      where: queryObj,
+      columns: [ 'id', 'sort', 'img_url', 'link', 'is_show', 'title', 'desc', 'create_time', 'update_time' ],
+      orders: [[ 'sort', 'asc' ], [ 'id', 'desc' ]],
+      limit: 10,
+      offset: (page - 1) * 10,
+    });
+
+    // 判断该页是否有数据
+    if (list.length === 0) {
+      results = {
+        list: [],
+        total: 0,
+      };
+      return results;
+    }
+
+    // 数据总条数
+    const total = await app.mysql.count('lin_banner', queryObj);
+    results = {
+      // 把日期格式化
+      list: formatTimeYMDH(list),
+      total,
+    };
+    return results;
   }
 }
 
