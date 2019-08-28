@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-20 08:36:44
- * @LastEditTime: 2019-08-27 11:19:00
+ * @LastEditTime: 2019-08-28 11:58:08
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -33,11 +33,12 @@ class AdminController extends BaseController {
   async login() {
     // ctx: egg全局的上下文对象(request和response都在里面)
     const { ctx, app, service } = this;
+    const { formatLoggerMsg } = this.ctx.helper;
+
     // this.ctx.session.code
     // console.log(`图形验证码:${ctx.session.code}`);
     // helper实用工具函数(定义在:extend/helper.js)
     // const { helper } = this.ctx;
-    const { formatLoggerMsg } = this.ctx.helper;
     /* 日志配置-start */
     // 自定义日志(扩展extend实现)
     // this.ctx.swLog.info('请求开始');
@@ -66,13 +67,7 @@ class AdminController extends BaseController {
       password,
       vcode,
     });
-    if (!validateResult) {
-      // 错误日志
-      ctx
-        .getLogger('formatLogger')
-        .info(formatLoggerMsg('参数格式错误', username));
-      return;
-    }
+    if (!validateResult) return;
 
     // console.log(validateResult);
     // 获取用户所有信息(通过username)
@@ -82,20 +77,14 @@ class AdminController extends BaseController {
     // 校验用户名
     if (!user) {
       // 错误日志
-      ctx
-        .getLogger('formatLogger')
-        .info(formatLoggerMsg('用户不存在', username));
-      this.sendFail({}, '用户不存在', 10003);
+      this.sendFail('用户不存在');
       return;
     }
     // 校验密码(简单Md5加密)
     /* 方法1:MD5插件 */
     if (user.password !== Md5(password)) {
       // 错误日志
-      ctx
-        .getLogger('formatLogger')
-        .info(formatLoggerMsg('登录密码错误', username));
-      this.sendFail({}, '密码错误', 10003);
+      this.sendFail('密码错误');
       return;
     }
 
@@ -111,10 +100,8 @@ class AdminController extends BaseController {
     const { code } = ctx.session;
     console.log(code);
     if (vcode !== code) {
-      // console.log(vcode);
       // 错误日志
-      ctx.getLogger('formatLogger').info(formatLoggerMsg('验证码错误', username));
-      this.sendFail({}, '验证码错误', 10003);
+      this.sendFail('验证码错误');
       return;
     }
 
@@ -138,25 +125,17 @@ class AdminController extends BaseController {
   // 获取个人信息
   async info() {
     const { app, ctx, service } = this;
-    const { formatLoggerMsg } = this.ctx.helper;
 
     // 这里获取的是字符串
     const { id } = ctx.request.headers;
 
     // 校验id
     const rules = AdminRule.info;
-
     // 拿到验证结果
     const validateResult = await ctx.validate(rules, {
       id,
     });
-    if (!validateResult) {
-      // 错误日志
-      ctx
-        .getLogger('formatLogger')
-        .info(formatLoggerMsg('管理员ID错误', ''));
-      return;
-    }
+    if (!validateResult) return;
     // 获取token
     // const token = ctx.request.headers.authorization.split(' ')[1];
     // token解密
@@ -169,8 +148,7 @@ class AdminController extends BaseController {
 
     // 没有查询到id对应的用户
     if (results.length === 0) {
-      ctx.getLogger('formatLogger').info(formatLoggerMsg('用户不存在'));
-      this.sendFail({}, '用户不存在', 10003);
+      this.sendErrmsg('管理员-不存在');
       return;
     }
     // 返回数据
@@ -180,24 +158,16 @@ class AdminController extends BaseController {
   // 获取管理员列表(分页)
   async list() {
     const { ctx, service } = this;
-    const { formatLoggerMsg } = this.ctx.helper;
     const { page } = this.ctx.request.body;
 
     // page校验
-    // const rule = {
-    //   page: [{ required: true, message: 'page不能为空' }],
-    // };
     const rules = AdminRule.list;
-
     // 拿到验证结果
     const validateResult = await ctx.validate(rules, {
       page,
     });
-    if (!validateResult) {
-      // 错误日志
-      ctx.getLogger('formatLogger').info(formatLoggerMsg('page不能为空', ''));
-      return;
-    }
+    if (!validateResult) return;
+
     const results = await service.admin.list();
     // console.log(`results is ${JSON.stringify(results)}`);
     // 返回数据
@@ -208,25 +178,8 @@ class AdminController extends BaseController {
   async add() {
     const { ctx, service } = this;
     const { username, password, group_id } = this.ctx.request.body;
-    const { formatLoggerMsg } = this.ctx.helper;
+
     // 账号密码校验规则
-    // const rule = {
-    //   username: [
-    //     { required: true, message: '用户名不能为空' },
-    //     { type: 'string', message: '用户名必须是字符串' },
-    //   ],
-    //   password: [
-    //     { required: true, message: '密码不能为空' },
-    //     { type: 'string', message: '提交类型必须是字符串' },
-    //     {
-    //       type: 'string',
-    //       min: 6,
-    //       max: 20,
-    //       message: '密码长度为6-20位',
-    //     },
-    //   ],
-    //   group_id: [{ required: true, message: '分组不能为空' }],
-    // };
     const rules = AdminRule.add;
 
     // 拿到验证结果
@@ -235,84 +188,52 @@ class AdminController extends BaseController {
       password,
       group_id,
     });
-    if (!validateResult) {
-      // 错误日志
-      ctx
-        .getLogger('formatLogger')
-        .info(formatLoggerMsg('参数格式错误', username));
-      return;
-    }
+    if (!validateResult) return;
 
     // 添加管理员到数据库(获取插入结果)
     const results = await service.admin.add();
     if (!results) {
       // 错误日志
-      ctx
-        .getLogger('formatLogger')
-        .info(formatLoggerMsg('添加失败,请重试', username));
-      this.sendFail({}, '添加失败,请重试', 10003);
+      this.sendErrmsg('管理员-添加失败,请重试');
       return;
     }
 
-    this.sendSuccess({}, '添加成功');
+    this.sendSuccess({}, '管理员-添加成功');
   }
   // 删除管理员
   async delete() {
     const { ctx, service } = this;
-    const { formatLoggerMsg } = this.ctx.helper;
     const { id } = this.ctx.request.body;
 
-    // id校验
-    // const rule = {
-    //   id: [
-    //     { required: true, message: 'id不能为空' },
-    //     { type: 'number', message: 'id必须是数字' },
-    //   ],
-    // };
     const rules = AdminRule.id;
-
     // 拿到验证结果
     const validateResult = await ctx.validate(rules, {
       id,
     });
-    if (!validateResult) {
-      // 错误日志
-      ctx.getLogger('formatLogger').info(formatLoggerMsg('参数格式错误', id));
-      return;
-    }
+    if (!validateResult) return;
 
     // 是否存在该ID
     const idInfo = await service.admin.allInfo({ id });
 
     if (!idInfo) {
       // 错误日志
-      ctx.getLogger('formatLogger').info(formatLoggerMsg('ID不存在', id));
-      this.sendFail({}, 'ID不存在', 10003);
+      this.sendErrmsg('管理员-ID不存在');
       return;
     }
 
     const results = await service.admin.delete(id);
     if (!results) {
       // 错误日志
-      ctx.getLogger('formatLogger').info(formatLoggerMsg('删除失败,请重试', id));
-      this.sendFail({}, '删除失败,请重试', 10003);
-
+      this.sendErrmsg('管理员-删除失败,请重试');
       return;
     }
-    this.sendSuccess({}, '删除成功');
+    this.sendSuccess({}, '管理员-删除成功');
   }
   // 编辑管理员
   async edit() {
     const { ctx, service } = this;
     const { id, username, password, create_time, update_time, delete_time } = ctx.request.body;
-    const { formatLoggerMsg } = this.ctx.helper;
-    // 校验规则
-    // const rule = {
-    //   id: [
-    //     { required: true, message: 'ID不能为空' },
-    //     { type: 'number', message: 'id类型为数字' },
-    //   ],
-    // };
+
     // 校验规则
     const rules = AdminRule.id;
 
@@ -320,21 +241,12 @@ class AdminController extends BaseController {
     const validateResult = await ctx.validate(rules, {
       id,
     });
-    if (!validateResult) {
-      // 错误日志
-      ctx
-        .getLogger('formatLogger')
-        .info(formatLoggerMsg('id错误', ''));
-      return;
-    }
+    if (!validateResult) return;
 
     // 不能修改用户名和密码
     if (username || password || create_time || update_time || delete_time) {
       // 错误日志
-      ctx
-        .getLogger('formatLogger')
-        .info(formatLoggerMsg('用户名和密码不能修改', ''));
-      this.sendFail({}, '用户名和密码不能修改', 10003);
+      this.sendErrmsg('管理员-用户名和密码不能修改');
       return;
     }
 
@@ -348,10 +260,7 @@ class AdminController extends BaseController {
 
     // 修改的内容必须包含一个其他参数
     if (requestObjLen < 2) {
-      ctx
-        .getLogger('formatLogger')
-        .info(formatLoggerMsg('不能修改,参数错误', ''));
-      this.sendFail({}, '不能修改,参数错误', 10003);
+      this.sendErrmsg('管理员-不能修改,参数错误');
       return;
     }
 
@@ -361,25 +270,19 @@ class AdminController extends BaseController {
 
     if (!idInfo) {
       // 错误日志
-      ctx.getLogger('formatLogger').info(formatLoggerMsg('ID不存在', id));
-      this.sendFail({}, 'ID不存在', 10003);
+      this.sendErrmsg('管理员-ID不存在');
       return;
     }
-
 
     // 插入到数据库
     const results = await service.admin.edit(requestObj);
     if (!results) {
       // 错误日志
-      ctx
-        .getLogger('formatLogger')
-        .info(formatLoggerMsg('修改失败,请重试', id));
-      this.sendFail({}, '修改失败,请重试', 10003);
-
+      this.sendErrmsg('管理员信息-修改失败,请重试');
       return;
     }
 
-    this.sendSuccess({}, '修改成功');
+    this.sendSuccess({}, '管理员信息-修改成功');
   }
 }
 
