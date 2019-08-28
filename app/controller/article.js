@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-28 16:30:17
- * @LastEditTime: 2019-08-28 17:45:07
+ * @LastEditTime: 2019-08-28 18:21:30
  * @LastEditors: Please set LastEditors
  */
 
@@ -23,8 +23,6 @@ class ArticleController extends BaseController {
   async index() {
     const { ctx } = this;
     const results = await ctx.model.Article.findAll();
-    // console.log(`results is ${results}`);
-
     ctx.body = results;
   }
 }

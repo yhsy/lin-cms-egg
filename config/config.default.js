@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-19 08:56:55
- * @LastEditTime: 2019-08-28 16:41:55
+ * @LastEditTime: 2019-08-28 18:16:11
  * @LastEditors: Please set LastEditors
  */
 /* eslint valid-jsdoc: "off" */
@@ -143,6 +143,25 @@ module.exports = appInfo => {
     username: 'root',
     password: '1qaz!QAZ',
     database: 'lin-cms-egg',
+    define: {
+      underscored: true, // 注意需要加上这个， egg-sequelize只是简单的使用Object.assign对配置和默认配置做了merge, 如果不加这个 update_at会被转变成 updateAt故报错
+      // 禁止修改表名，默认情况下，sequelize将自动将所有传递的模型名称（define的第一个参数）转换为复数
+      // 但是为了安全着想，复数的转换可能会发生变化，所以禁止该行为
+      freezeTableName: true,
+      timestamps: false, // 去除createAt updateAt(默认true-不去掉)
+    },
+    // 默认UTC时间改成北京时间
+    timezone: '+08:00', // 保存为本地时区
+    dialectOptions: {
+      dateStrings: true,
+      typeCast(field, next) {
+        // for reading from database
+        if (field.type === 'DATETIME') {
+          return field.string();
+        }
+        return next();
+      },
+    },
   };
 
   // add your middleware config here
