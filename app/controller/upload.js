@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-26 14:43:37
- * @LastEditTime: 2019-08-26 18:46:13
+ * @LastEditTime: 2019-08-28 12:01:19
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -20,7 +20,6 @@ class UploadController extends BaseController {
   // 上传图片到七牛云
   async uploadImg() {
     const { ctx } = this;
-    const { formatLoggerMsg } = this.ctx.helper;
 
     // 获取上传的文件
     const file = ctx.request.files[0];
@@ -44,8 +43,7 @@ class UploadController extends BaseController {
     // console.log(`results is ${results}`);
     // 上传失败
     if (!results) {
-      ctx.getLogger('formatLogger').info(formatLoggerMsg('图片上传失败'));
-      this.sendFail({}, '上传失败,请重试', 10003);
+      this.sendErrmsg('七牛云-上传失败,请重试');
       return;
     }
     // 上传成功返回
