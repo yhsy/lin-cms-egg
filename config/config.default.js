@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-19 08:56:55
- * @LastEditTime: 2019-08-26 18:37:49
+ * @LastEditTime: 2019-08-28 16:41:55
  * @LastEditors: Please set LastEditors
  */
 /* eslint valid-jsdoc: "off" */
@@ -74,6 +74,7 @@ module.exports = appInfo => {
     agent: false,
   };
 
+
   // jwt插件配置
   config.jwt = {
     // 秘钥
@@ -131,6 +132,17 @@ module.exports = appInfo => {
     // mode: 'stream',
     // fileSize: '50mb',
     // fileExtensions: [ '.xls', '.txt' ], // 扩展几种上传的文件格式
+  };
+
+  // squlize配置
+  config.sequelize = {
+    // 数据库类型
+    dialect: 'mysql',
+    host: 'localhost',
+    port: 3306,
+    username: 'root',
+    password: '1qaz!QAZ',
+    database: 'lin-cms-egg',
   };
 
   // add your middleware config here

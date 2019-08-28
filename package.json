@@ -12,7 +12,9 @@
     "egg-logview": "^2.0.0",
     "egg-mysql": "^3.0.0",
     "egg-scripts": "^2.11.0",
+    "egg-sequelize": "^5.2.0",
     "egg-validate-plus": "^1.1.6",
+    "mysql2": "^1.7.0",
     "qiniu": "^7.2.2",
     "svg-captcha": "^1.4.0"
   },
@@ -24,7 +26,8 @@
     "egg-mock": "^3.21.0",
     "eslint": "^5.13.0",
     "eslint-config-egg": "^7.1.0",
-    "md5": "^2.2.1"
+    "md5": "^2.2.1",
+    "sequelize-cli": "^5.5.0"
   },
   "engines": {
     "node": ">=10.0.0"

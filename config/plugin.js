@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-19 08:56:58
- * @LastEditTime: 2019-08-22 17:39:57
+ * @LastEditTime: 2019-08-28 15:11:13
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -32,5 +32,10 @@ module.exports = {
   logview: {
     package: 'egg-logview',
     // env: ['local', 'default', 'test', 'unittest']
+  },
+  // ORM框架-操作数据库
+  sequelize: {
+    enable: true,
+    package: 'egg-sequelize',
   },
 };

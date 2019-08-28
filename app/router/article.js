@@ -1,10 +1,12 @@
 /*
  * @Description: In User Settings Edit
  * @Author: your name
- * @Date: 2019-08-15 11:17:17
- * @LastEditTime: 2019-08-28 16:47:43
+ * @Date: 2019-08-28 16:35:22
+ * @LastEditTime: 2019-08-28 16:37:07
  * @LastEditors: Please set LastEditors
  */
+
+
 'use strict';
 
 /**
@@ -12,12 +14,6 @@
  */
 module.exports = app => {
   const { router, controller } = app;
-
-  router.get('/', controller.home.index);
-
-  require('./test')(app);
-  require('./admin')(app);
-  require('./upload')(app);
-  require('./home')(app);
-  require('./article')(app);
+  // 测试index
+  router.get('/api/article/index', controller.article.index);
 };
