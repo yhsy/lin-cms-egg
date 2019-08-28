@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-16 09:45:25
- * @LastEditTime: 2019-08-27 16:42:20
+ * @LastEditTime: 2019-08-28 11:50:23
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -43,11 +43,12 @@ class BaseController extends Controller {
     };
     ctx.status = 200;
   }
-  // 统一错误msg+日志
+  // 统一错误msg+日志(用户登录才用)
   sendErrmsg(msg) {
     const { ctx } = this;
+    const { id } = ctx.request.body;
     const { formatLoggerMsg } = this.ctx.helper;
-    ctx.getLogger('formatLogger').info(formatLoggerMsg(msg));
+    ctx.getLogger('formatLogger').info(formatLoggerMsg(msg, id));
     this.sendFail({}, msg, 10003);
   }
 }

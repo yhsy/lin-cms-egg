@@ -2,15 +2,15 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-22 17:07:30
- * @LastEditTime: 2019-08-23 15:11:26
+ * @LastEditTime: 2019-08-28 11:49:02
  * @LastEditors: Please set LastEditors
  */
 'use strict';
 
 module.exports = {
   // 日志格式化
-  formatLoggerMsg(msg, username) {
-    return `[${msg}][用户名:${username}]`;
+  formatLoggerMsg(msg, id) {
+    return `[${msg}][用户id:${id}]`;
   },
   // 过滤json对象里面没有值的属性
   filterNullObj(obj) {
