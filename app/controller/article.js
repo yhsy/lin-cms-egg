@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-28 16:30:17
- * @LastEditTime: 2019-08-28 20:04:28
+ * @LastEditTime: 2019-08-29 10:44:13
  * @LastEditors: Please set LastEditors
  */
 
@@ -36,6 +36,99 @@ class ArticleController extends BaseController {
     }
     this.sendSuccess({}, '添加文章成功');
 
+  }
+
+  // 编辑文章
+  async edit() {
+    const { ctx, service } = this;
+
+    const { id, title, author, cover, url, content, status } = ctx.request.body;
+    const rules = ArticleRules.edit;
+    const validateResults = await ctx.validate(rules, {
+      id, title, author, cover, url, content, status,
+    });
+    if (!validateResults) return;
+
+    const info = await service.article.info(id);
+    if (!info) {
+      this.sendErrmsg('文章ID不存在');
+      return;
+    }
+    // console.log(`info is --- ${JSON.stringify(info)}`);
+
+    const result = await service.article.edit(id);
+    if (!result) {
+      this.sendErrmsg('文章信息-修改失败,请重试');
+      return;
+    }
+    this.sendSuccess({}, '文章信息-修改成功');
+
+  }
+
+  // 删除文章(软)
+  async del() {
+    const { ctx, service } = this;
+
+    const { id } = ctx.request.body;
+    const rules = ArticleRules.del;
+    const validateResults = await ctx.validate(rules, {
+      id,
+    });
+    if (!validateResults) return;
+
+    const info = await service.article.info(id);
+    if (!info) {
+      this.sendErrmsg('文章ID不存在');
+      return;
+    }
+
+    // 软删除
+    const result = await service.article.del(id);
+
+    if (!result) {
+      this.sendErrmsg('文章-删除失败,请重试');
+      return;
+    }
+    this.sendSuccess({}, '文章-删除成功');
+  }
+  // 删除文章(硬)
+  async remove() {
+    const { ctx, service } = this;
+
+    const { id } = ctx.request.body;
+    const rules = ArticleRules.del;
+    const validateResults = await ctx.validate(rules, {
+      id,
+    });
+    if (!validateResults) return;
+
+    const info = await service.article.info(id);
+    if (!info) {
+      this.sendErrmsg('文章ID不存在');
+      return;
+    }
+
+    // 硬删除需要管理员权限
+    const uid = ctx.request.headers.id;
+    const user = await service.admin.allInfo({ id: uid });
+    if (!user) {
+      this.sendErrmsg('管理员不存在');
+      return;
+    }
+
+    if (user.admin !== 1) {
+      this.sendErrmsg('对不起,您的权限不足');
+      return;
+    }
+
+    // 硬删除
+    const result = await service.article.remove(id);
+
+    if (!result) {
+      this.sendErrmsg('文章-删除失败,请重试');
+      return;
+    }
+    this.sendSuccess({}, '文章-删除成功');
   }
 }
 

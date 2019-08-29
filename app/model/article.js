@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-28 16:24:22
- * @LastEditTime: 2019-08-28 18:06:07
+ * @LastEditTime: 2019-08-29 10:10:15
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -30,6 +30,8 @@ module.exports = app => {
     status: { type: BOOLEAN, allowNull: false, defaultValue: true },
     // 文章内容(默认:暂无内容)
     content: { type: TEXT, allowNull: false, defaultValue: '暂无内容' },
+    // 软删除(0-否,1-是)
+    is_delete: { type: BOOLEAN, allowNull: false, defaultValue: false },
     // 创建时间
     created_at: DATE,
     // 更新时间

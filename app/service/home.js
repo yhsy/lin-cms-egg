@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-27 10:47:42
- * @LastEditTime: 2019-08-27 18:26:48
+ * @LastEditTime: 2019-08-29 10:15:45
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -41,7 +41,7 @@ class HomeService extends Service {
     const updateSuccess = result.affectedRows === 1;
     return updateSuccess;
   }
-  // 删除banner
+  // 删除banner(软删除)
   async delBanner(id) {
     const row = {
       id,
