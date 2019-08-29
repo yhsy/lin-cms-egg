@@ -2,10 +2,34 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-26 10:44:32
- * @LastEditTime: 2019-08-28 20:10:12
+ * @LastEditTime: 2019-08-29 15:16:40
  * @LastEditors: Please set LastEditors
  */
 'use strict';
+
+// 验证输入的数字比min小
+const validateNumberMin = (rule, value, callback) => {
+  const val = Number(value);
+  // console.log(`val is ${val}`);
+  // console.log(`rule的min${rule.options.min}`);
+  if (val !== '' && rule.options.min !== '' && val < rule.options.min) {
+    // console.log('这里进来了1');
+    // return callback(new Error('page范围为1到100之间'));
+    return callback(new Error());
+  }
+  callback();
+};
+// 验证输入的数字比max大
+const validateNumberMax = (rule, value, callback) => {
+  const val = Number(value);
+  if (val !== '' && rule.options.max !== '' && val > rule.options.max) {
+    // console.log('这里进来了2');
+    // console.log(`val is ${val}`);
+    // console.log(`rule的max${rule.options.max}`);
+    return callback(new Error());
+  }
+  callback();
+};
 
 /* 基础的校验规则 */
 const BaseRule = {
@@ -21,7 +45,6 @@ const BaseRule = {
     { required: true, message: '密码不能为空' },
     { type: 'string', message: '密码类型为字符串' },
     {
-      type: 'string',
       min: 6,
       max: 20,
       message: '密码长度为6-20位',
@@ -29,14 +52,24 @@ const BaseRule = {
   ],
   page: [
     { required: true, message: 'page不能为空' },
-    { type: 'number', message: 'page类型为数字' },
+    { type: 'integer', message: 'page类型为整数' },
+    {
+      validator: validateNumberMin,
+      message: 'page范围为1到100之间',
+      options: { min: 1 },
+    },
+    {
+      validator: validateNumberMax,
+      message: 'page范围为1到100之间',
+      options: { max: 100 },
+    },
   ],
   // 管理员-分组id
   group_id: [{ required: true, message: '分组不能为空' }],
   // 序号
   sort: [
     { required: true, message: '序号不能为空' },
-    { type: 'number', message: '序号类型为数字' },
+    { type: 'integer', message: '序号类型为整数' },
   ],
   img_url: [
     { required: true, message: '图片地址不能为空' },
@@ -76,7 +109,23 @@ const BaseRule = {
     { required: true, message: '状态不能为空' },
     { type: 'enum', enum: [ 0, 1 ], message: '状态参数错误' },
   ],
+  // 条数(1-50)
+  limit: [
+    { required: true, message: 'limit不能为空' },
+    { type: 'integer', message: 'limit类型为整数' },
+    {
+      validator: validateNumberMin,
+      message: 'limit范围为1到100之间',
+      options: { min: 1 },
+    },
+    {
+      validator: validateNumberMax,
+      message: 'limit范围为1到100之间',
+      options: { max: 100 },
+    },
+  ],
+  startTime: [{ required: true, message: '开始时间不能为空' }],
+  endTime: [{ required: true, message: '开始时间不能为空' }],
 };
 
 module.exports = BaseRule;
-

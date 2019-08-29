@@ -2,12 +2,21 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-28 19:28:02
- * @LastEditTime: 2019-08-29 10:16:35
+ * @LastEditTime: 2019-08-29 16:36:44
  * @LastEditors: Please set LastEditors
  */
 'use strict';
 
 const Service = require('egg').Service;
+
+const ArticleRules = require('../rules/article');
+const Utils = require('../utils');
+const { filterNullObj } = Utils;
+
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
+
+const moment = require('moment');
 
 class ArticleService extends Service {
   // 添加文章
@@ -48,6 +57,94 @@ class ArticleService extends Service {
     const { ctx } = this;
     const result = await ctx.model.Article.destroy({ where: { id } });
     return result;
+  }
+
+  // 文章列表
+  async list() {
+    console.log('list进来了');
+    const { ctx } = this;
+    const requestObj = ctx.request.body;
+    const { page, limit, startTime, endTime } = ctx.request.body;
+    // 过滤空数据
+    const reqObj = filterNullObj(requestObj);
+    const whereObj = {
+      is_delete: 0,
+    };
+    let results = {};
+    // 标题
+    if (reqObj.title) {
+      whereObj.title = {
+        [Op.like]: `%${reqObj.title}%`,
+      };
+    }
+    // 作者
+    if (reqObj.author) {
+      whereObj.author = {
+        [Op.like]: `%${reqObj.author}%`,
+      };
+    }
+    // 状态
+    if (reqObj.status >= 0) {
+      whereObj.status = reqObj.status;
+    }
+    // 浏览量
+    // 创建时间
+    if (startTime && endTime) {
+      if (startTime === endTime) {
+        // console.log('相等');
+        whereObj.created_at = {
+          // 大于等于
+          [Op.gte]: startTime,
+          // 小于
+          [Op.lte]: moment(endTime).add(1, 'days'),
+        };
+      } else {
+        whereObj.created_at = {
+        // 大于等于
+          [Op.gte]: startTime,
+          // 小于
+          [Op.lte]: endTime,
+        };
+      }
+
+    }
+
+    // 文章列表(分页)
+    const list = await ctx.model.Article.findAll({
+      where: whereObj,
+      // 返回过滤字段(浏览量和软删除)
+      attributes: { exclude: [ 'pageviews', 'is_delete' ] },
+      order: [
+        // 创建时间-倒序
+        [ 'created_at', 'DESC' ],
+        // [ 'id', 'DESC' ],
+      ],
+      // 条数
+      limit,
+      offset: (page - 1) * limit,
+    });
+
+    if (list.length === 0 || !list) {
+      results = {
+        list: [],
+        total: 0,
+      };
+      return results;
+    }
+
+    // 统计总条数
+    // findAndAll() 分页统计
+    const total = await ctx.model.Article.count({
+      where: whereObj,
+    });
+
+    results = {
+      list,
+      total,
+    };
+
+    return results;
+
   }
 }
 

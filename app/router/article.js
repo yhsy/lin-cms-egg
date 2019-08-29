@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-28 16:35:22
- * @LastEditTime: 2019-08-29 10:25:21
+ * @LastEditTime: 2019-08-29 15:19:07
  * @LastEditors: Please set LastEditors
  */
 
@@ -25,4 +25,8 @@ module.exports = app => {
   router.post('/api/article/del', app.jwt, controller.article.del);
   // 删除文章(硬)
   router.post('/api/article/remove', app.jwt, controller.article.remove);
+
+  // 获取文章列表
+  router.get('/api/article/list', app.jwt, controller.article.list);
+
 };

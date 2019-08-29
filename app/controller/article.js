@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-28 16:30:17
- * @LastEditTime: 2019-08-29 10:44:13
+ * @LastEditTime: 2019-08-29 15:57:27
  * @LastEditors: Please set LastEditors
  */
 
@@ -10,6 +10,9 @@
 
 const BaseController = require('./base');
 const ArticleRules = require('../rules/article');
+
+const Utils = require('../utils');
+const { filterNullObj } = Utils;
 
 class ArticleController extends BaseController {
 
@@ -129,6 +132,22 @@ class ArticleController extends BaseController {
       return;
     }
     this.sendSuccess({}, '文章-删除成功');
+  }
+  // 获取文章列表
+  async list() {
+    const { ctx, service } = this;
+
+    const { page, limit } = ctx.request.body;
+    const rules = ArticleRules.list;
+    const validateResult = ctx.validate(rules, { page, limit });
+    if (!validateResult) return;
+
+    const results = await service.article.list();
+    if (!results) {
+      this.sendErrmsg('文章列表-获取失败,请重试');
+      return;
+    }
+    this.sendSuccess(results, '文章列表-获取成功');
   }
 }
 
