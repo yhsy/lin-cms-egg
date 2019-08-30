@@ -11,7 +11,7 @@
  Target Server Version : 50725
  File Encoding         : 65001
 
- Date: 28/08/2019 18:30:26
+ Date: 30/08/2019 08:40:10
 */
 
 SET NAMES utf8mb4;
@@ -59,9 +59,9 @@ CREATE TABLE `lin_admin` (
 -- Records of lin_admin
 -- ----------------------------
 BEGIN;
-INSERT INTO `lin_admin` VALUES (1, 'super', 'http://7n.webgo.vip/avatar.png', 2, 1, NULL, 2, 'sha1$2a00b748$1$1fef3d3297477b2c9c0f26a5496d3dc64e08bf5a', '2019-08-07 08:48:32', '2019-08-26 10:05:00', NULL);
-INSERT INTO `lin_admin` VALUES (2, 'admin01', 'https://s2.ax1x.com/2019/08/05/e29sl8.jpg', 2, 1, NULL, 1, 'e10adc3949ba59abbe56e057f20f883e', '2019-08-20 09:06:56', '2019-08-20 09:06:58', NULL);
-INSERT INTO `lin_admin` VALUES (3, 'admin02', 'http://7n.webgo.vip/1.jpg', 1, 1, 'ceshi@qq.com', 3, 'e10adc3949ba59abbe56e057f20f883e', '2019-08-26 09:46:39', '2019-08-26 10:05:57', NULL);
+INSERT INTO `lin_admin` VALUES (1, 'super', 'http://7n.webgo.vip/avatar.png', 1, 1, NULL, 2, 'sha1$2a00b748$1$1fef3d3297477b2c9c0f26a5496d3dc64e08bf5a', '2019-08-07 08:48:32', '2019-08-29 10:43:56', NULL);
+INSERT INTO `lin_admin` VALUES (2, 'admin01', 'https://s2.ax1x.com/2019/08/05/e29sl8.jpg', 2, 1, NULL, 1, 'e10adc3949ba59abbe56e057f20f883e', '2019-08-20 09:06:56', '2019-08-29 10:25:58', NULL);
+INSERT INTO `lin_admin` VALUES (3, 'admin02', 'http://7n.webgo.vip/1.jpg', 2, 1, 'ceshi@qq.com', 3, 'e10adc3949ba59abbe56e057f20f883e', '2019-08-26 09:46:39', '2019-08-29 10:25:59', NULL);
 COMMIT;
 
 -- ----------------------------
@@ -71,23 +71,28 @@ DROP TABLE IF EXISTS `lin_article`;
 CREATE TABLE `lin_article` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `title` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `author` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `author` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '管理员',
   `url` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `pageviews` int(10) NOT NULL DEFAULT '0',
   `description` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `cover` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'http://7n.webgo.vip/no-image.jpg',
   `status` tinyint(1) NOT NULL DEFAULT '1',
   `content` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `is_delete` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of lin_article
 -- ----------------------------
 BEGIN;
-INSERT INTO `lin_article` VALUES (1, '新闻标题', '作者', 'http://www.baidu.com', 1, NULL, 'http://7n.webgo.vip/no-image.jpg', 1, '新闻的内容', '2019-08-28 17:52:05', '2019-08-28 17:52:07');
+INSERT INTO `lin_article` VALUES (1, '我是文章标题1', '管理员1', 'http://www.webgo.vip/eggcms/article?id=1', 1, NULL, 'http://7n.webgo.vip/banner1.jpg', 0, '我是文章的内容1我是文章的内容1我是文章的内容1', 0, '2019-08-28 17:52:05', '2019-08-29 09:23:55');
+INSERT INTO `lin_article` VALUES (2, '我是文章标题', '管理员', 'http://www.webgo.vip/eggcms/article?id=2', 0, NULL, 'http://7n.webgo.vip/banner2.jpg', 1, '我是文章的内容我是文章的内容我是文章的内容', 0, '2019-08-28 20:13:15', '2019-08-28 20:13:15');
+INSERT INTO `lin_article` VALUES (3, '我是文章标题3', '管理员3', 'http://www.webgo.vip/eggcms/article?id=3', 0, NULL, 'http://7n.webgo.vip/banner3.jpg', 1, '我是文章的内容3我是文章的内容3我是文章的内容3', 0, '2019-08-28 20:15:16', '2019-08-28 20:15:16');
+INSERT INTO `lin_article` VALUES (4, '我是文章标题4', '管理员4', 'http://www.webgo.vip/eggcms/article?id=4', 0, NULL, 'http://7n.webgo.vip/banner4.jpg', 1, '我是文章的内容3我是文章的内容3我是文章的内容4', 0, '2019-08-29 08:36:33', '2019-08-29 08:36:33');
+INSERT INTO `lin_article` VALUES (6, '我是文章标题5', '管理员5', 'http://www.webgo.vip/eggcms/article?id=5', 0, NULL, 'http://7n.webgo.vip/banner5.jpg', 1, '我是文章的内容3我是文章的内容3我是文章的内容5', 0, '2019-08-29 15:19:21', '2019-08-29 15:19:21');
 COMMIT;
 
 -- ----------------------------
