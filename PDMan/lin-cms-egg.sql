@@ -11,7 +11,7 @@
  Target Server Version : 50725
  File Encoding         : 65001
 
- Date: 30/08/2019 08:40:10
+ Date: 30/08/2019 19:17:07
 */
 
 SET NAMES utf8mb4;
@@ -32,6 +32,7 @@ CREATE TABLE `SequelizeMeta` (
 -- ----------------------------
 BEGIN;
 INSERT INTO `SequelizeMeta` VALUES ('20190828101913-init-lin_article.js');
+INSERT INTO `SequelizeMeta` VALUES ('20190830014311-init-lin_columns.js');
 COMMIT;
 
 -- ----------------------------
@@ -69,30 +70,31 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `lin_article`;
 CREATE TABLE `lin_article` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
-  `title` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `author` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '管理员',
-  `url` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `pageviews` int(10) NOT NULL DEFAULT '0',
-  `description` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `cover` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'http://7n.webgo.vip/no-image.jpg',
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  `content` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `is_delete` tinyint(1) NOT NULL DEFAULT '0',
-  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
+  `id` int(8) NOT NULL AUTO_INCREMENT COMMENT '文章ID',
+  `cid` int(2) NOT NULL COMMENT '栏目ID',
+  `title` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '标题',
+  `author` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '管理员' COMMENT '作者',
+  `url` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '链接地址',
+  `pageviews` int(10) NOT NULL DEFAULT '0' COMMENT '浏览量',
+  `description` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '描述',
+  `cover` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'http://7n.webgo.vip/no-image.jpg' COMMENT '封面图片',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态(0-隐藏,1-正常)',
+  `content` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '文章内容',
+  `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除(0-否,1-是)',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of lin_article
 -- ----------------------------
 BEGIN;
-INSERT INTO `lin_article` VALUES (1, '我是文章标题1', '管理员1', 'http://www.webgo.vip/eggcms/article?id=1', 1, NULL, 'http://7n.webgo.vip/banner1.jpg', 0, '我是文章的内容1我是文章的内容1我是文章的内容1', 0, '2019-08-28 17:52:05', '2019-08-29 09:23:55');
-INSERT INTO `lin_article` VALUES (2, '我是文章标题', '管理员', 'http://www.webgo.vip/eggcms/article?id=2', 0, NULL, 'http://7n.webgo.vip/banner2.jpg', 1, '我是文章的内容我是文章的内容我是文章的内容', 0, '2019-08-28 20:13:15', '2019-08-28 20:13:15');
-INSERT INTO `lin_article` VALUES (3, '我是文章标题3', '管理员3', 'http://www.webgo.vip/eggcms/article?id=3', 0, NULL, 'http://7n.webgo.vip/banner3.jpg', 1, '我是文章的内容3我是文章的内容3我是文章的内容3', 0, '2019-08-28 20:15:16', '2019-08-28 20:15:16');
-INSERT INTO `lin_article` VALUES (4, '我是文章标题4', '管理员4', 'http://www.webgo.vip/eggcms/article?id=4', 0, NULL, 'http://7n.webgo.vip/banner4.jpg', 1, '我是文章的内容3我是文章的内容3我是文章的内容4', 0, '2019-08-29 08:36:33', '2019-08-29 08:36:33');
-INSERT INTO `lin_article` VALUES (6, '我是文章标题5', '管理员5', 'http://www.webgo.vip/eggcms/article?id=5', 0, NULL, 'http://7n.webgo.vip/banner5.jpg', 1, '我是文章的内容3我是文章的内容3我是文章的内容5', 0, '2019-08-29 15:19:21', '2019-08-29 15:19:21');
+INSERT INTO `lin_article` VALUES (1, 109, '我是文章标题1', '管理员1', 'http://www.webgo.vip/eggcms/article?id=1', 1, NULL, 'http://7n.webgo.vip/banner1.jpg', 0, '我是文章的内容1我是文章的内容1我是文章的内容1', 0, '2019-08-28 17:52:05', '2019-08-30 09:24:49');
+INSERT INTO `lin_article` VALUES (2, 101, '我是文章标题', '管理员', 'http://www.webgo.vip/eggcms/article?id=2', 0, NULL, 'http://7n.webgo.vip/banner2.jpg', 1, '我是文章的内容我是文章的内容我是文章的内容', 0, '2019-08-28 20:13:15', '2019-08-30 09:02:25');
+INSERT INTO `lin_article` VALUES (3, 101, '我是文章标题3', '管理员3', 'http://www.webgo.vip/eggcms/article?id=3', 0, NULL, 'http://7n.webgo.vip/banner3.jpg', 1, '我是文章的内容3我是文章的内容3我是文章的内容3', 0, '2019-08-28 20:15:16', '2019-08-30 09:02:26');
+INSERT INTO `lin_article` VALUES (4, 102, '我是文章标题4', '管理员4', 'http://www.webgo.vip/eggcms/article?id=4', 0, NULL, 'http://7n.webgo.vip/banner4.jpg', 1, '我是文章的内容3我是文章的内容3我是文章的内容4', 0, '2019-08-29 08:36:33', '2019-08-30 09:03:09');
+INSERT INTO `lin_article` VALUES (6, 102, '我是文章标题5', '管理员5', 'http://www.webgo.vip/eggcms/article?id=5', 0, NULL, 'http://7n.webgo.vip/banner5.jpg', 1, '我是文章的内容3我是文章的内容3我是文章的内容5', 0, '2019-08-29 15:19:21', '2019-08-30 09:03:13');
 COMMIT;
 
 -- ----------------------------
@@ -124,6 +126,30 @@ INSERT INTO `lin_banner` VALUES (3, 3, 'banenr3', '', 'http://7n.webgo.vip/banne
 INSERT INTO `lin_banner` VALUES (4, 4, 'banenr4', '', 'http://7n.webgo.vip/banner4.jpg', '#', 0, 0, '2019-08-27 16:57:16', '2019-08-27 18:23:37', NULL);
 INSERT INTO `lin_banner` VALUES (5, 5, 'banenr5', '', 'http://7n.webgo.vip/banner5.jpg', '#', 1, 0, '2019-08-27 16:57:24', '2019-08-27 18:05:37', NULL);
 INSERT INTO `lin_banner` VALUES (6, 6, 'banenr6', '', 'http://7n.webgo.vip/banner6.jpg', '#', 1, 0, '2019-08-27 16:57:37', '2019-08-27 16:57:37', NULL);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for lin_columns
+-- ----------------------------
+DROP TABLE IF EXISTS `lin_columns`;
+CREATE TABLE `lin_columns` (
+  `cid` int(4) NOT NULL AUTO_INCREMENT,
+  `cname` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `link` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(2) NOT NULL DEFAULT '1',
+  `is_delete` tinyint(2) NOT NULL DEFAULT '0',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`cid`)
+) ENGINE=InnoDB AUTO_INCREMENT=104 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------
+-- Records of lin_columns
+-- ----------------------------
+BEGIN;
+INSERT INTO `lin_columns` VALUES (101, '公司新闻', NULL, 1, 0, '2019-08-30 09:51:12', '2019-08-30 09:51:17');
+INSERT INTO `lin_columns` VALUES (102, '行业新闻', NULL, 1, 0, '2019-08-30 12:23:07', '2019-08-30 12:23:07');
+INSERT INTO `lin_columns` VALUES (103, '内部通知', NULL, 0, 1, '2019-08-30 18:40:38', '2019-08-30 18:44:21');
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
