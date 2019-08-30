@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-30 12:15:44
- * @LastEditTime: 2019-08-30 12:17:44
+ * @LastEditTime: 2019-08-30 18:47:02
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -13,7 +13,7 @@ const ColumnsRules = require('../rules/columns');
 // const Utils = require('../utils');
 // const { filterNullObj } = Utils;
 
-class ArticleController extends BaseController {
+class ColumnsController extends BaseController {
 
   // 添加栏目
   async add() {
@@ -34,73 +34,72 @@ class ArticleController extends BaseController {
 
   }
 
-  // 编辑文章
+  // 编辑栏目
   async edit() {
     const { ctx, service } = this;
 
-    const { id, title, author, cover, url, content, status } = ctx.request.body;
+    const { cid, cname, status } = ctx.request.body;
     const rules = ColumnsRules.edit;
     const validateResults = await ctx.validate(rules, {
-      id, title, author, cover, url, content, status,
+      cid, cname, status,
     });
     if (!validateResults) return;
 
-    const info = await service.article.info(id);
+    const info = await service.columns.info(cid);
     if (!info) {
-      this.sendErrmsg('文章ID不存在');
+      this.sendErrmsg('栏目ID不存在');
       return;
     }
-    // console.log(`info is --- ${JSON.stringify(info)}`);
 
-    const result = await service.article.edit(id);
+    const result = await service.columns.edit(cid);
     if (!result) {
-      this.sendErrmsg('文章信息-修改失败,请重试');
+      this.sendErrmsg('栏目信息-修改失败,请重试');
       return;
     }
-    this.sendSuccess({}, '文章信息-修改成功');
+    this.sendSuccess({}, '栏目信息-修改成功');
 
   }
 
-  // 删除文章(软)
+  // 删除栏目(软)
   async del() {
     const { ctx, service } = this;
 
-    const { id } = ctx.request.body;
+    const { cid } = ctx.request.body;
     const rules = ColumnsRules.del;
     const validateResults = await ctx.validate(rules, {
-      id,
+      cid,
     });
     if (!validateResults) return;
 
-    const info = await service.article.info(id);
+    const info = await service.columns.info(cid);
     if (!info) {
-      this.sendErrmsg('文章ID不存在');
+      this.sendErrmsg('栏目ID不存在');
       return;
     }
 
     // 软删除
-    const result = await service.article.del(id);
+    const result = await service.columns.del(cid);
 
     if (!result) {
-      this.sendErrmsg('文章-删除失败,请重试');
+      this.sendErrmsg('栏目-删除失败,请重试');
       return;
     }
-    this.sendSuccess({}, '文章-删除成功');
+    this.sendSuccess({}, '栏目-删除成功');
   }
-  // 删除文章(硬)
+  // 删除栏目(硬)
   async remove() {
     const { ctx, service } = this;
 
-    const { id } = ctx.request.body;
+    const { cid } = ctx.request.body;
     const rules = ColumnsRules.del;
     const validateResults = await ctx.validate(rules, {
-      id,
+      cid,
     });
     if (!validateResults) return;
 
-    const info = await service.article.info(id);
+    const info = await service.columns.info(cid);
     if (!info) {
-      this.sendErrmsg('文章ID不存在');
+      this.sendErrmsg('栏目ID不存在');
       return;
     }
 
@@ -118,15 +117,15 @@ class ArticleController extends BaseController {
     }
 
     // 硬删除
-    const result = await service.article.remove(id);
+    const result = await service.columns.remove(id);
 
     if (!result) {
-      this.sendErrmsg('文章-删除失败,请重试');
+      this.sendErrmsg('栏目-删除失败,请重试');
       return;
     }
-    this.sendSuccess({}, '文章-删除成功');
+    this.sendSuccess({}, '栏目-删除成功');
   }
-  // 获取文章列表
+  // 获取栏目列表
   async list() {
     const { ctx, service } = this;
 
@@ -135,13 +134,13 @@ class ArticleController extends BaseController {
     const validateResult = ctx.validate(rules, { page, limit });
     if (!validateResult) return;
 
-    const results = await service.article.list();
+    const results = await service.columns.list();
     if (!results) {
-      this.sendErrmsg('文章列表-获取失败,请重试');
+      this.sendErrmsg('栏目列表-获取失败,请重试');
       return;
     }
-    this.sendSuccess(results, '文章列表-获取成功');
+    this.sendSuccess(results, '栏目列表-获取成功');
   }
 }
 
-module.exports = ArticleController;
+module.exports = ColumnsController;
