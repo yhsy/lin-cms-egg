@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-28 16:24:22
- * @LastEditTime: 2019-08-29 16:05:05
+ * @LastEditTime: 2019-08-30 09:57:15
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -14,6 +14,8 @@ module.exports = app => {
   const Article = app.model.define('lin_article', {
     // 文章id
     id: { type: INTEGER(8), primaryKey: true, autoIncrement: true },
+    // 栏目id
+    cid: { type: INTEGER(2), allowNull: false },
     // 标题
     title: { type: STRING(30), allowNull: false },
     // 作者

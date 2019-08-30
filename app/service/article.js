@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-28 19:28:02
- * @LastEditTime: 2019-08-29 16:36:44
+ * @LastEditTime: 2019-08-30 18:36:16
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -61,7 +61,6 @@ class ArticleService extends Service {
 
   // 文章列表
   async list() {
-    console.log('list进来了');
     const { ctx } = this;
     const requestObj = ctx.request.body;
     const { page, limit, startTime, endTime } = ctx.request.body;
