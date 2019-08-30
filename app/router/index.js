@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-15 11:17:17
- * @LastEditTime: 2019-08-28 16:47:43
+ * @LastEditTime: 2019-08-30 12:22:27
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -20,4 +20,5 @@ module.exports = app => {
   require('./upload')(app);
   require('./home')(app);
   require('./article')(app);
+  require('./columns')(app);
 };

@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-26 10:44:32
- * @LastEditTime: 2019-08-29 15:16:40
+ * @LastEditTime: 2019-08-30 10:00:33
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -126,6 +126,16 @@ const BaseRule = {
   ],
   startTime: [{ required: true, message: '开始时间不能为空' }],
   endTime: [{ required: true, message: '开始时间不能为空' }],
+  // 栏目id
+  cid: [
+    { required: true, message: '栏目ID不能为空' },
+    { type: 'number', message: '栏目ID类型为数字' },
+  ],
+  // 栏目名称
+  cname: [
+    { required: true, message: '栏目名称不能为空' },
+    { type: 'string', min: 2, max: 10, message: '栏目名称为2-10个字符' },
+  ],
 };
 
 module.exports = BaseRule;
