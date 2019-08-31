@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : 本地数据库
+ Source Server         : 本地mysql
  Source Server Type    : MySQL
- Source Server Version : 50725
+ Source Server Version : 50724
  Source Host           : localhost:3306
  Source Schema         : lin-cms-egg
 
  Target Server Type    : MySQL
- Target Server Version : 50725
+ Target Server Version : 50724
  File Encoding         : 65001
 
- Date: 30/08/2019 19:17:07
+ Date: 31/08/2019 22:15:45
 */
 
 SET NAMES utf8mb4;
@@ -33,6 +33,7 @@ CREATE TABLE `SequelizeMeta` (
 BEGIN;
 INSERT INTO `SequelizeMeta` VALUES ('20190828101913-init-lin_article.js');
 INSERT INTO `SequelizeMeta` VALUES ('20190830014311-init-lin_columns.js');
+INSERT INTO `SequelizeMeta` VALUES ('20190831134851-init-jobs.js');
 COMMIT;
 
 -- ----------------------------
@@ -141,7 +142,7 @@ CREATE TABLE `lin_columns` (
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`cid`)
-) ENGINE=InnoDB AUTO_INCREMENT=104 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=204 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of lin_columns
@@ -150,6 +151,33 @@ BEGIN;
 INSERT INTO `lin_columns` VALUES (101, '公司新闻', NULL, 1, 0, '2019-08-30 09:51:12', '2019-08-30 09:51:17');
 INSERT INTO `lin_columns` VALUES (102, '行业新闻', NULL, 1, 0, '2019-08-30 12:23:07', '2019-08-30 12:23:07');
 INSERT INTO `lin_columns` VALUES (103, '内部通知', NULL, 0, 1, '2019-08-30 18:40:38', '2019-08-30 18:44:21');
+INSERT INTO `lin_columns` VALUES (201, '研发部', NULL, 1, 0, '2019-08-31 22:13:50', '2019-08-31 22:13:55');
+INSERT INTO `lin_columns` VALUES (202, '运营部', NULL, 1, 0, '2019-08-31 22:14:18', '2019-08-31 22:14:23');
+INSERT INTO `lin_columns` VALUES (203, '产品部', NULL, 1, 0, '2019-08-31 22:15:06', '2019-08-31 22:15:09');
+COMMIT;
+
+-- ----------------------------
+-- Table structure for lin_jobs
+-- ----------------------------
+DROP TABLE IF EXISTS `lin_jobs`;
+CREATE TABLE `lin_jobs` (
+  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `cid` int(8) NOT NULL,
+  `title` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `num` int(8) DEFAULT NULL,
+  `status` tinyint(2) NOT NULL DEFAULT '1',
+  `content` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `is_delete` tinyint(2) NOT NULL DEFAULT '0',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------
+-- Records of lin_jobs
+-- ----------------------------
+BEGIN;
+INSERT INTO `lin_jobs` VALUES (1, 201, 'web前端', 1, 1, 'web前端招聘要求', 0, '2019-08-31 22:11:53', '2019-08-31 22:11:56');
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
