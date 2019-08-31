@@ -77,7 +77,7 @@ const BaseRule = {
   ],
   is_show: [
     { required: true, message: '是否显示:不能为空' },
-    { type: 'enum', enum: [ 0, 1 ], message: '是否显示:参数错误' },
+    { type: 'enum', enum: [0, 1], message: '是否显示:参数错误' },
   ],
   // 文章标题
   title: [
@@ -107,7 +107,7 @@ const BaseRule = {
   // 文章-状态
   status: [
     { required: true, message: '状态不能为空' },
-    { type: 'enum', enum: [ 0, 1 ], message: '状态参数错误' },
+    { type: 'enum', enum: [0, 1], message: '状态参数错误' },
   ],
   // 条数(1-50)
   limit: [
@@ -136,6 +136,20 @@ const BaseRule = {
     { required: true, message: '栏目名称不能为空' },
     { type: 'string', min: 2, max: 10, message: '栏目名称为2-10个字符' },
   ],
+  job_num: [
+    { required: true, message: '招聘数量不能为空' },
+    { type: 'integer', message: '招聘人数为整数' },
+    {
+      validator: validateNumberMin,
+      message: '招聘人数范围为1到100之间',
+      options: { min: 1 },
+    },
+    {
+      validator: validateNumberMax,
+      message: '招聘人数范围为1到100之间',
+      options: { max: 100 },
+    },
+  ]
 };
 
 module.exports = BaseRule;

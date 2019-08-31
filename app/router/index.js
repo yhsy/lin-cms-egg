@@ -21,4 +21,6 @@ module.exports = app => {
   require('./home')(app);
   require('./article')(app);
   require('./columns')(app);
+  require('./jobs')(app);
+
 };
