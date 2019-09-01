@@ -17,9 +17,9 @@ const JobsRules = {
     num: job_num,
     content,
   },
-  // del: {
-  //   id,
-  // },
+  del: {
+    id,
+  },
   // list: {
   //   page,
   //   limit,

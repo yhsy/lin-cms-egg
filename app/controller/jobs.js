@@ -52,71 +52,71 @@ class JobsController extends BaseController {
 
   }
 
-  // // 删除招聘(软)
-  // async del () {
-  //   const { ctx, service } = this;
+  // 删除招聘(软)
+  async del () {
+    const { ctx, service } = this;
 
-  //   const { cid } = ctx.request.body;
-  //   const rules = JobsRules.del;
-  //   const validateResults = await ctx.validate(rules, {
-  //     cid,
-  //   });
-  //   if (!validateResults) return;
+    const { id } = ctx.request.body;
+    const rules = JobsRules.del;
+    const validateResults = await ctx.validate(rules, {
+      id,
+    });
+    if (!validateResults) return;
 
-  //   const info = await service.jobs.info(cid);
-  //   if (!info) {
-  //     this.sendErrmsg('招聘ID不存在');
-  //     return;
-  //   }
+    const info = await service.jobs.info(id);
+    if (!info) {
+      this.sendErrmsg('招聘ID不存在');
+      return;
+    }
 
-  //   // 软删除
-  //   const result = await service.jobs.del(cid);
+    // 软删除
+    const result = await service.jobs.del(id);
 
-  //   if (!result) {
-  //     this.sendErrmsg('招聘-删除失败,请重试');
-  //     return;
-  //   }
-  //   this.sendSuccess({}, '招聘-删除成功');
-  // }
-  // // 删除招聘(硬)
-  // async remove () {
-  //   const { ctx, service } = this;
+    if (!result) {
+      this.sendErrmsg('招聘-删除失败,请重试');
+      return;
+    }
+    this.sendSuccess({}, '招聘-删除成功');
+  }
+  // 删除招聘(硬)
+  async remove () {
+    const { ctx, service } = this;
 
-  //   const { cid } = ctx.request.body;
-  //   const rules = JobsRules.del;
-  //   const validateResults = await ctx.validate(rules, {
-  //     cid,
-  //   });
-  //   if (!validateResults) return;
+    const { id } = ctx.request.body;
+    const rules = JobsRules.del;
+    const validateResults = await ctx.validate(rules, {
+      id,
+    });
+    if (!validateResults) return;
 
-  //   const info = await service.jobs.info(cid);
-  //   if (!info) {
-  //     this.sendErrmsg('招聘ID不存在');
-  //     return;
-  //   }
+    const info = await service.jobs.info(id);
+    if (!info) {
+      this.sendErrmsg('招聘ID不存在');
+      return;
+    }
 
-  //   // 硬删除需要管理员权限
-  //   const uid = ctx.request.headers.id;
-  //   const user = await service.admin.allInfo({ id: uid });
-  //   if (!user) {
-  //     this.sendErrmsg('管理员不存在');
-  //     return;
-  //   }
+    // 硬删除需要管理员权限
+    const uid = ctx.request.headers.id;
+    const user = await service.admin.allInfo({ id: uid });
+    if (!user) {
+      this.sendErrmsg('管理员不存在');
+      return;
+    }
 
-  //   if (user.admin !== 1) {
-  //     this.sendErrmsg('对不起,您的权限不足');
-  //     return;
-  //   }
+    if (user.admin !== 1) {
+      this.sendErrmsg('对不起,您的权限不足');
+      return;
+    }
 
-  //   // 硬删除
-  //   const result = await service.jobs.remove(id);
+    // 硬删除
+    const result = await service.jobs.remove(id);
 
-  //   if (!result) {
-  //     this.sendErrmsg('招聘-删除失败,请重试');
-  //     return;
-  //   }
-  //   this.sendSuccess({}, '招聘-删除成功');
-  // }
+    if (!result) {
+      this.sendErrmsg('招聘-删除失败,请重试');
+      return;
+    }
+    this.sendSuccess({}, '招聘-删除成功');
+  }
   // // 获取招聘列表
   // async list () {
   //   const { ctx, service } = this;

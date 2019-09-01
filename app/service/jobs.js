@@ -40,21 +40,21 @@ class JobsService extends Service {
     const result = await ctx.model.Jobs.update(requestObj, { where: { id } });
     return result;
   }
-  // // 删除招聘信息(软删除)
-  // async del (cid) {
-  //   const { ctx } = this;
-  //   const requestObj = {
-  //     is_delete: 1,
-  //   };
-  //   const result = await ctx.model.Jobs.update(requestObj, { where: { cid } });
-  //   return result;
-  // }
-  // // 删除招聘信息(硬删除-数据库直接删除)
-  // async remove (cid) {
-  //   const { ctx } = this;
-  //   const result = await ctx.model.Jobs.destroy({ where: { cid } });
-  //   return result;
-  // }
+  // 删除招聘信息(软删除)
+  async del (id) {
+    const { ctx } = this;
+    const requestObj = {
+      is_delete: 1,
+    };
+    const result = await ctx.model.Jobs.update(requestObj, { where: { id } });
+    return result;
+  }
+  // 删除招聘信息(硬删除-数据库直接删除)
+  async remove (id) {
+    const { ctx } = this;
+    const result = await ctx.model.Jobs.destroy({ where: { id } });
+    return result;
+  }
 
   // // 招聘信息列表
   // async list () {
