@@ -26,31 +26,31 @@ class JobsController extends BaseController {
 
   }
 
-  // // 编辑招聘
-  // async edit () {
-  //   const { ctx, service } = this;
+  // 编辑招聘
+  async edit () {
+    const { ctx, service } = this;
 
-  //   const { cid, cname, status } = ctx.request.body;
-  //   const rules = JobsRules.edit;
-  //   const validateResults = await ctx.validate(rules, {
-  //     cid, cname, status,
-  //   });
-  //   if (!validateResults) return;
+    const { id, cid, title, num, content } = ctx.request.body;
+    const rules = JobsRules.edit;
+    const validateResults = await ctx.validate(rules, {
+      id, cid, title, num, content
+    });
+    if (!validateResults) return;
 
-  //   const info = await service.jobs.info(cid);
-  //   if (!info) {
-  //     this.sendErrmsg('招聘ID不存在');
-  //     return;
-  //   }
+    const info = await service.jobs.info(id);
+    if (!info) {
+      this.sendErrmsg('招聘ID不存在');
+      return;
+    }
 
-  //   const result = await service.jobs.edit(cid);
-  //   if (!result) {
-  //     this.sendErrmsg('招聘信息-修改失败,请重试');
-  //     return;
-  //   }
-  //   this.sendSuccess({}, '招聘信息-修改成功');
+    const result = await service.jobs.edit(id);
+    if (!result) {
+      this.sendErrmsg('招聘信息-修改失败,请重试');
+      return;
+    }
+    this.sendSuccess({}, '招聘信息-修改成功');
 
-  // }
+  }
 
   // // 删除招聘(软)
   // async del () {

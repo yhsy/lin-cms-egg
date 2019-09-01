@@ -12,7 +12,7 @@ const Op = Sequelize.Op;
 const moment = require('moment');
 
 class JobsService extends Service {
-  // 添加栏目
+  // 添加招聘信息
   async add () {
     const { ctx } = this;
     const { cid, title, num, content } = ctx.request.body;
@@ -27,20 +27,20 @@ class JobsService extends Service {
     const result = await ctx.model.Jobs.create(requestObj);
     return result;
   }
-  // // 获取栏目详情
-  // async info (cid) {
-  //   const { ctx } = this;
-  //   const result = await ctx.model.Jobs.findOne({ where: { cid } });
-  //   return result;
-  // }
-  // // 编辑栏目
-  // async edit (cid) {
-  //   const { ctx } = this;
-  //   const requestObj = ctx.request.body;
-  //   const result = await ctx.model.Jobs.update(requestObj, { where: { cid } });
-  //   return result;
-  // }
-  // // 删除栏目(软删除)
+  // 获取招聘信息详情
+  async info (id) {
+    const { ctx } = this;
+    const result = await ctx.model.Jobs.findOne({ where: { id } });
+    return result;
+  }
+  // 编辑招聘信息
+  async edit (id) {
+    const { ctx } = this;
+    const requestObj = ctx.request.body;
+    const result = await ctx.model.Jobs.update(requestObj, { where: { id } });
+    return result;
+  }
+  // // 删除招聘信息(软删除)
   // async del (cid) {
   //   const { ctx } = this;
   //   const requestObj = {
@@ -49,14 +49,14 @@ class JobsService extends Service {
   //   const result = await ctx.model.Jobs.update(requestObj, { where: { cid } });
   //   return result;
   // }
-  // // 删除栏目(硬删除-数据库直接删除)
+  // // 删除招聘信息(硬删除-数据库直接删除)
   // async remove (cid) {
   //   const { ctx } = this;
   //   const result = await ctx.model.Jobs.destroy({ where: { cid } });
   //   return result;
   // }
 
-  // // 栏目列表
+  // // 招聘信息列表
   // async list () {
   //   const { ctx } = this;
   //   const requestObj = ctx.request.body;
@@ -99,7 +99,7 @@ class JobsService extends Service {
 
   //   }
 
-  //   // 栏目列表(分页)
+  //   // 招聘信息列表(分页)
   //   const list = await ctx.model.Jobs.findAll({
   //     where: whereObj,
   //     // 返回过滤字段(浏览量和软删除)

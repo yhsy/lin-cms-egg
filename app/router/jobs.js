@@ -9,8 +9,8 @@ module.exports = app => {
 
   // 添加栏目
   router.post('/api/jobs/add', app.jwt, controller.jobs.add);
-  // // 编辑栏目
-  // router.post('/api/jobs/edit', app.jwt, controller.jobs.edit);
+  // 编辑栏目
+  router.post('/api/jobs/edit', app.jwt, controller.jobs.edit);
   // // 删除栏目(软)
   // router.post('/api/jobs/del', app.jwt, controller.jobs.del);
   // // 删除栏目(硬)
