@@ -16,7 +16,7 @@ module.exports = app => {
   // 删除招聘信息(硬)
   router.post('/api/jobs/remove', app.jwt, controller.jobs.remove);
 
-  // // 获取招聘信息列表
-  // router.get('/api/jobs/list', app.jwt, controller.jobs.list);
+  // 获取招聘信息列表
+  router.get('/api/jobs/list', app.jwt, controller.jobs.list);
 
 };

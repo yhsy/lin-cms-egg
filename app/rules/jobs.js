@@ -2,7 +2,7 @@
 
 'use strict';
 const BaseRule = require('./base');
-const { id, cid, title, job_num, content, } = BaseRule;
+const { id, cid, title, job_num, content, page, limit, } = BaseRule;
 const JobsRules = {
   add: {
     cid,
@@ -20,10 +20,10 @@ const JobsRules = {
   del: {
     id,
   },
-  // list: {
-  //   page,
-  //   limit,
-  // },
+  list: {
+    page,
+    limit,
+  },
   // create_at: {
   //   startTime,
   //   endTime,

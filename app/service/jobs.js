@@ -56,85 +56,95 @@ class JobsService extends Service {
     return result;
   }
 
-  // // 招聘信息列表
-  // async list () {
-  //   const { ctx } = this;
-  //   const requestObj = ctx.request.body;
-  //   const { page, limit, startTime, endTime } = ctx.request.body;
-  //   // 过滤空数据
-  //   const reqObj = filterNullObj(requestObj);
-  //   const whereObj = {
-  //     is_delete: 0,
-  //   };
-  //   let results = {};
-  //   // 标题
-  //   if (reqObj.cname) {
-  //     whereObj.cname = {
-  //       [Op.like]: `%${reqObj.cname}%`,
-  //     };
-  //   }
-  //   // 状态
-  //   if (reqObj.status >= 0) {
-  //     whereObj.status = reqObj.status;
-  //   }
+  // 招聘信息列表
+  async list () {
+    const { ctx } = this;
+    const requestObj = ctx.request.body;
+    const { page, limit, startTime, endTime } = ctx.request.body;
+    // 过滤空数据
+    const reqObj = filterNullObj(requestObj);
+    const whereObj = {
+      is_delete: 0,
+    };
+    let results = {};
+    // 招聘栏目
+    if (reqObj.cid) {
+      whereObj.cid = reqObj.cid
+    }
+    // 招聘职位标题
+    if (reqObj.title) {
+      whereObj.title = {
+        [Op.like]: `%${reqObj.title}%`,
+      };
+    }
+    // // 招聘职位内容
+    // if (reqObj.content) {
+    //   whereObj.content = {
+    //     [Op.like]: `%${reqObj.content}%`,
+    //   };
+    // }
+    // 招聘状态
+    if (reqObj.status >= 0) {
+      whereObj.status = reqObj.status;
+    }
 
-  //   // 创建时间
-  //   if (startTime && endTime) {
-  //     if (startTime === endTime) {
-  //       // console.log('相等');
-  //       whereObj.created_at = {
-  //         // 大于等于
-  //         [Op.gte]: startTime,
-  //         // 小于
-  //         [Op.lte]: moment(endTime).add(1, 'days'),
-  //       };
-  //     } else {
-  //       whereObj.created_at = {
-  //         // 大于等于
-  //         [Op.gte]: startTime,
-  //         // 小于
-  //         [Op.lte]: endTime,
-  //       };
-  //     }
+    // 创建时间
+    if (startTime && endTime) {
+      if (startTime === endTime) {
+        // console.log('相等');
+        whereObj.created_at = {
+          // 大于等于
+          [Op.gte]: startTime,
+          // 小于
+          [Op.lte]: moment(endTime).add(1, 'days'),
+        };
+      } else {
+        whereObj.created_at = {
+          // 大于等于
+          [Op.gte]: startTime,
+          // 小于
+          [Op.lte]: endTime,
+        };
+      }
 
-  //   }
+    }
 
-  //   // 招聘信息列表(分页)
-  //   const list = await ctx.model.Jobs.findAll({
-  //     where: whereObj,
-  //     // 返回过滤字段(浏览量和软删除)
-  //     attributes: { exclude: ['is_delete'] },
-  //     order: [
-  //       // 创建时间-倒序
-  //       ['created_at', 'DESC'],
-  //       ['cid', 'DESC'],
-  //     ],
-  //     // 条数
-  //     limit,
-  //     offset: (page - 1) * limit,
-  //   });
+    // 招聘信息列表(分页)
+    const list = await ctx.model.Jobs.findAll({
+      where: whereObj,
+      // 返回过滤字段(浏览量和软删除)
+      attributes: { exclude: ['is_delete'] },
+      order: [
+        // 创建时间-倒序
+        ['created_at', 'DESC'],
+        // ['cid', 'DESC'],
+      ],
+      // 条数
+      limit,
+      offset: (page - 1) * limit,
+    });
 
-  //   if (list.length === 0 || !list) {
-  //     results = {
-  //       list: [],
-  //       total: 0,
-  //     };
-  //     return results;
-  //   }
+    if (list.length === 0 || !list) {
+      results = {
+        list: [],
+        total: 0,
+      };
+      return results;
+    }
 
-  //   // 统计总条数
-  //   const total = await ctx.model.Jobs.count({
-  //     where: whereObj,
-  //   });
+    // 统计总条数
+    const total = await ctx.model.Jobs.count({
+      where: whereObj,
+    });
 
-  //   results = {
-  //     list,
-  //     total,
-  //   };
+    results = {
+      list,
+      total,
+    };
 
-  //   return results;
+    return results;
 
-  // }
+  }
 
 }
 

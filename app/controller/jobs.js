@@ -117,22 +117,22 @@ class JobsController extends BaseController {
     }
     this.sendSuccess({}, '招聘-删除成功');
   }
-  // // 获取招聘列表
-  // async list () {
-  //   const { ctx, service } = this;
+  // 获取招聘列表
+  async list () {
+    const { ctx, service } = this;
 
-  //   const { page, limit } = ctx.request.body;
-  //   const rules = JobsRules.list;
-  //   const validateResult = ctx.validate(rules, { page, limit });
-  //   if (!validateResult) return;
+    const { page, limit } = ctx.request.body;
+    const rules = JobsRules.list;
+    const validateResult = ctx.validate(rules, { page, limit });
+    if (!validateResult) return;
 
-  //   const results = await service.jobs.list();
-  //   if (!results) {
-  //     this.sendErrmsg('招聘列表-获取失败,请重试');
-  //     return;
-  //   }
-  //   this.sendSuccess(results, '招聘列表-获取成功');
-  // }
+    const results = await service.jobs.list();
+    if (!results) {
+      this.sendErrmsg('招聘列表-获取失败,请重试');
+      return;
+    }
+    this.sendSuccess(results, '招聘列表-获取成功');
+  }
 }
 
 module.exports = JobsController;
