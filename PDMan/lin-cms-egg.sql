@@ -11,7 +11,7 @@
  Target Server Version : 50724
  File Encoding         : 65001
 
- Date: 31/08/2019 22:15:45
+ Date: 02/09/2019 22:24:33
 */
 
 SET NAMES utf8mb4;
@@ -171,13 +171,14 @@ CREATE TABLE `lin_jobs` (
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of lin_jobs
 -- ----------------------------
 BEGIN;
-INSERT INTO `lin_jobs` VALUES (1, 201, 'web前端', 1, 1, 'web前端招聘要求', 0, '2019-08-31 22:11:53', '2019-08-31 22:11:56');
+INSERT INTO `lin_jobs` VALUES (1, 201, 'web前端', 1, 1, 'web前端招聘要求', 0, '2019-08-31 22:11:53', '2019-09-02 22:21:28');
+INSERT INTO `lin_jobs` VALUES (22, 201, '中级web前端', 2, 1, '中级web前端找人了', 0, '2019-09-02 22:22:13', '2019-09-02 22:22:17');
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
