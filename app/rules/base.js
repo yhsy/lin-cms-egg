@@ -2,10 +2,12 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-26 10:44:32
- * @LastEditTime: 2019-08-30 10:00:33
+ * @LastEditTime: 2019-09-03 09:28:47
  * @LastEditors: Please set LastEditors
  */
 'use strict';
+
+// const { sanitize } = require('validator');
 
 // 验证输入的数字比min小
 const validateNumberMin = (rule, value, callback) => {
@@ -77,7 +79,7 @@ const BaseRule = {
   ],
   is_show: [
     { required: true, message: '是否显示:不能为空' },
-    { type: 'enum', enum: [0, 1], message: '是否显示:参数错误' },
+    { type: 'enum', enum: [ 0, 1 ], message: '是否显示:参数错误' },
   ],
   // 文章标题
   title: [
@@ -107,7 +109,7 @@ const BaseRule = {
   // 文章-状态
   status: [
     { required: true, message: '状态不能为空' },
-    { type: 'enum', enum: [0, 1], message: '状态参数错误' },
+    { type: 'enum', enum: [ 0, 1 ], message: '状态参数错误' },
   ],
   // 条数(1-50)
   limit: [
@@ -149,7 +151,30 @@ const BaseRule = {
       message: '招聘人数范围为1到100之间',
       options: { max: 100 },
     },
-  ]
+  ],
+  // 加盟-留言人
+  join_name: [
+    { required: true, message: '名称不能为空' },
+    { type: 'string', min: 2, max: 30, message: '名称为2-30个字符' },
+  ],
+  // 手机号
+  phone: [
+    { required: true, message: '手机不能为空' },
+    {
+      type: 'string',
+      pattern: /^1([38]\d|5[0-35-9]|7[3678])\d{8}$/,
+      transform(value) {
+        // return sanitize(value).trim();
+        return value.trim();
+      },
+      message: '手机号码格式错误',
+    },
+  ],
+  // 地址
+  address: [
+    { required: true, message: '地址不能为空' },
+    { type: 'string', min: 10, max: 100, message: '地址为10-100个字符' },
+  ],
 };
 
 module.exports = BaseRule;
