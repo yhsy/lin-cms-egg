@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-09-03 08:36:41
- * @LastEditTime: 2019-09-03 08:50:47
+ * @LastEditTime: 2019-09-03 09:39:05
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -17,7 +17,7 @@ module.exports = {
       // 姓名/企业
       name: { type: STRING(30), allowNull: false },
       // 联系电话(手机)
-      phone: { type: INTEGER(11), allowNull: false },
+      phone: { type: STRING(32), allowNull: false },
       // 联系地址
       address: { type: STRING(50), allowNull: false },
       // 客户备注信息
