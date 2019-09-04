@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-09-03 08:57:28
- * @LastEditTime: 2019-09-04 08:40:55
+ * @LastEditTime: 2019-09-04 08:47:42
  * @LastEditors: Please set LastEditors
  */
 
@@ -25,9 +25,9 @@ const JoinRules = {
     phone,
     address,
   },
-//   del: {
-//     id,
-//   },
+  del: {
+    id,
+  },
 //   list: {
 //     page,
 //     limit,

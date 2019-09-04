@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-09-03 09:17:23
- * @LastEditTime: 2019-09-04 08:42:08
+ * @LastEditTime: 2019-09-04 08:49:15
  * @LastEditors: Please set LastEditors
  */
 
@@ -60,71 +60,71 @@ class JoinController extends BaseController {
 
   }
 
-  //   // 删除加盟(软)
-  //   async del() {
-  //     const { ctx, service } = this;
+  // 删除加盟(软)
+  async del() {
+    const { ctx, service } = this;
 
-  //     const { id } = ctx.request.body;
-  //     const rules = JoinRules.del;
-  //     const validateResults = await ctx.validate(rules, {
-  //       id,
-  //     });
-  //     if (!validateResults) return;
+    const { id } = ctx.request.body;
+    const rules = JoinRules.del;
+    const validateResults = await ctx.validate(rules, {
+      id,
+    });
+    if (!validateResults) return;
 
-  //     const info = await service.join.info(id);
-  //     if (!info) {
-  //       this.sendErrmsg('加盟ID不存在');
-  //       return;
-  //     }
+    const info = await service.join.info(id);
+    if (!info) {
+      this.sendErrmsg('加盟ID不存在');
+      return;
+    }
 
-  //     // 软删除
-  //     const result = await service.join.del(id);
+    // 软删除
+    const result = await service.join.del(id);
 
-  //     if (!result) {
-  //       this.sendErrmsg('加盟-删除失败,请重试');
-  //       return;
-  //     }
-  //     this.sendSuccess({}, '加盟-删除成功');
-  //   }
-  //   // 删除加盟(硬)
-  //   async remove() {
-  //     const { ctx, service } = this;
+    if (!result) {
+      this.sendErrmsg('加盟-删除失败,请重试');
+      return;
+    }
+    this.sendSuccess({}, '加盟-删除成功');
+  }
+  // 删除加盟(硬)
+  async remove() {
+    const { ctx, service } = this;
 
-  //     const { id } = ctx.request.body;
-  //     const rules = JoinRules.del;
-  //     const validateResults = await ctx.validate(rules, {
-  //       id,
-  //     });
-  //     if (!validateResults) return;
+    const { id } = ctx.request.body;
+    const rules = JoinRules.del;
+    const validateResults = await ctx.validate(rules, {
+      id,
+    });
+    if (!validateResults) return;
 
-  //     const info = await service.join.info(id);
-  //     if (!info) {
-  //       this.sendErrmsg('加盟ID不存在');
-  //       return;
-  //     }
+    const info = await service.join.info(id);
+    if (!info) {
+      this.sendErrmsg('加盟ID不存在');
+      return;
+    }
 
-  //     // 硬删除需要管理员权限
-  //     const uid = ctx.request.headers.id;
-  //     const user = await service.admin.allInfo({ id: uid });
-  //     if (!user) {
-  //       this.sendErrmsg('管理员不存在');
-  //       return;
-  //     }
+    // 硬删除需要管理员权限
+    const uid = ctx.request.headers.id;
+    const user = await service.admin.allInfo({ id: uid });
+    if (!user) {
+      this.sendErrmsg('管理员不存在');
+      return;
+    }
 
-  //     if (user.admin !== 1) {
-  //       this.sendErrmsg('对不起,您的权限不足');
-  //       return;
-  //     }
+    if (user.admin !== 1) {
+      this.sendErrmsg('对不起,您的权限不足');
+      return;
+    }
 
-  //     // 硬删除
-  //     const result = await service.join.remove(id);
+    // 硬删除
+    const result = await service.join.remove(id);
 
-  //     if (!result) {
-  //       this.sendErrmsg('加盟-删除失败,请重试');
-  //       return;
-  //     }
-  //     this.sendSuccess({}, '加盟-删除成功');
-  //   }
+    if (!result) {
+      this.sendErrmsg('加盟-删除失败,请重试');
+      return;
+    }
+    this.sendSuccess({}, '加盟-删除成功');
+  }
   //   // 获取加盟列表
   //   async list() {
   //     const { ctx, service } = this;
