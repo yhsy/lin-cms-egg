@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-09-03 09:19:47
- * @LastEditTime: 2019-09-04 08:48:34
+ * @LastEditTime: 2019-09-04 08:58:50
  * @LastEditors: Please set LastEditors
  */
 
@@ -23,7 +23,6 @@ module.exports = app => {
   // 删除加盟信息(硬)
   router.post('/api/join/remove', app.jwt, controller.join.remove);
 
-  //   // 获取加盟信息列表
-  //   router.get('/api/join/list', app.jwt, controller.join.list);
-
+  // 获取加盟信息列表
+  router.get('/api/join/list', app.jwt, controller.join.list);
 };

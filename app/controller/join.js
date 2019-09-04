@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-09-03 09:17:23
- * @LastEditTime: 2019-09-04 08:49:15
+ * @LastEditTime: 2019-09-04 08:59:02
  * @LastEditors: Please set LastEditors
  */
 
@@ -125,22 +125,22 @@ class JoinController extends BaseController {
     }
     this.sendSuccess({}, '加盟-删除成功');
   }
-  //   // 获取加盟列表
-  //   async list() {
-  //     const { ctx, service } = this;
+  // 获取加盟列表
+  async list() {
+    const { ctx, service } = this;
 
-  //     const { page, limit } = ctx.request.body;
-  //     const rules = JoinRules.list;
-  //     const validateResult = ctx.validate(rules, { page, limit });
-  //     if (!validateResult) return;
+    const { page, limit } = ctx.request.body;
+    const rules = JoinRules.list;
+    const validateResult = ctx.validate(rules, { page, limit });
+    if (!validateResult) return;
 
-//     const results = await service.join.list();
-//     if (!results) {
-//       this.sendErrmsg('加盟列表-获取失败,请重试');
-//       return;
-//     }
-//     this.sendSuccess(results, '加盟列表-获取成功');
-//   }
+    const results = await service.join.list();
+    if (!results) {
+      this.sendErrmsg('加盟列表-获取失败,请重试');
+      return;
+    }
+    this.sendSuccess(results, '加盟列表-获取成功');
+  }
 }
 
 module.exports = JoinController;
