@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-09-03 09:13:12
- * @LastEditTime: 2019-09-03 09:33:22
+ * @LastEditTime: 2019-09-04 08:41:26
  * @LastEditors: Please set LastEditors
  */
 
@@ -31,19 +31,19 @@ class JoinService extends Service {
     const result = await ctx.model.Join.create(requestObj);
     return result;
   }
-  //   // 获取加盟信息详情
-  //   async info (id) {
-  //     const { ctx } = this;
-  //     const result = await ctx.model.Join.findOne({ where: { id } });
-  //     return result;
-  //   }
-  //   // 编辑加盟信息
-  //   async edit (id) {
-  //     const { ctx } = this;
-  //     const requestObj = ctx.request.body;
-  //     const result = await ctx.model.Join.update(requestObj, { where: { id } });
-  //     return result;
-  //   }
+  // 获取加盟信息详情
+  async info(id) {
+    const { ctx } = this;
+    const result = await ctx.model.Join.findOne({ where: { id } });
+    return result;
+  }
+  // 编辑加盟信息
+  async edit(id) {
+    const { ctx } = this;
+    const requestObj = ctx.request.body;
+    const result = await ctx.model.Join.update(requestObj, { where: { id } });
+    return result;
+  }
   //   // 删除加盟信息(软删除)
   //   async del (id) {
   //     const { ctx } = this;

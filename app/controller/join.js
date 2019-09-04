@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-09-03 09:17:23
- * @LastEditTime: 2019-09-03 09:33:15
+ * @LastEditTime: 2019-09-04 08:42:08
  * @LastEditors: Please set LastEditors
  */
 
@@ -33,31 +33,32 @@ class JoinController extends BaseController {
 
   }
 
-  //   // 编辑加盟
-  //   async edit() {
-  //     const { ctx, service } = this;
+  // 编辑加盟
+  async edit() {
+    const { ctx, service } = this;
 
-  //     const { id, cid, title, num, content } = ctx.request.body;
-  //     const rules = JoinRules.edit;
-  //     const validateResults = await ctx.validate(rules, {
-  //       id, cid, title, num, content,
-  //     });
-  //     if (!validateResults) return;
+    const { id, name, phone, address } = ctx.request.body;
 
-  //     const info = await service.join.info(id);
-  //     if (!info) {
-  //       this.sendErrmsg('加盟ID不存在');
-  //       return;
-  //     }
+    const rules = JoinRules.edit;
+    const validateResults = await ctx.validate(rules, {
+      id, name, phone, address,
+    });
+    if (!validateResults) return;
 
-  //     const result = await service.join.edit(id);
-  //     if (!result) {
-  //       this.sendErrmsg('加盟信息-修改失败,请重试');
-  //       return;
-  //     }
-  //     this.sendSuccess({}, '加盟信息-修改成功');
+    const info = await service.join.info(id);
+    if (!info) {
+      this.sendErrmsg('加盟ID不存在');
+      return;
+    }
 
-  //   }
+    const result = await service.join.edit(id);
+    if (!result) {
+      this.sendErrmsg('加盟信息-修改失败,请重试');
+      return;
+    }
+    this.sendSuccess({}, '加盟信息-修改成功');
+
+  }
 
   //   // 删除加盟(软)
   //   async del() {

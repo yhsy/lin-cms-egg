@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-09-03 08:57:28
- * @LastEditTime: 2019-09-03 09:16:40
+ * @LastEditTime: 2019-09-04 08:40:55
  * @LastEditors: Please set LastEditors
  */
 
@@ -10,7 +10,7 @@
 'use strict';
 const BaseRule = require('./base');
 const {
-  join_name, phone, address,
+  join_name, phone, address, id,
   // id, cid, title, job_num, content, page, limit
 } = BaseRule;
 const JoinRules = {
@@ -19,13 +19,12 @@ const JoinRules = {
     phone,
     address,
   },
-//   edit: {
-//     id,
-//     cid,
-//     title,
-//     num: job_num,
-//     content,
-//   },
+  edit: {
+    id,
+    name: join_name,
+    phone,
+    address,
+  },
 //   del: {
 //     id,
 //   },
