@@ -23,14 +23,14 @@ const AdminRule = require('../rules/admin');
 
 class AdminController extends BaseController {
   // 图片验证码
-  async verify() {
+  async verify () {
     const { ctx } = this;
     const captcha = await this.service.admin.captcha(); // 服务里面的方法
     ctx.response.type = 'image/svg+xml'; // 返回的类型
     ctx.body = captcha.data; // 返回一张图片
   }
   // 登录
-  async login() {
+  async login () {
     // ctx: egg全局的上下文对象(request和response都在里面)
     const { ctx, app, service } = this;
     const { formatLoggerMsg } = this.ctx.helper;
@@ -54,7 +54,9 @@ class AdminController extends BaseController {
     /* 日志配置-end */
 
     // 获取账号密码
-    const { username, password, vcode } = ctx.request.body;
+    // const { username, password, vcode } = ctx.request.body;
+    const { username, password } = ctx.request.body;
+
     // console.log(`图形验证码:${ctx.session.code}`);
 
     // 账号密码校验规则
@@ -65,7 +67,7 @@ class AdminController extends BaseController {
     const validateResult = await ctx.validate(rules, {
       username,
       password,
-      vcode,
+      // vcode,
     });
     if (!validateResult) return;
 
@@ -97,13 +99,13 @@ class AdminController extends BaseController {
     // }
 
     // 判断图形验证码
-    const { code } = ctx.session;
-    console.log(code);
-    if (vcode !== code) {
-      // 错误日志
-      this.sendFail('验证码错误');
-      return;
-    }
+    // const { code } = ctx.session;
+    // console.log(code);
+    // if (vcode !== code) {
+    //   // 错误日志
+    //   this.sendFail('验证码错误');
+    //   return;
+    // }
 
     // 生成token(用户创建时间,jwt秘钥,过期时间:2小时(3d表示3天))
     const token = app.jwt.sign(
@@ -123,7 +125,7 @@ class AdminController extends BaseController {
     this.sendSuccess(data, '登录成功');
   }
   // 获取个人信息
-  async info() {
+  async info () {
     const { app, ctx, service } = this;
 
     // 这里获取的是字符串
@@ -156,7 +158,7 @@ class AdminController extends BaseController {
   }
 
   // 获取管理员列表(分页)
-  async list() {
+  async list () {
     const { ctx, service } = this;
     const { page } = this.ctx.request.body;
 
@@ -175,7 +177,7 @@ class AdminController extends BaseController {
   }
 
   // 添加管理员
-  async add() {
+  async add () {
     const { ctx, service } = this;
     const { username, password, group_id } = this.ctx.request.body;
 
@@ -201,7 +203,7 @@ class AdminController extends BaseController {
     this.sendSuccess({}, '管理员-添加成功');
   }
   // 删除管理员
-  async delete() {
+  async delete () {
     const { ctx, service } = this;
     const { id } = this.ctx.request.body;
 
@@ -230,7 +232,7 @@ class AdminController extends BaseController {
     this.sendSuccess({}, '管理员-删除成功');
   }
   // 编辑管理员
-  async edit() {
+  async edit () {
     const { ctx, service } = this;
     const { id, username, password, create_time, update_time, delete_time } = ctx.request.body;
 

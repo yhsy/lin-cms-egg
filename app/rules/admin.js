@@ -18,14 +18,14 @@ const AdminRule = {
     // 密码
     password,
     // 验证码
-    vcode: [
-      { required: true, message: '验证码不能为空' },
-      {
-        type: 'string',
-        len: 4,
-        message: '验证码长度为4位',
-      },
-    ],
+    // vcode: [
+    //   { required: true, message: '验证码不能为空' },
+    //   {
+    //     type: 'string',
+    //     len: 4,
+    //     message: '验证码长度为4位',
+    //   },
+    // ],
   },
   // 获取个人信息
   info: {
