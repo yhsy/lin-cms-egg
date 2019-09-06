@@ -41,11 +41,17 @@ const BaseRule = {
   ],
   username: [
     { required: true, message: '用户名不能为空' },
-    { type: 'string', message: '用户名必须是字符串' },
+    { type: 'string', message: '参数类型为字符串' },
+    {
+      min: 5,
+      max: 20,
+      message: '用户名长度为6-20位',
+    },
+
   ],
   password: [
     { required: true, message: '密码不能为空' },
-    { type: 'string', message: '密码类型为字符串' },
+    { type: 'string', message: '参数类型为字符串' },
     {
       min: 6,
       max: 20,
@@ -79,7 +85,7 @@ const BaseRule = {
   ],
   is_show: [
     { required: true, message: '是否显示:不能为空' },
-    { type: 'enum', enum: [ 0, 1 ], message: '是否显示:参数错误' },
+    { type: 'enum', enum: [0, 1], message: '是否显示:参数错误' },
   ],
   // 文章标题
   title: [
@@ -109,7 +115,7 @@ const BaseRule = {
   // 文章-状态
   status: [
     { required: true, message: '状态不能为空' },
-    { type: 'enum', enum: [ 0, 1 ], message: '状态参数错误' },
+    { type: 'enum', enum: [0, 1], message: '状态参数错误' },
   ],
   // 条数(1-50)
   limit: [
@@ -163,7 +169,7 @@ const BaseRule = {
     {
       type: 'string',
       pattern: /^1([38]\d|5[0-35-9]|7[3678])\d{8}$/,
-      transform(value) {
+      transform (value) {
         // return sanitize(value).trim();
         return value.trim();
       },

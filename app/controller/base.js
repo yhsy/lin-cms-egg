@@ -16,7 +16,7 @@ class BaseController extends Controller {
    * @params: string msg
    * @return: object { success, code, msg, data }
    */
-  sendSuccess(data, msg) {
+  sendSuccess (data, msg) {
     const { ctx } = this;
     ctx.body = {
       success: true,
@@ -33,18 +33,18 @@ class BaseController extends Controller {
    * @params: string msg
    * @return: object { success, code, msg, data }
    */
-  sendFail(data, msg, code) {
+  sendFail (msg, code, data) {
     const { ctx } = this;
     ctx.body = {
       success: false,
-      code,
+      code: code || 1001,
       msg,
-      data,
+      data: data || {},
     };
     ctx.status = 200;
   }
   // 统一错误msg+日志(用户登录才用)
-  sendErrmsg(msg) {
+  sendErrmsg (msg) {
     const { ctx } = this;
     const { id } = ctx.request.body;
     const { formatLoggerMsg } = this.ctx.helper;
