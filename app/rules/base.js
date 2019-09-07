@@ -53,10 +53,14 @@ const BaseRule = {
     { required: true, message: '密码不能为空' },
     { type: 'string', message: '参数类型为字符串' },
     {
-      min: 6,
-      max: 20,
-      message: '密码长度为6-20位',
+      len: 32,
+      message: '密码长度为32位',
     },
+    // {
+    //   min: 6,
+    //   max: 20,
+    //   message: '密码长度为6-20位',
+    // },
   ],
   page: [
     { required: true, message: 'page不能为空' },
