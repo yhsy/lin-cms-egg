@@ -17,7 +17,7 @@ const Md5 = require('md5');
 
 class AdminService extends Service {
   // 生成验证码
-  async captcha() {
+  async captcha () {
     const captcha = svgCaptcha.create({
       // 验证码长度
       size: 4,
@@ -36,22 +36,22 @@ class AdminService extends Service {
     return captcha;
   }
   // 获取管理员-全部信息
-  async allInfo(obj) {
+  async allInfo (obj) {
     // obj = {username: 'xxx'}
     const results = await this.app.mysql.get('lin_admin', obj);
     return results;
   }
   // 获取基础信息
-  async info(obj) {
+  async info (obj) {
     const results = await this.app.mysql.select('lin_admin', {
       // 搜索 lin_admin 表
       where: obj, // WHERE 条件
-      columns: [ 'id', 'nickname', 'avatar' ], // 要查询的表字段(既返回的数据)
+      columns: ['id', 'nickname', 'avatar'], // 要查询的表字段(既返回的数据)
     });
     return results;
   }
   // 获取管理员列表(分页)
-  async list() {
+  async list () {
     // 过滤json对象里面没有值的属性
     const { filterNullObj } = this.ctx.helper;
     // 获取查询参数
@@ -85,7 +85,7 @@ class AdminService extends Service {
         'update_time',
       ], // 要查询的表字段
       // 排序方式(创建时间->id)
-      orders: [[ 'create_time', 'desc' ], [ 'id', 'desc' ]],
+      orders: [['create_time', 'desc'], ['id', 'desc']],
       limit: 10, // 返回数据量(size)
       offset: 10 * (page - 1), // 数据偏移量(page的位置,从哪里取)
     });
@@ -110,7 +110,7 @@ class AdminService extends Service {
     return results;
   }
   // 获取管理员列表(日期筛选+分页)
-  async getTimeList(obj) {
+  async getTimeList (obj) {
     // const nickSql = '';
     // const actSql = '';
     // const gidSql = '';
@@ -179,7 +179,7 @@ class AdminService extends Service {
   }
 
   // 添加管理员
-  async add() {
+  async add () {
     const { username, password, group_id } = this.ctx.request.body;
     // console.log(username, password, group_id);
     // 插入
@@ -196,14 +196,14 @@ class AdminService extends Service {
     return insertSuccess;
   }
   // 删除管理员
-  async delete(id) {
+  async delete (id) {
     const results = await this.app.mysql.delete('lin_admin', {
       id,
     });
     return results;
   }
   // 编辑管理员
-  async edit(requestObj) {
+  async edit (requestObj) {
 
     // 修改(自动判断条件,id)
     const results = await this.app.mysql.update('lin_admin', requestObj);
@@ -216,11 +216,11 @@ class AdminService extends Service {
     return updateSuccess;
   }
   // 修改密码
-  async changePassword() {
+  async changePassword () {
     const { ctx, app } = this;
     const { id, password } = ctx.request.body;
 
-    const results = await app.mysql.update('lin_admin', { password }, { where: { id } });
+    const results = await app.mysql.update('lin_admin', { password: Md5(password) }, { where: { id } });
     // 是否更新成功
     const updateSuccess = results.affectedRows === 1;
     return updateSuccess;
