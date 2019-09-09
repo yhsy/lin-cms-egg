@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-26 10:44:32
- * @LastEditTime: 2019-08-26 12:17:45
+ * @LastEditTime: 2019-09-09 09:13:57
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -46,6 +46,18 @@ const AdminRule = {
   // 编辑和删除用
   id: {
     id,
+  },
+  changePassword: {
+    id,
+    oldPassword: [
+      { required: true, message: '旧密码不能为空' },
+      { type: 'string', message: '参数类型为字符串' },
+      {
+        len: 32,
+        message: '密码长度为32位',
+      },
+    ],
+    password,
   },
 };
 

@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-22 18:22:02
- * @LastEditTime: 2019-08-27 15:25:31
+ * @LastEditTime: 2019-09-09 08:59:53
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -211,6 +211,16 @@ class AdminService extends Service {
     // const { id } = requestObj;
     // delete requestObj.id;
     // const results = await this.app.mysql.update('lin_admin', requestObj, { where: { id } });
+    // 是否更新成功
+    const updateSuccess = results.affectedRows === 1;
+    return updateSuccess;
+  }
+  // 修改密码
+  async changePassword() {
+    const { ctx, app } = this;
+    const { id, password } = ctx.request.body;
+
+    const results = await app.mysql.update('lin_admin', { password }, { where: { id } });
     // 是否更新成功
     const updateSuccess = results.affectedRows === 1;
     return updateSuccess;

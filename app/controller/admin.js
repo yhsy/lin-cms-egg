@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-20 08:36:44
- * @LastEditTime: 2019-08-28 11:58:08
+ * @LastEditTime: 2019-09-09 09:06:14
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -23,14 +23,14 @@ const AdminRule = require('../rules/admin');
 
 class AdminController extends BaseController {
   // 图片验证码
-  async verify () {
+  async verify() {
     const { ctx } = this;
     const captcha = await this.service.admin.captcha(); // 服务里面的方法
     ctx.response.type = 'image/svg+xml'; // 返回的类型
     ctx.body = captcha.data; // 返回一张图片
   }
   // 登录
-  async login () {
+  async login() {
     // ctx: egg全局的上下文对象(request和response都在里面)
     const { ctx, app, service } = this;
     const { formatLoggerMsg } = this.ctx.helper;
@@ -125,7 +125,7 @@ class AdminController extends BaseController {
     this.sendSuccess(data, '登录成功');
   }
   // 获取个人信息
-  async info () {
+  async info() {
     const { app, ctx, service } = this;
 
     // 这里获取的是字符串
@@ -158,7 +158,7 @@ class AdminController extends BaseController {
   }
 
   // 获取管理员列表(分页)
-  async list () {
+  async list() {
     const { ctx, service } = this;
     const { page } = this.ctx.request.body;
 
@@ -177,7 +177,7 @@ class AdminController extends BaseController {
   }
 
   // 添加管理员
-  async add () {
+  async add() {
     const { ctx, service } = this;
     const { username, password, group_id } = this.ctx.request.body;
 
@@ -203,7 +203,7 @@ class AdminController extends BaseController {
     this.sendSuccess({}, '管理员-添加成功');
   }
   // 删除管理员
-  async delete () {
+  async delete() {
     const { ctx, service } = this;
     const { id } = this.ctx.request.body;
 
@@ -232,7 +232,7 @@ class AdminController extends BaseController {
     this.sendSuccess({}, '管理员-删除成功');
   }
   // 编辑管理员
-  async edit () {
+  async edit() {
     const { ctx, service } = this;
     const { id, username, password, create_time, update_time, delete_time } = ctx.request.body;
 
@@ -285,6 +285,48 @@ class AdminController extends BaseController {
     }
 
     this.sendSuccess({}, '管理员信息-修改成功');
+  }
+  // 修改密码
+  async changePassword() {
+    const { ctx, service } = this;
+    const { id, oldPassword, password } = ctx.request.body;
+
+    // 校验规则
+    const rules = AdminRule.changePassword;
+
+    // 拿到验证结果
+    const validateResult = await ctx.validate(rules, {
+      id, oldPassword, password,
+    });
+
+    if (!validateResult) return;
+
+    // 判断id是否存在
+    // 是否存在该ID
+    const idInfo = await service.admin.allInfo({ id });
+
+    if (!idInfo) {
+      // 错误日志
+      this.sendErrmsg('管理员-ID不存在');
+      return;
+    }
+
+    // 校验旧密码
+    if (Md5(oldPassword) !== idInfo.password) {
+      // 错误日志
+      this.sendFail('旧密码错误');
+      return;
+    }
+
+    // 插入到数据库
+    const results = await service.admin.changePassword();
+    if (!results) {
+      // 错误日志
+      this.sendErrmsg('管理员密码-修改失败,请重试');
+      return;
+    }
+
+    this.sendSuccess({}, '管理员密码-修改成功');
   }
 }
 
