@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-19 08:56:55
- * @LastEditTime: 2019-09-10 08:50:57
+ * @LastEditTime: 2019-09-11 09:22:34
  * @LastEditors: Please set LastEditors
  */
 /* eslint valid-jsdoc: "off" */
@@ -21,18 +21,40 @@ module.exports = appInfo => {
    * @type {Egg.EggAppConfig}
    **/
   const config = (exports = {});
-  // egg安全配置
+
+  /* 跨域插件配置-start */
   config.security = {
-    // post请求安全(暂时关闭)
-    csrf: {
+    xframe: {
       enable: false,
     },
-    // csrf: {
-    //   headerName: 'x-csrf-token', // 自定义请求头(客户端)
-    //   // queryName: '_csrf', // 通过 query 传递 CSRF token 的默认字段为 _csrf
-    //   // bodyName: '_csrf', // 通过 body 传递 CSRF token 的默认字段为 _csrf
-    // },
+    csp: {
+      match: '/em',
+      ignore: '/api',
+    },
+    domainWhiteList: [
+      '*',
+      // 'http://127.0.0.1:8080'
+    ],
+    methodnoallow: { enable: false },
+    // 安全配置(很重要)
+    csrf: {
+      enable: true,
+      ignoreJSON: true, // 默认为 false，当设置为 true 时，将会放过所有 content-type 为 `application/json` 的请求
+      headerName: 'x-csrf-token', // 通过 header 传递 CSRF token 的默认字段为 x-csrf-token
+      useSession: true, // 默认为 false，当设置为 true 时，将会把 csrf token 保存到 Session 中
+      cookieName: 'csrfToken', // Cookie 中的字段名，默认为 csrfToken
+      // sessionName: 'csrfToken', // Session 中的字段名，默认为 csrfToken
+      // queryName: '_csrf', // 通过 query 传递 CSRF token 的默认字段为 _csrf
+      // bodyName: '_csrf', // 通过 body 传递 CSRF token 的默认字段为 _csrf
+    },
   };
+  // 允许的跨域请求类型(GET,POST)
+  config.cors = {
+    origin: '*',
+    allowMethods: 'GET,POST',
+    // allowMethods: 'GET,POST,HEAD,PUT,OPTIONS,DELETE,PATCH',
+  };
+  /* 跨域插件配置-end */
 
   // 校验插件配置
   config.validatePlus = {
