@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-15 11:17:17
- * @LastEditTime: 2019-08-27 18:02:25
+ * @LastEditTime: 2019-09-11 09:18:11
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -91,10 +91,18 @@ class HomeController extends BaseController {
   // 获取Banner列表
   async listBanner() {
     const { ctx, service } = this;
-    const { page } = ctx.request.body;
+    // 特别注意:GET请求的参数要在query里获取,POST的参数在body里
+    // const { page } = ctx.request.body;
+    const { page } = this.ctx.request.query;
+    // console.log(`page: ${page}`);
+    // console.log(typeof page);
+    const req = {
+      page: Number(page),
+    };
+
 
     const rules = HomeRules.list;
-    const validateResult = await ctx.validate(rules, { page });
+    const validateResult = await ctx.validate(rules, req);
     if (!validateResult) return;
 
     const results = await service.home.listBanner(page);
