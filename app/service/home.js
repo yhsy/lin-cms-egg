@@ -15,7 +15,7 @@ const { formatTimeYMDH } = Utils;
 
 class HomeService extends Service {
   // 查询banner信息
-  async infoBanner(id) {
+  async infoBanner (id) {
     const result = await this.app.mysql.get('lin_banner', { id });
     // 过滤软删除的id
     if (result.is_delete) {
@@ -24,7 +24,7 @@ class HomeService extends Service {
     return result;
   }
   // 添加banner
-  async addBanner() {
+  async addBanner () {
     const { ctx, app } = this;
     const requestObj = ctx.request.body;
     console.log(`requestObj is ${JSON.stringify(requestObj)}`);
@@ -35,14 +35,14 @@ class HomeService extends Service {
     return insertSuccess;
   }
   // 编辑banner
-  async editBanner() {
+  async editBanner () {
     const requestObj = this.ctx.request.body;
     const result = await this.app.mysql.update('lin_banner', requestObj);
     const updateSuccess = result.affectedRows === 1;
     return updateSuccess;
   }
   // 删除banner(软删除)
-  async delBanner(id) {
+  async delBanner (id) {
     const row = {
       id,
       is_delete: 1,
@@ -52,10 +52,10 @@ class HomeService extends Service {
     return updateSuccess;
   }
   // 获取banner列表
-  async listBanner(page) {
+  async listBanner (page) {
     const { ctx, app } = this;
     let results = {};
-    const requestObj = ctx.request.body;
+    const requestObj = ctx.request.query;
     const queryObj = {};
 
     // 过滤软删除的banner
@@ -64,12 +64,15 @@ class HomeService extends Service {
     if (requestObj.is_show) {
       queryObj.is_show = requestObj.is_show;
     }
-
+    // 标题搜索
+    if (requestObj.title) {
+      queryObj.title = requestObj.title;
+    }
     // 数据列表
     const list = await app.mysql.select('lin_banner', {
       where: queryObj,
-      columns: [ 'id', 'sort', 'img_url', 'link', 'is_show', 'title', 'desc', 'create_time', 'update_time' ],
-      orders: [[ 'sort', 'asc' ], [ 'id', 'desc' ]],
+      columns: ['id', 'sort', 'img_url', 'link', 'is_show', 'title', 'desc', 'create_time', 'update_time'],
+      orders: [['sort', 'asc'], ['id', 'desc']],
       limit: 10,
       offset: (page - 1) * 10,
     });
