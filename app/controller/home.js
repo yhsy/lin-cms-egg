@@ -12,21 +12,21 @@ const HomeRules = require('../rules/home');
 
 class HomeController extends BaseController {
 
-  async index() {
+  async index () {
     const { ctx } = this;
     ctx.body = 'hi, egg';
   }
 
   // 添加banner
-  async addBanner() {
+  async addBanner () {
     const { ctx, service } = this;
-    const { sort, img_url, is_show } = ctx.request.body;
+    const { title, sort, img_url, link, } = ctx.request.body;
 
     // 校验规则
     const rules = HomeRules.addBanner;
     // 校验结果
     const validateResult = await ctx.validate(rules, {
-      sort, img_url, is_show,
+      title, sort, img_url, link,
     });
     // 校验失败,返回错误信息
     if (!validateResult) return;
@@ -42,7 +42,7 @@ class HomeController extends BaseController {
     this.sendSuccess({}, '添加成功');
   }
   // 编辑banner
-  async editBanner() {
+  async editBanner () {
     const { ctx, service } = this;
     const { id, sort, img_url, is_show } = ctx.request.body;
 
@@ -65,7 +65,7 @@ class HomeController extends BaseController {
     this.sendSuccess({}, '修改成功');
   }
   // 删除Banner(软删除)
-  async delBanner() {
+  async delBanner () {
     const { ctx, service } = this;
     const { id } = ctx.request.body;
 
@@ -89,7 +89,7 @@ class HomeController extends BaseController {
 
   }
   // 获取Banner列表
-  async listBanner() {
+  async listBanner () {
     const { ctx, service } = this;
     // 特别注意:GET请求的参数要在query里获取,POST的参数在body里
     // const { page } = ctx.request.body;

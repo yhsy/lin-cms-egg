@@ -27,7 +27,7 @@ class HomeService extends Service {
   async addBanner () {
     const { ctx, app } = this;
     const requestObj = ctx.request.body;
-    console.log(`requestObj is ${JSON.stringify(requestObj)}`);
+    // console.log(`requestObj is ${JSON.stringify(requestObj)}`);
 
     const result = await app.mysql.insert('lin_banner', requestObj);
     // 判断插入成功(判断是否插入成功 )

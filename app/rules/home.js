@@ -7,12 +7,17 @@
  */
 'use strict';
 const BaseRule = require('./base');
-const { sort, img_url, is_show, id, page } = BaseRule;
+const { title, sort, img_url, is_show, id, page, } = BaseRule;
 const HomeRules = {
   addBanner: {
     sort,
+    title,
     img_url,
-    is_show,
+    link: [
+      { required: true, message: '链接不能为空' },
+      { min: 1, max: 50, message: '链接地址为1-50个字符' },
+    ],
+    // is_show,
   },
   editBanner: {
     id,
