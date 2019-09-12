@@ -11,7 +11,7 @@
  Target Server Version : 50724
  File Encoding         : 65001
 
- Date: 02/09/2019 22:24:33
+ Date: 12/09/2019 23:47:53
 */
 
 SET NAMES utf8mb4;
@@ -62,8 +62,8 @@ CREATE TABLE `lin_admin` (
 -- ----------------------------
 BEGIN;
 INSERT INTO `lin_admin` VALUES (1, 'super', 'http://7n.webgo.vip/avatar.png', 1, 1, NULL, 2, 'sha1$2a00b748$1$1fef3d3297477b2c9c0f26a5496d3dc64e08bf5a', '2019-08-07 08:48:32', '2019-08-29 10:43:56', NULL);
-INSERT INTO `lin_admin` VALUES (2, 'admin01', 'https://s2.ax1x.com/2019/08/05/e29sl8.jpg', 2, 1, NULL, 1, 'e10adc3949ba59abbe56e057f20f883e', '2019-08-20 09:06:56', '2019-08-29 10:25:58', NULL);
-INSERT INTO `lin_admin` VALUES (3, 'admin02', 'http://7n.webgo.vip/1.jpg', 2, 1, 'ceshi@qq.com', 3, 'e10adc3949ba59abbe56e057f20f883e', '2019-08-26 09:46:39', '2019-08-29 10:25:59', NULL);
+INSERT INTO `lin_admin` VALUES (2, 'admin01', 'https://s2.ax1x.com/2019/08/05/e29sl8.jpg', 2, 1, NULL, 1, '9db06bcff9248837f86d1a6bcf41c9e7', '2019-08-20 09:06:56', '2019-09-09 21:47:05', NULL);
+INSERT INTO `lin_admin` VALUES (3, 'admin02', 'http://7n.webgo.vip/1.jpg', 2, 1, 'ceshi@qq.com', 3, '9db06bcff9248837f86d1a6bcf41c9e7', '2019-08-26 09:46:39', '2019-09-07 08:06:11', NULL);
 COMMIT;
 
 -- ----------------------------
@@ -115,18 +115,20 @@ CREATE TABLE `lin_banner` (
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of lin_banner
 -- ----------------------------
 BEGIN;
-INSERT INTO `lin_banner` VALUES (1, 1, 'banner1的标题', 'banner1的描述', 'http://7n.webgo.vip/banner1.jpg', '#', 1, 1, '2019-08-27 12:02:35', '2019-08-27 16:46:06', NULL);
-INSERT INTO `lin_banner` VALUES (2, 2, '', '', 'http://7n.webgo.vip/banner2.jpg', '', 1, 0, '2019-08-27 12:03:32', '2019-08-27 18:05:40', NULL);
-INSERT INTO `lin_banner` VALUES (3, 3, 'banenr3', '', 'http://7n.webgo.vip/banner3.jpg', '#', 1, 0, '2019-08-27 16:57:05', '2019-08-27 16:57:05', NULL);
-INSERT INTO `lin_banner` VALUES (4, 4, 'banenr4', '', 'http://7n.webgo.vip/banner4.jpg', '#', 0, 0, '2019-08-27 16:57:16', '2019-08-27 18:23:37', NULL);
-INSERT INTO `lin_banner` VALUES (5, 5, 'banenr5', '', 'http://7n.webgo.vip/banner5.jpg', '#', 1, 0, '2019-08-27 16:57:24', '2019-08-27 18:05:37', NULL);
-INSERT INTO `lin_banner` VALUES (6, 6, 'banenr6', '', 'http://7n.webgo.vip/banner6.jpg', '#', 1, 0, '2019-08-27 16:57:37', '2019-08-27 16:57:37', NULL);
+INSERT INTO `lin_banner` VALUES (1, 1, 'banner1的标题', 'banner1的描述', 'http://7n.webgo.vip/banner1.jpg', '#11', 1, 0, '2019-08-27 12:02:35', '2019-09-12 23:43:59', NULL);
+INSERT INTO `lin_banner` VALUES (2, 2, 'banner2标题', '', 'http://7n.webgo.vip/banner2.jpg', '#', 1, 0, '2019-08-27 12:03:32', '2019-09-12 23:38:44', NULL);
+INSERT INTO `lin_banner` VALUES (3, 3, 'banenr3', '', 'http://7n.webgo.vip/banner3.jpg', '#', 1, 0, '2019-08-28 16:57:05', '2019-09-11 21:17:05', NULL);
+INSERT INTO `lin_banner` VALUES (4, 4, 'banenr4', '', 'http://7n.webgo.vip/banner4.jpg', '#', 0, 0, '2019-08-28 16:57:16', '2019-09-11 21:17:08', NULL);
+INSERT INTO `lin_banner` VALUES (5, 5, 'banenr5', '', 'http://7n.webgo.vip/banner5.jpg', '#', 1, 0, '2019-08-29 16:57:24', '2019-09-11 21:17:15', NULL);
+INSERT INTO `lin_banner` VALUES (6, 6, 'banenr6', '', 'http://7n.webgo.vip/banner6.jpg', '#', 1, 0, '2019-08-30 16:57:37', '2019-09-11 21:17:22', NULL);
+INSERT INTO `lin_banner` VALUES (7, 7, 'Banner7标题', NULL, 'http://7n.webgo.vip/banner1.jpg', '#', 1, 0, '2019-09-11 22:45:17', '2019-09-11 22:45:17', NULL);
+INSERT INTO `lin_banner` VALUES (8, 8, 'banner8', NULL, 'http://7n.webgo.vip/banner2.jpg', '#', 1, 0, '2019-09-11 22:46:19', '2019-09-11 22:46:19', NULL);
 COMMIT;
 
 -- ----------------------------
