@@ -38,11 +38,11 @@ module.exports = appInfo => {
     methodnoallow: { enable: false },
     // 安全配置(很重要)
     csrf: {
-      enable: true,
+      enable: false,
       ignoreJSON: true, // 默认为 false，当设置为 true 时，将会放过所有 content-type 为 `application/json` 的请求
-      headerName: 'x-csrf-token', // 通过 header 传递 CSRF token 的默认字段为 x-csrf-token
-      useSession: true, // 默认为 false，当设置为 true 时，将会把 csrf token 保存到 Session 中
-      cookieName: 'csrfToken', // Cookie 中的字段名，默认为 csrfToken
+      // headerName: 'x-csrf-token', // 通过 header 传递 CSRF token 的默认字段为 x-csrf-token
+      // useSession: true, // 默认为 false，当设置为 true 时，将会把 csrf token 保存到 Session 中
+      // cookieName: 'csrfToken', // Cookie 中的字段名，默认为 csrfToken
       // sessionName: 'csrfToken', // Session 中的字段名，默认为 csrfToken
       // queryName: '_csrf', // 通过 query 传递 CSRF token 的默认字段为 _csrf
       // bodyName: '_csrf', // 通过 body 传递 CSRF token 的默认字段为 _csrf
@@ -58,7 +58,7 @@ module.exports = appInfo => {
 
   // 校验插件配置
   config.validatePlus = {
-    resolveError(ctx, errors) {
+    resolveError (ctx, errors) {
       if (errors.length) {
         ctx.type = 'json';
         ctx.status = 200;
@@ -85,8 +85,8 @@ module.exports = appInfo => {
       // 用户名
       user: 'root',
       // 密码
-      password: '1qaz!QAZ',
-      // password: 'a123456',
+      // password: '1qaz!QAZ',
+      password: 'a123456',
       // 数据库名
       database: 'lin-cms-egg',
     },
@@ -114,12 +114,12 @@ module.exports = appInfo => {
     formatLogger: {
       // 生成的log文件配置
       file: path.join(appInfo.root, 'logs/api.log'),
-      formatter(meta) {
+      formatter (meta) {
         // console.log('formatter');
         return `[${meta.date}] ${meta.message}`;
       },
       // ctx请求日志(格式化)
-      contextFormatter(meta) {
+      contextFormatter (meta) {
         // console.log('contextFormatter');
         return `[${meta.date}][${meta.level}] [${meta.ctx.method} ${meta.ctx.url}] ${meta.message}`;
       },
@@ -163,8 +163,8 @@ module.exports = appInfo => {
     host: 'localhost',
     port: 3306,
     username: 'root',
-    password: '1qaz!QAZ',
-    // password: 'a123456',
+    // password: '1qaz!QAZ',
+    password: 'a123456',
     database: 'lin-cms-egg',
     define: {
       underscored: true, // 注意需要加上这个， egg-sequelize只是简单的使用Object.assign对配置和默认配置做了merge, 如果不加这个 update_at会被转变成 updateAt故报错
@@ -177,7 +177,7 @@ module.exports = appInfo => {
     timezone: '+08:00', // 保存为本地时区
     dialectOptions: {
       dateStrings: true,
-      typeCast(field, next) {
+      typeCast (field, next) {
         // for reading from database
         if (field.type === 'DATETIME') {
           return field.string();
