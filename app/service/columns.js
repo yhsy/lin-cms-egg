@@ -21,7 +21,7 @@ const moment = require('moment');
 
 class ColumnsService extends Service {
   // 添加栏目
-  async add() {
+  async add () {
     const { ctx } = this;
     const { cname } = ctx.request.body;
     // 找出最大的cid
@@ -34,20 +34,20 @@ class ColumnsService extends Service {
     return result;
   }
   // 获取栏目详情
-  async info(cid) {
+  async info (cid) {
     const { ctx } = this;
     const result = await ctx.model.Columns.findOne({ where: { cid } });
     return result;
   }
   // 编辑栏目
-  async edit(cid) {
+  async edit (cid) {
     const { ctx } = this;
     const requestObj = ctx.request.body;
     const result = await ctx.model.Columns.update(requestObj, { where: { cid } });
     return result;
   }
   // 删除栏目(软删除)
-  async del(cid) {
+  async del (cid) {
     const { ctx } = this;
     const requestObj = {
       is_delete: 1,
@@ -56,19 +56,20 @@ class ColumnsService extends Service {
     return result;
   }
   // 删除栏目(硬删除-数据库直接删除)
-  async remove(cid) {
+  async remove (cid) {
     const { ctx } = this;
     const result = await ctx.model.Columns.destroy({ where: { cid } });
     return result;
   }
 
   // 栏目列表
-  async list() {
+  async list () {
     const { ctx } = this;
-    const requestObj = ctx.request.body;
-    const { page, limit, startTime, endTime } = ctx.request.body;
+    const requestObj = ctx.request.query;
+    const { page, limit, startTime, endTime } = ctx.request.query;
     // 过滤空数据
     const reqObj = filterNullObj(requestObj);
+    console.log(`req is ${JSON.stringify(reqObj)}`)
     const whereObj = {
       is_delete: 0,
     };
@@ -80,7 +81,7 @@ class ColumnsService extends Service {
       };
     }
     // 状态
-    if (reqObj.status >= 0) {
+    if (Number(reqObj.status) >= 0) {
       whereObj.status = reqObj.status;
     }
 
@@ -91,14 +92,14 @@ class ColumnsService extends Service {
         whereObj.created_at = {
           // 大于等于
           [Op.gte]: startTime,
-          // 小于
+          // 小于等于
           [Op.lte]: moment(endTime).add(1, 'days'),
         };
       } else {
         whereObj.created_at = {
           // 大于等于
           [Op.gte]: startTime,
-          // 小于
+          // 小于等于
           [Op.lte]: endTime,
         };
       }
@@ -108,15 +109,15 @@ class ColumnsService extends Service {
     // 栏目列表(分页)
     const list = await ctx.model.Columns.findAll({
       where: whereObj,
-      // 返回过滤字段(浏览量和软删除)
-      attributes: { exclude: [ 'is_delete' ] },
+      // 返回过滤字段(软删除)
+      attributes: { exclude: ['is_delete'] },
       order: [
         // 创建时间-倒序
-        [ 'created_at', 'DESC' ],
-        [ 'cid', 'DESC' ],
+        ['created_at', 'DESC'],
+        ['cid', 'DESC'],
       ],
       // 条数
-      limit,
+      limit: Number(limit),
       offset: (page - 1) * limit,
     });
 
