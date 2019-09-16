@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-30 09:53:35
- * @LastEditTime: 2019-09-16 09:01:53
+ * @LastEditTime: 2019-09-16 09:14:41
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -23,13 +23,12 @@ class ColumnsService extends Service {
   // 添加栏目
   async add() {
     const { ctx } = this;
-    const { type, cname, sort, link } = ctx.request.body;
+    const { type, cname, link } = ctx.request.body;
     // 找出最大的cid
     // const maxCid = ctx.model.Article.max('cid');
     const requestObj = {
       type,
       cname,
-      sort,
       link,
     };
 
