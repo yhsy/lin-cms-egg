@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-30 12:15:44
- * @LastEditTime: 2019-08-30 18:47:02
+ * @LastEditTime: 2019-09-16 09:01:23
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -20,9 +20,10 @@ class ColumnsController extends BaseController {
     const { ctx, service } = this;
 
     // 校验必填项
-    const { cname } = ctx.request.body;
+    const { type, cname, sort, link } = ctx.request.body;
+
     const rules = ColumnsRules.add;
-    const validateResult = await ctx.validate(rules, { cname });
+    const validateResult = await ctx.validate(rules, { type, cname, sort, link });
     if (!validateResult) return;
 
     const result = await service.columns.add();

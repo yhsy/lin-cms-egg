@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-30 09:53:35
- * @LastEditTime: 2019-08-30 19:14:48
+ * @LastEditTime: 2019-09-16 09:01:53
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -21,33 +21,36 @@ const moment = require('moment');
 
 class ColumnsService extends Service {
   // 添加栏目
-  async add () {
+  async add() {
     const { ctx } = this;
-    const { cname } = ctx.request.body;
+    const { type, cname, sort, link } = ctx.request.body;
     // 找出最大的cid
     // const maxCid = ctx.model.Article.max('cid');
     const requestObj = {
+      type,
       cname,
+      sort,
+      link,
     };
 
     const result = await ctx.model.Columns.create(requestObj);
     return result;
   }
   // 获取栏目详情
-  async info (cid) {
+  async info(cid) {
     const { ctx } = this;
     const result = await ctx.model.Columns.findOne({ where: { cid } });
     return result;
   }
   // 编辑栏目
-  async edit (cid) {
+  async edit(cid) {
     const { ctx } = this;
     const requestObj = ctx.request.body;
     const result = await ctx.model.Columns.update(requestObj, { where: { cid } });
     return result;
   }
   // 删除栏目(软删除)
-  async del (cid) {
+  async del(cid) {
     const { ctx } = this;
     const requestObj = {
       is_delete: 1,
@@ -56,20 +59,20 @@ class ColumnsService extends Service {
     return result;
   }
   // 删除栏目(硬删除-数据库直接删除)
-  async remove (cid) {
+  async remove(cid) {
     const { ctx } = this;
     const result = await ctx.model.Columns.destroy({ where: { cid } });
     return result;
   }
 
   // 栏目列表
-  async list () {
+  async list() {
     const { ctx } = this;
     const requestObj = ctx.request.query;
     const { page, limit, startTime, endTime } = ctx.request.query;
     // 过滤空数据
     const reqObj = filterNullObj(requestObj);
-    console.log(`req is ${JSON.stringify(reqObj)}`)
+    console.log(`req is ${JSON.stringify(reqObj)}`);
     const whereObj = {
       is_delete: 0,
     };
@@ -110,11 +113,11 @@ class ColumnsService extends Service {
     const list = await ctx.model.Columns.findAll({
       where: whereObj,
       // 返回过滤字段(软删除)
-      attributes: { exclude: ['is_delete'] },
+      attributes: { exclude: [ 'is_delete' ] },
       order: [
         // 创建时间-倒序
-        ['created_at', 'DESC'],
-        ['cid', 'DESC'],
+        [ 'created_at', 'DESC' ],
+        [ 'cid', 'DESC' ],
       ],
       // 条数
       limit: Number(limit),
