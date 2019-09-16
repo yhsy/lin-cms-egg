@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-30 09:48:33
- * @LastEditTime: 2019-08-30 12:19:07
+ * @LastEditTime: 2019-09-16 09:10:29
  * @LastEditors: Please set LastEditors
  */
 
@@ -14,6 +14,8 @@ module.exports = app => {
   const Columns = app.model.define('lin_columns', {
     // 栏目id
     cid: { type: INTEGER(4), primaryKey: true, autoIncrement: true },
+    // 栏目类型(1-新闻资讯,2-人才招聘)
+    type: { type: TINYINT(2), allowNull: false },
     // 栏目名称
     cname: { type: STRING(20), allowNull: false },
     // 链接地址
