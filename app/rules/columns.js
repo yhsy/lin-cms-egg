@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-30 09:54:57
- * @LastEditTime: 2019-09-16 09:15:45
+ * @LastEditTime: 2019-09-17 08:53:08
  * @LastEditors: Please set LastEditors
  */
 
@@ -21,8 +21,8 @@ const ColumnsRules = {
   },
   edit: {
     cid,
-    cname,
-    status,
+    // cname,
+    // status,
   },
   del: {
     cid,

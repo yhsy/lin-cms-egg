@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-30 12:15:44
- * @LastEditTime: 2019-09-16 09:15:19
+ * @LastEditTime: 2019-09-17 08:55:24
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -39,10 +39,13 @@ class ColumnsController extends BaseController {
   async edit() {
     const { ctx, service } = this;
 
-    const { cid, cname, status } = ctx.request.body;
+    // const { cid, cname, status } = ctx.request.body;
+    const { cid } = ctx.request.body;
+
     const rules = ColumnsRules.edit;
     const validateResults = await ctx.validate(rules, {
-      cid, cname, status,
+      // cid, cname, status,
+      cid,
     });
     if (!validateResults) return;
 
