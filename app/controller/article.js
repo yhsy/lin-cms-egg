@@ -17,19 +17,19 @@ const { filterNullObj } = Utils;
 class ArticleController extends BaseController {
 
   // 测试接口-egg-squlize插件
-  async index() {
+  async index () {
     const { ctx } = this;
     const results = await ctx.model.Article.findAll();
     ctx.body = results;
   }
   // 添加文章
-  async add() {
+  async add () {
     const { ctx, service } = this;
 
     // 校验必填项
-    const { title, author, cover, url, content } = ctx.request.body;
+    const { cid, title, author, cover, url, content } = ctx.request.body;
     const rules = ArticleRules.add;
-    const validateResult = await ctx.validate(rules, { title, author, cover, url, content });
+    const validateResult = await ctx.validate(rules, { cid, title, author, cover, url, content });
     if (!validateResult) return;
 
     const result = await service.article.add();
@@ -42,7 +42,7 @@ class ArticleController extends BaseController {
   }
 
   // 编辑文章
-  async edit() {
+  async edit () {
     const { ctx, service } = this;
 
     const { id, title, author, cover, url, content, status } = ctx.request.body;
@@ -69,7 +69,7 @@ class ArticleController extends BaseController {
   }
 
   // 删除文章(软)
-  async del() {
+  async del () {
     const { ctx, service } = this;
 
     const { id } = ctx.request.body;
@@ -95,7 +95,7 @@ class ArticleController extends BaseController {
     this.sendSuccess({}, '文章-删除成功');
   }
   // 删除文章(硬)
-  async remove() {
+  async remove () {
     const { ctx, service } = this;
 
     const { id } = ctx.request.body;
@@ -134,7 +134,7 @@ class ArticleController extends BaseController {
     this.sendSuccess({}, '文章-删除成功');
   }
   // 获取文章列表
-  async list() {
+  async list () {
     const { ctx, service } = this;
 
     const { page, limit } = ctx.request.query;

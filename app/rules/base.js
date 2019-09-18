@@ -185,6 +185,10 @@ const BaseRule = {
     { required: true, message: '地址不能为空' },
     { type: 'string', min: 10, max: 100, message: '地址为10-100个字符' },
   ],
+  link: [
+    { required: true, message: '链接不能为空' },
+    { min: 1, max: 50, message: '链接地址为1-50个字符' },
+  ],
 };
 
 module.exports = BaseRule;
