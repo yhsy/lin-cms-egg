@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-28 19:28:02
- * @LastEditTime: 2019-08-30 18:36:16
+ * @LastEditTime: 2019-09-18 09:01:54
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -62,10 +62,14 @@ class ArticleService extends Service {
   // 文章列表
   async list() {
     const { ctx } = this;
-    const requestObj = ctx.request.body;
-    const { page, limit, startTime, endTime } = ctx.request.body;
+    const requestObj = ctx.request.query;
+    const { page, limit, startTime, endTime } = ctx.request.query;
     // 过滤空数据
     const reqObj = filterNullObj(requestObj);
+    // 注意:这里要把page和limit转成数字类型
+    const Page = Number(page);
+    const Limit = Number(limit);
+    // console.log(`${JSON.stringify(reqObj)}`);
     const whereObj = {
       is_delete: 0,
     };
@@ -119,8 +123,8 @@ class ArticleService extends Service {
         // [ 'id', 'DESC' ],
       ],
       // 条数
-      limit,
-      offset: (page - 1) * limit,
+      limit: Limit,
+      offset: (Page - 1) * Limit,
     });
 
     if (list.length === 0 || !list) {

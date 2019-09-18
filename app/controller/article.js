@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-28 16:30:17
- * @LastEditTime: 2019-08-29 15:57:27
+ * @LastEditTime: 2019-09-18 08:51:20
  * @LastEditors: Please set LastEditors
  */
 
@@ -137,7 +137,8 @@ class ArticleController extends BaseController {
   async list() {
     const { ctx, service } = this;
 
-    const { page, limit } = ctx.request.body;
+    const { page, limit } = ctx.request.query;
+
     const rules = ArticleRules.list;
     const validateResult = ctx.validate(rules, { page, limit });
     if (!validateResult) return;
