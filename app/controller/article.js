@@ -44,11 +44,14 @@ class ArticleController extends BaseController {
   // 编辑文章
   async edit () {
     const { ctx, service } = this;
+    const { id, status } = ctx.request.body;
 
-    const { id, title, author, cover, url, content, status } = ctx.request.body;
+
+    // const { id, title, author, cover, url, content, status } = ctx.request.body;
     const rules = ArticleRules.edit;
     const validateResults = await ctx.validate(rules, {
-      id, title, author, cover, url, content, status,
+      id,
+      status,
     });
     if (!validateResults) return;
 

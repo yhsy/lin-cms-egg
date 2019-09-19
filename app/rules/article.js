@@ -20,12 +20,12 @@ const ArticleRules = {
   },
   edit: {
     id,
-    cid,
-    title,
-    author,
-    cover,
-    url: link,
-    content,
+    // cid,
+    // title,
+    // author,
+    // cover,
+    // url: link,
+    // content,
     status,
   },
   del: {
