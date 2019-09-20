@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-28 16:30:17
- * @LastEditTime: 2019-09-18 08:51:20
+ * @LastEditTime: 2019-09-20 09:07:02
  * @LastEditors: Please set LastEditors
  */
 
@@ -17,13 +17,13 @@ const { filterNullObj } = Utils;
 class ArticleController extends BaseController {
 
   // 测试接口-egg-squlize插件
-  async index () {
+  async index() {
     const { ctx } = this;
     const results = await ctx.model.Article.findAll();
     ctx.body = results;
   }
   // 添加文章
-  async add () {
+  async add() {
     const { ctx, service } = this;
 
     // 校验必填项
@@ -42,16 +42,20 @@ class ArticleController extends BaseController {
   }
 
   // 编辑文章
-  async edit () {
+  async edit() {
     const { ctx, service } = this;
-    const { id, status } = ctx.request.body;
-
-
-    // const { id, title, author, cover, url, content, status } = ctx.request.body;
+    // const { id } = ctx.request.body;
+    const { id, cid, title, author, cover, url, content } = ctx.request.body;
     const rules = ArticleRules.edit;
     const validateResults = await ctx.validate(rules, {
       id,
-      status,
+      cid,
+      title,
+      author,
+      cover,
+      url,
+      content,
+      // status,
     });
     if (!validateResults) return;
 
@@ -72,7 +76,7 @@ class ArticleController extends BaseController {
   }
 
   // 删除文章(软)
-  async del () {
+  async del() {
     const { ctx, service } = this;
 
     const { id } = ctx.request.body;
@@ -98,7 +102,7 @@ class ArticleController extends BaseController {
     this.sendSuccess({}, '文章-删除成功');
   }
   // 删除文章(硬)
-  async remove () {
+  async remove() {
     const { ctx, service } = this;
 
     const { id } = ctx.request.body;
@@ -137,7 +141,7 @@ class ArticleController extends BaseController {
     this.sendSuccess({}, '文章-删除成功');
   }
   // 获取文章列表
-  async list () {
+  async list() {
     const { ctx, service } = this;
 
     const { page, limit } = ctx.request.query;
