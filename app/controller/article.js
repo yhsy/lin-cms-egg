@@ -17,13 +17,13 @@ const { filterNullObj } = Utils;
 class ArticleController extends BaseController {
 
   // 测试接口-egg-squlize插件
-  async index() {
+  async index () {
     const { ctx } = this;
     const results = await ctx.model.Article.findAll();
     ctx.body = results;
   }
   // 添加文章
-  async add() {
+  async add () {
     const { ctx, service } = this;
 
     // 校验必填项
@@ -42,22 +42,34 @@ class ArticleController extends BaseController {
   }
 
   // 编辑文章
-  async edit() {
+  async edit () {
     const { ctx, service } = this;
     // const { id } = ctx.request.body;
-    const { id, cid, title, author, cover, url, content } = ctx.request.body;
-    const rules = ArticleRules.edit;
-    const validateResults = await ctx.validate(rules, {
-      id,
-      cid,
-      title,
-      author,
-      cover,
-      url,
-      content,
-      // status,
-    });
-    if (!validateResults) return;
+    const { id, cid, title, author, cover, url, content, status, } = ctx.request.body;
+    let rules = {}
+    if (status >= 0) {
+      rules = ArticleRules.editStatus;
+      const validateResultsStatus = await ctx.validate(rules, {
+        id,
+        status,
+      });
+      if (!validateResultsStatus) return;
+    } else {
+      rules = ArticleRules.edit;
+      const validateResults = await ctx.validate(rules, {
+        id,
+        cid,
+        title,
+        author,
+        cover,
+        url,
+        content,
+      });
+      if (!validateResults) return;
+    }
+
+
+
 
     const info = await service.article.info(id);
     if (!info) {
@@ -76,7 +88,7 @@ class ArticleController extends BaseController {
   }
 
   // 删除文章(软)
-  async del() {
+  async del () {
     const { ctx, service } = this;
 
     const { id } = ctx.request.body;
@@ -102,7 +114,7 @@ class ArticleController extends BaseController {
     this.sendSuccess({}, '文章-删除成功');
   }
   // 删除文章(硬)
-  async remove() {
+  async remove () {
     const { ctx, service } = this;
 
     const { id } = ctx.request.body;
@@ -141,7 +153,7 @@ class ArticleController extends BaseController {
     this.sendSuccess({}, '文章-删除成功');
   }
   // 获取文章列表
-  async list() {
+  async list () {
     const { ctx, service } = this;
 
     const { page, limit } = ctx.request.query;
