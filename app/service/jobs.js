@@ -59,8 +59,8 @@ class JobsService extends Service {
   // 招聘信息列表
   async list () {
     const { ctx } = this;
-    const requestObj = ctx.request.body;
-    const { page, limit, startTime, endTime } = ctx.request.body;
+    const requestObj = ctx.request.query;
+    const { page, limit, startTime, endTime } = ctx.request.query;
     // 过滤空数据
     const reqObj = filterNullObj(requestObj);
     const whereObj = {
@@ -120,7 +120,7 @@ class JobsService extends Service {
         // ['cid', 'DESC'],
       ],
       // 条数
-      limit,
+      limit: Number(limit),
       offset: (page - 1) * limit,
     });
 

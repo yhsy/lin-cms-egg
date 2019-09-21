@@ -121,7 +121,9 @@ class JobsController extends BaseController {
   async list () {
     const { ctx, service } = this;
 
-    const { page, limit } = ctx.request.body;
+    // const { page, limit } = ctx.request.body;
+    const { page, limit } = ctx.request.query;
+
     const rules = JobsRules.list;
     const validateResult = ctx.validate(rules, { page, limit });
     if (!validateResult) return;
