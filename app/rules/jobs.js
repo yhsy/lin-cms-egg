@@ -8,7 +8,10 @@ const JobsRules = {
     cid,
     title,
     num: job_num,
-    content,
+    content: [
+      { required: true, message: '内容不能为空' },
+      { type: 'string', min: 2, message: '内容最少2个字符' },
+    ],
   },
   edit: {
     id,
