@@ -30,12 +30,23 @@ class JobsController extends BaseController {
   async edit () {
     const { ctx, service } = this;
 
-    const { id, cid, title, num, content } = ctx.request.body;
-    const rules = JobsRules.edit;
-    const validateResults = await ctx.validate(rules, {
-      id, cid, title, num, content
-    });
-    if (!validateResults) return;
+    const { id, cid, title, num, content, status } = ctx.request.body;
+
+    if (Number(status) >= 0) {
+      // 修改招聘状态
+      const ruleStatus = JobsRules.editStatus;
+      const ruleResults = await ctx.validate(ruleStatus, {
+        id, status,
+      });
+      if (!ruleResults) return;
+
+    } else {
+      const rules = JobsRules.edit;
+      const validateResults = await ctx.validate(rules, {
+        id, cid, title, num, content
+      });
+      if (!validateResults) return;
+    }
 
     const info = await service.jobs.info(id);
     if (!info) {
