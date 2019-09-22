@@ -21,7 +21,7 @@ const moment = require('moment');
 
 class ColumnsService extends Service {
   // 添加栏目
-  async add() {
+  async add () {
     const { ctx } = this;
     const { type, cname, link } = ctx.request.body;
     // 找出最大的cid
@@ -36,20 +36,20 @@ class ColumnsService extends Service {
     return result;
   }
   // 获取栏目详情
-  async info(cid) {
+  async info (cid) {
     const { ctx } = this;
     const result = await ctx.model.Columns.findOne({ where: { cid } });
     return result;
   }
   // 编辑栏目
-  async edit(cid) {
+  async edit (cid) {
     const { ctx } = this;
     const requestObj = ctx.request.body;
     const result = await ctx.model.Columns.update(requestObj, { where: { cid } });
     return result;
   }
   // 删除栏目(软删除)
-  async del(cid) {
+  async del (cid) {
     const { ctx } = this;
     const requestObj = {
       is_delete: 1,
@@ -58,17 +58,17 @@ class ColumnsService extends Service {
     return result;
   }
   // 删除栏目(硬删除-数据库直接删除)
-  async remove(cid) {
+  async remove (cid) {
     const { ctx } = this;
     const result = await ctx.model.Columns.destroy({ where: { cid } });
     return result;
   }
 
   // 栏目列表
-  async list() {
+  async list () {
     const { ctx } = this;
     const requestObj = ctx.request.query;
-    const { page, limit, startTime, endTime } = ctx.request.query;
+    const { page, limit, startTime, endTime, type } = ctx.request.query;
     // 过滤空数据
     const reqObj = filterNullObj(requestObj);
     console.log(`req is ${JSON.stringify(reqObj)}`);
@@ -76,6 +76,27 @@ class ColumnsService extends Service {
       is_delete: 0,
     };
     let results = {};
+
+    const types = Number(type)
+    // 栏目类型(1-新闻资讯,2-人才招聘)
+    if (types === 1 || types === 2) {
+      whereObj.type = types
+      // 类型对应的栏目信息
+      const colList = await ctx.model.Columns.findAll({
+        where: whereObj,
+        // 返回过滤字段(软删除)
+        // attributes: { exclude: [ '','', 'is_delete','created_at',] },
+        attributes: ['cid', 'cname',],
+        order: [
+          // 创建时间-倒序
+          ['created_at', 'DESC'],
+          ['cid', 'DESC'],
+        ],
+      });
+
+      return colList
+    }
+
     // 标题
     if (reqObj.cname) {
       whereObj.cname = {
@@ -112,11 +133,11 @@ class ColumnsService extends Service {
     const list = await ctx.model.Columns.findAll({
       where: whereObj,
       // 返回过滤字段(软删除)
-      attributes: { exclude: [ 'is_delete' ] },
+      attributes: { exclude: ['is_delete'] },
       order: [
         // 创建时间-倒序
-        [ 'created_at', 'DESC' ],
-        [ 'cid', 'DESC' ],
+        ['created_at', 'DESC'],
+        ['cid', 'DESC'],
       ],
       // 条数
       limit: Number(limit),
