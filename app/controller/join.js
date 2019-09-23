@@ -14,7 +14,7 @@ const JoinRules = require('../rules/join');
 class JoinController extends BaseController {
 
   // 添加加盟
-  async add() {
+  async add () {
     const { ctx, service } = this;
 
     // 校验必填项
@@ -34,16 +34,24 @@ class JoinController extends BaseController {
   }
 
   // 编辑加盟
-  async edit() {
+  async edit () {
     const { ctx, service } = this;
 
-    const { id, name, phone, address } = ctx.request.body;
-
-    const rules = JoinRules.edit;
-    const validateResults = await ctx.validate(rules, {
-      id, name, phone, address,
-    });
-    if (!validateResults) return;
+    const { id, name, phone, address, status, } = ctx.request.body;
+    let rules = {}
+    if (status >= 0) {
+      rules = JoinRules.editStatus;
+      const validateStatus = await ctx.validate(rules, {
+        id, status,
+      });
+      if (!validateStatus) return;
+    } else {
+      rules = JoinRules.edit;
+      const validateResults = await ctx.validate(rules, {
+        id, name, phone, address,
+      });
+      if (!validateResults) return;
+    }
 
     const info = await service.join.info(id);
     if (!info) {
@@ -61,7 +69,7 @@ class JoinController extends BaseController {
   }
 
   // 删除加盟(软)
-  async del() {
+  async del () {
     const { ctx, service } = this;
 
     const { id } = ctx.request.body;
@@ -87,7 +95,7 @@ class JoinController extends BaseController {
     this.sendSuccess({}, '加盟-删除成功');
   }
   // 删除加盟(硬)
-  async remove() {
+  async remove () {
     const { ctx, service } = this;
 
     const { id } = ctx.request.body;
@@ -126,7 +134,7 @@ class JoinController extends BaseController {
     this.sendSuccess({}, '加盟-删除成功');
   }
   // 获取加盟列表
-  async list() {
+  async list () {
     const { ctx, service } = this;
 
     const { page, limit } = ctx.request.query;

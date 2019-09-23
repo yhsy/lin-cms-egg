@@ -10,7 +10,7 @@
 'use strict';
 const BaseRule = require('./base');
 const {
-  join_name, phone, address, id, page, limit,
+  join_name, phone, address, id, page, limit, status,
 } = BaseRule;
 const JoinRules = {
   add: {
@@ -23,6 +23,10 @@ const JoinRules = {
     name: join_name,
     phone,
     address,
+  },
+  editStatus: {
+    id,
+    status,
   },
   del: {
     id,
