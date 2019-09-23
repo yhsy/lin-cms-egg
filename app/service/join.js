@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-09-03 09:13:12
- * @LastEditTime: 2019-09-04 08:58:45
+ * @LastEditTime: 2019-09-23 08:44:02
  * @LastEditors: Please set LastEditors
  */
 
@@ -63,8 +63,10 @@ class JoinService extends Service {
   // 加盟信息列表
   async list() {
     const { ctx } = this;
-    const requestObj = ctx.request.body;
-    const { page, limit, startTime, endTime } = ctx.request.body;
+
+    const requestObj = ctx.request.query;
+    const { page, limit, startTime, endTime } = ctx.request.query;
+
     // 过滤空数据
     const reqObj = filterNullObj(requestObj);
     const whereObj = {
@@ -95,7 +97,7 @@ class JoinService extends Service {
       whereObj.status = reqObj.status;
     }
     // 客户类型
-    if (reqObj.type >= 0) {
+    if (Number(reqObj.type) >= 0) {
       whereObj.type = reqObj.type;
     }
 
@@ -129,7 +131,7 @@ class JoinService extends Service {
         [ 'created_at', 'DESC' ],
       ],
       // 条数
-      limit,
+      limit: Number(limit),
       offset: (page - 1) * limit,
     });
 

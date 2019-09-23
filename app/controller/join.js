@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-09-03 09:17:23
- * @LastEditTime: 2019-09-04 08:59:02
+ * @LastEditTime: 2019-09-23 08:44:34
  * @LastEditors: Please set LastEditors
  */
 
@@ -129,7 +129,7 @@ class JoinController extends BaseController {
   async list() {
     const { ctx, service } = this;
 
-    const { page, limit } = ctx.request.body;
+    const { page, limit } = ctx.request.query;
     const rules = JoinRules.list;
     const validateResult = ctx.validate(rules, { page, limit });
     if (!validateResult) return;
