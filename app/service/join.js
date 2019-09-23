@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-09-03 09:13:12
- * @LastEditTime: 2019-09-23 08:44:02
+ * @LastEditTime: 2019-09-23 09:22:16
  * @LastEditors: Please set LastEditors
  */
 
@@ -86,20 +86,20 @@ class JoinService extends Service {
         [Op.like]: `%${reqObj.phone}%`,
       };
     }
-    // 地址
-    if (reqObj.address) {
-      whereObj.address = {
-        [Op.like]: `%${reqObj.address}%`,
-      };
-    }
+    // // 地址
+    // if (reqObj.address) {
+    //   whereObj.address = {
+    //     [Op.like]: `%${reqObj.address}%`,
+    //   };
+    // }
     // 状态
     if (reqObj.status >= 0) {
       whereObj.status = reqObj.status;
     }
-    // 客户类型
-    if (Number(reqObj.type) >= 0) {
-      whereObj.type = reqObj.type;
-    }
+    // // 客户类型
+    // if (Number(reqObj.type) >= 0) {
+    //   whereObj.type = reqObj.type;
+    // }
 
     // 创建时间
     if (startTime && endTime) {
