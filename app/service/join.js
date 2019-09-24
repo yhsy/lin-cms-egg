@@ -20,7 +20,7 @@ const moment = require('moment');
 
 class JoinService extends Service {
   // 添加加盟信息
-  async add() {
+  async add () {
     const { ctx } = this;
     const { name, phone, address } = ctx.request.body;
 
@@ -32,20 +32,20 @@ class JoinService extends Service {
     return result;
   }
   // 获取加盟信息详情
-  async info(id) {
+  async info (id) {
     const { ctx } = this;
     const result = await ctx.model.Join.findOne({ where: { id } });
     return result;
   }
   // 编辑加盟信息
-  async edit(id) {
+  async edit (id) {
     const { ctx } = this;
     const requestObj = ctx.request.body;
     const result = await ctx.model.Join.update(requestObj, { where: { id } });
     return result;
   }
   // 删除加盟信息(软删除)
-  async del(id) {
+  async del (id) {
     const { ctx } = this;
     const requestObj = {
       is_delete: 1,
@@ -54,14 +54,14 @@ class JoinService extends Service {
     return result;
   }
   // 删除加盟信息(硬删除-数据库直接删除)
-  async remove(id) {
+  async remove (id) {
     const { ctx } = this;
     const result = await ctx.model.Join.destroy({ where: { id } });
     return result;
   }
 
   // 加盟信息列表
-  async list() {
+  async list () {
     const { ctx } = this;
 
     const requestObj = ctx.request.query;
@@ -125,10 +125,10 @@ class JoinService extends Service {
     const list = await ctx.model.Join.findAll({
       where: whereObj,
       // 返回过滤字段(浏览量和软删除)
-      attributes: { exclude: [ 'is_delete' ] },
+      attributes: { exclude: ['is_delete'] },
       order: [
         // 创建时间-倒序
-        [ 'created_at', 'DESC' ],
+        ['created_at', 'DESC'],
       ],
       // 条数
       limit: Number(limit),

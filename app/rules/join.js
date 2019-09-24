@@ -23,6 +23,7 @@ const JoinRules = {
     name: join_name,
     phone,
     address,
+    // desc,
   },
   editStatus: {
     id,
@@ -30,6 +31,12 @@ const JoinRules = {
       { required: true, message: '状态不能为空' },
       { type: 'enum', enum: [0, 1, 2], message: '状态参数错误' },
     ],
+  },
+  editDesc: {
+    id,
+    desc: [
+      { required: true, message: '备注不能为空' },
+    ]
   },
   del: {
     id,

@@ -37,7 +37,12 @@ class JoinController extends BaseController {
   async edit () {
     const { ctx, service } = this;
 
-    const { id, name, phone, address, status, } = ctx.request.body;
+    const {
+      id,
+      // name, phone, address,
+      status,
+      desc,
+    } = ctx.request.body;
     let rules = {}
     if (status >= 0) {
       rules = JoinRules.editStatus;
@@ -46,9 +51,12 @@ class JoinController extends BaseController {
       });
       if (!validateStatus) return;
     } else {
-      rules = JoinRules.edit;
+      // rules = JoinRules.edit;
+      rules = JoinRules.editDesc;
       const validateResults = await ctx.validate(rules, {
-        id, name, phone, address,
+        // id, name, phone, address,
+        id,
+        desc,
       });
       if (!validateResults) return;
     }
