@@ -26,7 +26,10 @@ const JoinRules = {
   },
   editStatus: {
     id,
-    status,
+    status: [
+      { required: true, message: '状态不能为空' },
+      { type: 'enum', enum: [0, 1, 2], message: '状态参数错误' },
+    ],
   },
   del: {
     id,
