@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-20 08:36:44
- * @LastEditTime: 2019-09-09 09:06:14
+ * @LastEditTime: 2019-09-25 09:07:51
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -160,20 +160,22 @@ class AdminController extends BaseController {
   // 获取管理员列表(分页)
   async list() {
     const { ctx, service } = this;
-    const { page } = this.ctx.request.body;
+    const { page } = this.ctx.request.query;
 
     // page校验
     const rules = AdminRule.list;
     // 拿到验证结果
     const validateResult = await ctx.validate(rules, {
-      page,
+      page: Number(page),
     });
     if (!validateResult) return;
 
     const results = await service.admin.list();
-    // console.log(`results is ${JSON.stringify(results)}`);
-    // 返回数据
-    this.sendSuccess(results, 'ok');
+    if (!results) {
+      this.sendErrmsg('获取失败,请重试');
+      return;
+    }
+    this.sendSuccess(results, '获取成功');
   }
 
   // 添加管理员
