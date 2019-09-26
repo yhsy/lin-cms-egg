@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-22 18:22:02
- * @LastEditTime: 2019-09-25 09:06:13
+ * @LastEditTime: 2019-09-26 16:13:32
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -14,6 +14,8 @@ const svgCaptcha = require('svg-captcha');
 const moment = require('moment');
 // Md5加密:方法1
 const Md5 = require('md5');
+
+const _ = require('loadsh');
 
 class AdminService extends Service {
   // 生成验证码
@@ -52,28 +54,71 @@ class AdminService extends Service {
   }
   // 获取管理员列表(分页)
   async list() {
+    const { ctx } = this;
     // 过滤json对象里面没有值的属性
     const { filterNullObj } = this.ctx.helper;
     // 获取查询参数
     // console.log(this.ctx.request.body);
+    const requestObj = filterNullObj(ctx.request.query);
     // 过滤没有值的参数
-    const requestObj = filterNullObj(this.ctx.request.query);
+    // const requestObj = filterNullObj(this.ctx.request.query);
+    const { page, id, active, nickname, group_id, startTime, endTime } = ctx.request.query;
+    // console.log(`page:${page}, id:${id}, active:${active}, nickname:${nickname}`);
     // 返回结果
     let results = {};
+    const reqObj = {};
 
-    // 如果有日期筛选(要用mysql原生的查询语句)
-    if (requestObj.startTime && requestObj.endTime) {
-      results = await this.getTimeList(requestObj);
+    // id查询
+    if (_.isInteger(Number(id)) && Number(id) > 0) {
+      reqObj.id = Number(id);
+    }
+
+    // 状态查询
+    if (active === '0' || active === '1') {
+      reqObj.active = Number(active);
+    }
+
+    // 昵称查询
+    if (nickname) {
+      reqObj.nickname = nickname;
+    }
+
+    // group_id查询
+    if (_.isInteger(Number(group_id)) && Number(group_id) > 0) {
+      reqObj.group_id = Number(group_id);
+    }
+
+    // 创建时间查询(要用mysql原生的查询语句)
+    if (startTime && endTime) {
+      reqObj.page = page;
+      reqObj.startTime = startTime;
+      reqObj.endTime = endTime;
+
+      results = await this.getTimeList(reqObj);
+
+      // results = await this.getTimeList(requestObj);
       return results;
     }
+
+    // console.log(`reqObj: ${JSON.stringify(reqObj)}`);
+
+    // 如果有日期筛选(要用mysql原生的查询语句)
+    // if (requestObj.startTime && requestObj.endTime) {
+    //   results = await this.getTimeList(requestObj);
+    //   return results;
+    // }
     // 分页
-    const { page } = requestObj;
-    // 在查询条件里删除page
-    delete requestObj.page;
+    // const { page } = requestObj;
+    // // 在查询条件里删除page
+    // delete requestObj.page;
+
+    // 条件查询里删除page字段
+    delete reqObj.page;
     // 获取10条数据
     const list = await this.app.mysql.select('lin_admin', {
       // 是管理员
-      where: requestObj,
+      // where: requestObj,
+      where: reqObj,
       columns: [
         'id',
         'nickname',
@@ -99,7 +144,9 @@ class AdminService extends Service {
       return results;
     }
     // 统计总条数
-    const total = await this.app.mysql.count('lin_admin', requestObj);
+    // const total = await this.app.mysql.count('lin_admin', requestObj);
+    const total = await this.app.mysql.count('lin_admin', reqObj);
+
 
     // 组装数据
     results = {
@@ -118,8 +165,14 @@ class AdminService extends Service {
     let whereSql = '';
 
     const { page, startTime, endTime } = obj;
-    // console.log(`startTime is ${startTime}, eTime is ${endTime}`);
+    console.log(`startTime is ${startTime}, eTime is ${endTime}`);
+    console.log(`obj:${JSON.stringify(obj)}`);
 
+    if (obj.id) {
+      // const { nickname } = obj;
+      // nickSql = `AND t.nickname = '${nickname}'`;
+      whereSql += `AND t.id = '${obj.id}'`;
+    }
     if (obj.nickname) {
       // const { nickname } = obj;
       // nickSql = `AND t.nickname = '${nickname}'`;
