@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-22 18:22:02
- * @LastEditTime: 2019-09-26 16:13:32
+ * @LastEditTime: 2019-09-27 08:58:39
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -62,11 +62,14 @@ class AdminService extends Service {
     const requestObj = filterNullObj(ctx.request.query);
     // 过滤没有值的参数
     // const requestObj = filterNullObj(this.ctx.request.query);
-    const { page, id, active, nickname, group_id, startTime, endTime } = ctx.request.query;
+    const { page, limit, id, active, nickname, group_id, startTime, endTime } = ctx.request.query;
     // console.log(`page:${page}, id:${id}, active:${active}, nickname:${nickname}`);
     // 返回结果
     let results = {};
-    const reqObj = {};
+    const reqObj = {
+      page,
+      limit: Number(limit),
+    };
 
     // id查询
     if (_.isInteger(Number(id)) && Number(id) > 0) {
@@ -90,7 +93,6 @@ class AdminService extends Service {
 
     // 创建时间查询(要用mysql原生的查询语句)
     if (startTime && endTime) {
-      reqObj.page = page;
       reqObj.startTime = startTime;
       reqObj.endTime = endTime;
 
@@ -114,6 +116,8 @@ class AdminService extends Service {
 
     // 条件查询里删除page字段
     delete reqObj.page;
+    delete reqObj.limit;
+
     // 获取10条数据
     const list = await this.app.mysql.select('lin_admin', {
       // 是管理员
@@ -131,8 +135,8 @@ class AdminService extends Service {
       ], // 要查询的表字段
       // 排序方式(创建时间->id)
       orders: [[ 'create_time', 'desc' ], [ 'id', 'desc' ]],
-      limit: 10, // 返回数据量(size)
-      offset: 10 * (page - 1), // 数据偏移量(page的位置,从哪里取)
+      limit: Number(limit), // 返回数据量(size)
+      offset: Number(limit) * (page - 1), // 数据偏移量(page的位置,从哪里取)
     });
     // console.log(`list is ${list}`);
     // 判断该页是否有数据
@@ -164,9 +168,10 @@ class AdminService extends Service {
     // 条件sql
     let whereSql = '';
 
-    const { page, startTime, endTime } = obj;
-    console.log(`startTime is ${startTime}, eTime is ${endTime}`);
-    console.log(`obj:${JSON.stringify(obj)}`);
+    const { page, limit, startTime, endTime } = obj;
+
+    // console.log(`startTime is ${startTime}, eTime is ${endTime}`);
+    // console.log(`obj:${JSON.stringify(obj)}`);
 
     if (obj.id) {
       // const { nickname } = obj;
@@ -190,6 +195,7 @@ class AdminService extends Service {
     }
 
     // 分页公式(LIMIT*(page-1))
+    const limits = Number(limit);
     const pages = 1 * (page - 1);
 
     // 获取分页数据
@@ -202,7 +208,7 @@ class AdminService extends Service {
       t.create_time < DATE_FORMAT('${endTime}', '%Y-%m-%d %H')
       ${whereSql}
       ORDER BY t.create_time DESC
-      LIMIT 1 OFFSET ${pages};
+      LIMIT ${limits} OFFSET ${pages};
       `;
     // 获取数据的总条数
     const countSql = `

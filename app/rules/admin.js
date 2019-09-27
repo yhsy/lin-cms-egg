@@ -2,13 +2,13 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-26 10:44:32
- * @LastEditTime: 2019-09-09 09:13:57
+ * @LastEditTime: 2019-09-27 08:56:45
  * @LastEditors: Please set LastEditors
  */
 'use strict';
 
 const BaseRule = require('./base');
-const { id, username, password, page, group_id } = BaseRule;
+const { page, limit, id, username, password, group_id } = BaseRule;
 /* 管理员-校验规则 */
 const AdminRule = {
   // 登录
@@ -36,6 +36,7 @@ const AdminRule = {
   // 列表
   list: {
     page,
+    limit,
   },
   // 添加
   add: {
