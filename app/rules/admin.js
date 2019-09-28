@@ -44,7 +44,11 @@ const AdminRule = {
     password,
     group_id,
   },
-  // 编辑和删除用
+  editPassword: {
+    id,
+    password,
+  },
+  // 编辑和删除
   id: {
     id,
   },
