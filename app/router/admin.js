@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-08-19 08:46:54
- * @LastEditTime: 2019-09-09 09:09:07
+ * @LastEditTime: 2019-09-29 08:38:50
  * @LastEditors: Please set LastEditors
  */
 'use strict';
@@ -29,4 +29,6 @@ module.exports = app => {
   router.post('/api/admin/edit', app.jwt, controller.admin.edit);
   // 修改密码
   router.post('/api/admin/change_password', app.jwt, controller.admin.changePassword);
+  // 修改-状态
+  router.post('/api/admin/edit/status', app.jwt, controller.admin.editStatus);
 };
