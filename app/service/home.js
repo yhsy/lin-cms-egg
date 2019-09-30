@@ -15,7 +15,7 @@ const { formatTimeYMDH } = Utils;
 
 class HomeService extends Service {
   // 查询banner信息
-  async infoBanner(id) {
+  async infoBanner (id) {
     const result = await this.app.mysql.get('lin_banner', { id });
     // 过滤软删除的id
     if (result.is_delete) {
@@ -24,7 +24,7 @@ class HomeService extends Service {
     return result;
   }
   // 添加banner
-  async addBanner() {
+  async addBanner () {
     const { ctx, app } = this;
     const requestObj = ctx.request.body;
     // console.log(`requestObj is ${JSON.stringify(requestObj)}`);
@@ -35,7 +35,7 @@ class HomeService extends Service {
     return insertSuccess;
   }
   // 编辑banner
-  async editBanner() {
+  async editBanner () {
     const { id, sort, title, img_url, link, is_show } = this.ctx.request.body;
 
     const reqObj = {};
@@ -60,7 +60,7 @@ class HomeService extends Service {
     return updateSuccess;
   }
   // 删除banner(软删除)
-  async delBanner(id) {
+  async delBanner (id) {
     const row = {
       id,
       is_delete: 1,
@@ -70,7 +70,7 @@ class HomeService extends Service {
     return updateSuccess;
   }
   // 获取banner列表
-  async listBanner(page) {
+  async listBanner (page) {
     const { ctx, app } = this;
     let results = {};
     const requestObj = ctx.request.query;
@@ -89,8 +89,8 @@ class HomeService extends Service {
     // 数据列表
     const list = await app.mysql.select('lin_banner', {
       where: queryObj,
-      columns: [ 'id', 'sort', 'img_url', 'link', 'is_show', 'title', 'desc', 'create_time', 'update_time' ],
-      orders: [[ 'sort', 'asc' ], [ 'id', 'desc' ]],
+      columns: ['id', 'sort', 'img_url', 'link', 'is_show', 'title', 'desc', 'create_time', 'update_time'],
+      orders: [['sort', 'asc'], ['id', 'desc']],
       limit: 10,
       offset: (page - 1) * 10,
     });
@@ -111,6 +111,22 @@ class HomeService extends Service {
       list: formatTimeYMDH(list),
       total,
     };
+    return results;
+  }
+  // 客户端-获取banner(3条)
+  async getBanner () {
+    const { ctx, app } = this;
+
+    // 数据列表
+    const list = await app.mysql.select('lin_banner', {
+      columns: ['id', 'sort', 'img_url', 'link', 'title', 'desc'],
+      orders: [['sort', 'asc'], ['id', 'desc']],
+      limit: 3,
+      offset: 0,
+    });
+
+    // 格式化日期
+    const results = formatTimeYMDH(list);
     return results;
   }
 }
