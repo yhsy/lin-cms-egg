@@ -23,5 +23,5 @@ module.exports = app => {
   require('./columns')(app);
   require('./jobs')(app);
   require('./join')(app);
-
+  require('./client')(app);
 };
