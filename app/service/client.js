@@ -34,11 +34,11 @@ class ClientService extends Service {
     const list = await ctx.model.Article.findAll({
       where: whereObj,
       // 返回过滤字段(浏览量和软删除)
-      attributes: { exclude: ['pageviews', 'is_delete'] },
+      attributes: { exclude: ['pageviews', 'is_delete', 'status', 'updated_at'] },
       order: [
         // 创建时间-倒序
         ['created_at', 'DESC'],
-        // [ 'id', 'DESC' ],
+        ['id', 'DESC'],
       ],
       // 条数
       limit: 4,
