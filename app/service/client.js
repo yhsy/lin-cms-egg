@@ -23,6 +23,34 @@ class ClientService extends Service {
     const results = formatTimeYMDH(list);
     return results;
   }
+  // 客户端-获取新闻列表(4条)
+  async getNews () {
+    const { ctx } = this;
+    const whereObj = {
+      is_delete: 0,
+    };
+
+    // 文章列表(分页)
+    const list = await ctx.model.Article.findAll({
+      where: whereObj,
+      // 返回过滤字段(浏览量和软删除)
+      attributes: { exclude: ['pageviews', 'is_delete'] },
+      order: [
+        // 创建时间-倒序
+        ['created_at', 'DESC'],
+        // [ 'id', 'DESC' ],
+      ],
+      // 条数
+      limit: 4,
+      offset: 0,
+    });
+
+
+    const results = formatTimeYMDH(list);
+
+    return results;
+
+  }
 }
 
 module.exports = ClientService;
