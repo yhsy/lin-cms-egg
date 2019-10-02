@@ -2,6 +2,7 @@
 'use strict';
 
 const BaseController = require('./base');
+const JoinRules = require('../rules/join');
 
 class ClientController extends BaseController {
   // 首页-获取banner
@@ -26,6 +27,26 @@ class ClientController extends BaseController {
     // ]
     const results = await service.client.getNews();
     this.sendSuccess(results, '列表获取成功');
+  }
+
+  // 添加加盟
+  async addJoin () {
+    const { ctx, service } = this;
+
+    // 校验必填项
+    const { name, phone, address } = ctx.request.body;
+
+    const rules = JoinRules.add;
+    const validateResult = await ctx.validate(rules, { name, phone, address });
+    if (!validateResult) return;
+
+    const result = await service.join.add();
+    if (!result) {
+      this.sendErrmsg('添加加盟失败,请重试');
+      return;
+    }
+    this.sendSuccess({}, '添加加盟成功');
+
   }
 }
 
