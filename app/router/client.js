@@ -9,4 +9,6 @@ module.exports = app => {
   router.get('/api/client/getbanner', controller.client.getBanner);
   // 获取首页-新闻
   router.get('/api/client/getnews', controller.client.getNews);
+  // 新增加盟信息
+  router.post('/api/client/addjoin', controller.client.addJoin);
 };
