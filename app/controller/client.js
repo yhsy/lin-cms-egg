@@ -40,12 +40,12 @@ class ClientController extends BaseController {
     const validateResult = await ctx.validate(rules, { name, phone, address });
     if (!validateResult) return;
 
-    const result = await service.join.add();
+    const result = await service.client.addJoin();
     if (!result) {
-      this.sendErrmsg('添加加盟失败,请重试');
+      this.sendErrmsg('留言失败,请重试');
       return;
     }
-    this.sendSuccess({}, '添加加盟成功');
+    this.sendSuccess({}, '恭喜您,留言成功');
 
   }
 }

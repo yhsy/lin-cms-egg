@@ -51,6 +51,18 @@ class ClientService extends Service {
     return results;
 
   }
+  // 客户端-新增加盟信息
+  async addJoin () {
+    const { ctx } = this;
+    const { name, phone, address } = ctx.request.body;
+
+    const requestObj = {
+      name, phone, address,
+    };
+
+    const result = await ctx.model.Join.create(requestObj);
+    return result;
+  }
 }
 
 module.exports = ClientService;
