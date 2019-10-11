@@ -1,3 +1,10 @@
+/*
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-10-09 08:55:33
+ * @LastEditTime: 2019-10-11 20:40:52
+ * @LastEditors: Please set LastEditors
+ */
 
 'use strict';
 
@@ -6,13 +13,13 @@ const JoinRules = require('../rules/join');
 
 class ClientController extends BaseController {
   // 首页-获取banner
-  async getBanner () {
+  async getBanner() {
     const { ctx, service } = this;
     const results = await service.client.getBanner();
     this.sendSuccess(results, '列表获取成功');
   }
   // 首页-获取新闻列表
-  async getNews () {
+  async getNews() {
     const { ctx, service } = this;
     // const results = [
     //   {
@@ -30,7 +37,7 @@ class ClientController extends BaseController {
   }
 
   // 添加加盟
-  async addJoin () {
+  async addJoin() {
     const { ctx, service } = this;
 
     // 校验必填项
