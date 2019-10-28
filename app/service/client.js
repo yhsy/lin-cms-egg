@@ -8,13 +8,13 @@ const { formatTimeYMDH } = Utils;
 
 class ClientService extends Service {
   // 客户端-获取banner(3条)
-  async getBanner() {
+  async getBanner () {
     const { ctx, app } = this;
 
     // 数据列表
     const list = await app.mysql.select('lin_banner', {
-      columns: [ 'id', 'sort', 'img_url', 'link', 'title', 'desc' ],
-      orders: [[ 'sort', 'asc' ], [ 'id', 'desc' ]],
+      columns: ['id', 'sort', 'img_url', 'link', 'title', 'desc'],
+      orders: [['sort', 'asc'], ['id', 'desc']],
       limit: 3,
       offset: 0,
     });
@@ -24,21 +24,28 @@ class ClientService extends Service {
     return results;
   }
   // 客户端-获取新闻列表(4条)
-  async getNews() {
+  async getNews () {
     const { ctx } = this;
+    const req = this.ctx.request.query;
+    const { cid } = this.ctx.request.query;
     const whereObj = {
-      is_delete: 0,
+      is_delete: 0
     };
+
+    // 栏目id
+    if (Number(cid) === 101 || Number(cid) === 102) {
+      whereObj.cid = cid;
+    }
 
     // 文章列表(分页)
     const list = await ctx.model.Article.findAll({
       where: whereObj,
       // 返回过滤字段(浏览量和软删除)
-      attributes: { exclude: [ 'pageviews', 'is_delete', 'status', 'updated_at' ] },
+      attributes: { exclude: ['pageviews', 'is_delete', 'status', 'updated_at'] },
       order: [
         // 创建时间-倒序
-        [ 'created_at', 'DESC' ],
-        [ 'id', 'DESC' ],
+        ['created_at', 'DESC'],
+        ['id', 'DESC'],
       ],
       // 条数
       limit: 4,
@@ -52,7 +59,7 @@ class ClientService extends Service {
 
   }
   // 客户端-新增加盟信息
-  async addJoin() {
+  async addJoin () {
     const { ctx } = this;
     const { name, phone, address } = ctx.request.body;
 
