@@ -33,7 +33,7 @@ class ClientService extends Service {
     };
 
     // 栏目id
-    if (Number(cid) === 101 || Number(cid) === 102) {
+    if (Number(cid) >= 101 && Number(cid) <= 103) {
       whereObj.cid = cid;
     }
 
@@ -69,6 +69,58 @@ class ClientService extends Service {
 
     const result = await ctx.model.Join.create(requestObj);
     return result;
+  }
+  // 客户端-获取招聘信息列表
+  async getJobs () {
+    const { ctx } = this;
+    const { page, limit, cid } = ctx.request.query;
+    // 查询条件
+    const whereObj = {
+      is_delete: 0,
+      status: 1,
+    };
+    // 返回结果
+    let results = {}
+
+
+    // 栏目id
+    if (Number(cid) >= 201 && Number(cid) <= 203) {
+      whereObj.cid = cid;
+    }
+
+    // 招聘信息列表(分页)
+    const list = await ctx.model.Jobs.findAll({
+      where: whereObj,
+      // 返回过滤字段(浏览量和软删除)
+      attributes: { exclude: ['is_delete'] },
+      order: [
+        // 创建时间-倒序
+        ['created_at', 'DESC'],
+      ],
+      // 条数
+      limit: Number(limit),
+      offset: (page - 1) * limit,
+    });
+
+    if (list.length === 0 || !list) {
+      results = {
+        list: [],
+        total: 0,
+      };
+      return results;
+    }
+
+    // 统计总条数
+    const total = await ctx.model.Jobs.count({
+      where: whereObj,
+    });
+
+    results = {
+      list,
+      total,
+    };
+
+    return results;
   }
 }
 

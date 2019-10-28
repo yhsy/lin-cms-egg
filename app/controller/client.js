@@ -13,13 +13,13 @@ const JoinRules = require('../rules/join');
 
 class ClientController extends BaseController {
   // 首页-获取banner
-  async getBanner() {
+  async getBanner () {
     const { ctx, service } = this;
     const results = await service.client.getBanner();
     this.sendSuccess(results, '列表获取成功');
   }
   // 首页-获取新闻列表
-  async getNews() {
+  async getNews () {
     const { ctx, service } = this;
     // const results = [
     //   {
@@ -37,7 +37,7 @@ class ClientController extends BaseController {
   }
 
   // 添加加盟
-  async addJoin() {
+  async addJoin () {
     const { ctx, service } = this;
 
     // 校验必填项
@@ -55,6 +55,15 @@ class ClientController extends BaseController {
     this.sendSuccess({}, '恭喜您,留言成功');
 
   }
+
+  // 获取招聘信息列表
+  async getJobs () {
+    const { ctx, service } = this;
+    const results = await service.client.getJobs();
+    this.sendSuccess(results, '列表获取成功');
+  }
 }
+
+
 
 module.exports = ClientController;
