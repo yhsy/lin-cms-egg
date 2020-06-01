@@ -5,22 +5,24 @@
  * @LastEditTime: 2019-08-26 18:31:53
  * @LastEditors: Please set LastEditors
  */
-'use strict';
+"use strict";
 // 引入七牛SDK
-const qiniu = require('qiniu');
+const qiniu = require("qiniu");
 // node上传处理模块
-const formidable = require('formidable');
+const formidable = require("formidable");
 // fs
-const fs = require('mz/fs');
+const fs = require("mz/fs");
 
 // 日期插件
-const moment = require('moment');
+const moment = require("moment");
 
 const config = {
-  accessKey: 'LlMsm2IOaDRpITt3yZrb45VzjB4eQQZeJ99YTBIo',
-  secretKey: '4oHMXZ3zCv-iA4y0ozYampBe_QRL5SKKQCga-JHR',
-  bucket: 'webgo',
-  url: 'http://7n.webgo.vip/',
+  accessKey: "LlMsm2IOaDRpITt3yZrb45VzjB4eQQZeJ99YTBIo",
+  secretKey: "4oHMXZ3zCv-iA4y0ozYampBe_QRL5SKKQCga-JHR",
+  bucket: "jsyu",
+  url: "http://7n.jsyu.vip/",
+  // bucket: 'webgo',
+  // url: 'http://7n.webgo.vip/',
 };
 
 // 要上传的空间
@@ -34,7 +36,7 @@ const qn = {
     const secretKey = config.secretKey;
     const mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
     const uploadToken = putPolicy.uploadToken(mac);
-    // console.log(uploadToken);
+    console.log(`uploadToken:${uploadToken}`);
     return uploadToken;
   },
   // 七牛云的key
@@ -51,17 +53,20 @@ const qn = {
 
     return new Promise((resolve, reject) => {
       // 文件上传
-      formUploader.putFile(uploadToken, key, localFile, putExtra, function(respErr,
-        respBody, respInfo) {
-      // console.log('上传进来了');
+      formUploader.putFile(uploadToken, key, localFile, putExtra, function (
+        respErr,
+        respBody,
+        respInfo
+      ) {
+        // console.log("上传进来了");
         if (respErr) {
-          console.log('上传失败');
+          console.log("上传失败");
           // throw respErr;
           reject(respErr);
         }
         if (respInfo.statusCode === 200) {
-          console.log('上传成功');
-          console.log(respBody);
+          // console.log("上传成功");
+          console.log(`respBody:${respBody}`);
           const { hash, key } = respBody;
           const result = {
             hash,
@@ -70,12 +75,11 @@ const qn = {
           // 返回的数据
           resolve(result);
         } else {
-          console.log('上传信息');
+          console.log("上传信息");
           console.log(respInfo.statusCode);
           // console.log(respBody);
           // resolve(respInfo.statusCode);
           resolve(respBody);
-
         }
       });
     });
