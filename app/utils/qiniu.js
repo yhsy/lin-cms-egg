@@ -19,10 +19,8 @@ const moment = require("moment");
 const config = {
   accessKey: "LlMsm2IOaDRpITt3yZrb45VzjB4eQQZeJ99YTBIo",
   secretKey: "4oHMXZ3zCv-iA4y0ozYampBe_QRL5SKKQCga-JHR",
-  bucket: "jsyu",
-  url: "http://7n.jsyu.vip/",
-  // bucket: 'webgo',
-  // url: 'http://7n.webgo.vip/',
+  bucket: "webgo",
+  url: "http://webgo.7n.jsyu.vip/",
 };
 
 // 要上传的空间
